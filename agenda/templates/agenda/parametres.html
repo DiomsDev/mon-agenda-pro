@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+
+{% block title %}
+Paramètres - DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header" style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+">
+
+    <div>
+        <h1>⚙️ Paramètres</h1>
+        <p>Configuration et préférences de DIRAGENDA</p>
+    </div>
+
+</div>
+
+
+<!-- PROFIL -->
+
+<div class="section">
+
+    <div class="section-header">
+        <div>
+            <h2>👤 Mon profil</h2>
+            <p style="margin-top:5px; color:#64748b;">
+                Informations de votre compte
+            </p>
+        </div>
+        <a href="{% url 'modifier_profil' %}" class="btn">Modifier mon profil</a>
+    </div>
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(2, 1fr);
+        gap:20px;
+    ">
+
+        <div>
+            <label>Nom d'utilisateur</label>
+            <div class="form-control">
+                {{ request.user.username }}
+            </div>
+        </div>
+
+        <div>
+            <label>Rôle</label>
+            <div class="form-control">
+                {{ request.user.get_role_display }}
+            </div>
+        </div>
+
+        <div>
+            <label>Nom complet</label>
+            <div class="form-control">
+                {% if request.user.get_full_name %}
+                    {{ request.user.get_full_name }}
+                {% else %}
+                    Non renseigné
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <label>Adresse e-mail</label>
+            <div class="form-control">
+                {% if request.user.email %}
+                    {{ request.user.email }}
+                {% else %}
+                    Non renseignée
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SÉCURITÉ -->
+
+<div class="section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>🔐 Sécurité</h2>
+
+            <p style="margin-top:5px; color:#64748b;">
+                Gérez la sécurité de votre compte
+            </p>
+        </div>
+
+    </div>
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:20px;
+        padding:18px;
+        background:#F8FAF9;
+        border-radius:10px;
+    ">
+
+        <div>
+            <strong>Mot de passe</strong>
+
+            <p style="
+                margin-top:5px;
+                color:#64748b;
+                font-size:13px;
+            ">
+                Modifiez régulièrement votre mot de passe
+                pour protéger votre compte.
+            </p>
+        </div>
+
+        <a href="{% url 'password_change' %}" class="btn">
+               Modifier le mot de passe
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- NOTIFICATIONS -->
+
+<div class="section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>🔔 Notifications</h2>
+
+            <p style="margin-top:5px; color:#64748b;">
+                Gestion des notifications de DIRAGENDA
+            </p>
+        </div>
+
+    </div>
+
+    <div style="
+        padding:18px;
+        background:#F8FAF9;
+        border-radius:10px;
+    ">
+
+        <label style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            cursor:pointer;
+        ">
+
+            <input type="checkbox" checked>
+
+            <span>
+                Activer les notifications
+            </span>
+
+        </label>
+
+        <p style="
+            margin-top:8px;
+            margin-left:25px;
+            color:#64748b;
+            font-size:13px;
+        ">
+            Recevoir les rappels et notifications
+            concernant votre agenda.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- APPARENCE -->
+
+<div class="section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>🎨 Apparence</h2>
+
+            <p style="margin-top:5px; color:#64748b;">
+                Personnalisez l'affichage de DIRAGENDA
+            </p>
+        </div>
+
+    </div>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:18px;
+        background:#F8FAF9;
+        border-radius:10px;
+    ">
+
+        <div>
+            <strong>Thème</strong>
+
+            <p style="
+                margin-top:5px;
+                color:#64748b;
+                font-size:13px;
+            ">
+                Choisissez le thème de l'application.
+            </p>
+        </div>
+
+        <select class="form-control" style="width:180px;">
+            <option>Clair</option>
+            <option>Sombre</option>
+        </select>
+
+    </div>
+
+</div>
+
+
+<!-- PRÉFÉRENCES -->
+
+<div class="section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>⚙️ Préférences</h2>
+
+            <p style="margin-top:5px; color:#64748b;">
+                Préférences générales de l'application
+            </p>
+        </div>
+
+    </div>
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(2, 1fr);
+        gap:20px;
+    ">
+
+        <div>
+            <label>Format de date</label>
+
+            <select class="form-control">
+                <option>JJ/MM/AAAA</option>
+                <option>MM/JJ/AAAA</option>
+                <option>AAAA-MM-JJ</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Premier jour de la semaine</label>
+
+            <select class="form-control">
+                <option>Lundi</option>
+                <option>Dimanche</option>
+            </select>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- INFORMATIONS -->
+
+<div class="section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>ℹ️ À propos</h2>
+
+            <p style="margin-top:5px; color:#64748b;">
+                Informations sur l'application
+            </p>
+        </div>
+
+    </div>
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:18px;
+        background:#F8FAF9;
+        border-radius:10px;
+    ">
+
+        <div>
+            <strong>DIRAGENDA</strong>
+
+            <p style="
+                margin-top:5px;
+                color:#64748b;
+                font-size:13px;
+            ">
+                Gestion professionnelle de l'agenda
+            </p>
+        </div>
+
+        <span style="
+            padding:7px 12px;
+            background:#E8F5E9;
+            color:#2E7D32;
+            border-radius:20px;
+            font-size:12px;
+            font-weight:600;
+        ">
+            Version 1.0
+        </span>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

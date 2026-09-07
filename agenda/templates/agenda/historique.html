@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}
+Historique - DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+
+
+
+<div class="card">
+
+    <!-- EN-TÊTE -->
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:20px;
+        gap:15px;
+        flex-wrap:wrap;
+    ">
+
+        
+
+        <div style="
+            background:#f1f5f9;
+            padding:10px 15px;
+            border-radius:8px;
+            font-weight:600;
+        ">
+            {{ actions|length }} action{{ actions|length|pluralize }}
+        </div>
+
+    </div>
+
+    <!-- RECHERCHE ET FILTRES -->
+
+<form method="get" style="
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+">
+
+    <!-- Recherche -->
+    <input
+        type="text"
+        name="recherche"
+        value="{{ recherche }}"
+        placeholder="🔎 Rechercher..."
+        style="
+            flex:1;
+            min-width:220px;
+            padding:11px 14px;
+            border:1px solid #cbd5e1;
+            border-radius:8px;
+            font-size:14px;
+        "
+    >
+
+    <!-- Type d'action -->
+    <select
+        name="type_action"
+        style="
+            padding:11px 14px;
+            border:1px solid #cbd5e1;
+            border-radius:8px;
+            font-size:14px;
+            background:white;
+        "
+    >
+
+        <option value="">Toutes les actions</option>
+
+        {% for type in types_actions %}
+
+            <option
+                value="{{ type }}"
+                {% if type_action == type %}selected{% endif %}
+            >
+                {{ type }}
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <!-- Bouton -->
+    <button
+        type="submit"
+        style="
+            padding:11px 18px;
+            border:none;
+            border-radius:8px;
+            background:#2563eb;
+            color:white;
+            font-weight:600;
+            cursor:pointer;
+        "
+    >
+        Rechercher
+    </button>
+
+    <!-- Réinitialiser -->
+    <a
+        href="{% url 'historique' %}"
+        style="
+            display:flex;
+            align-items:center;
+            padding:11px 18px;
+            border-radius:8px;
+            background:#f1f5f9;
+            color:#334155;
+            text-decoration:none;
+            font-weight:600;
+        "
+    >
+        Réinitialiser
+    </a>
+
+</form>
+
+
+    {% if actions %}
+
+    <div style="overflow-x:auto;">
+
+        <table style="
+            width:100%;
+            border-collapse:collapse;
+        ">
+
+            <thead>
+
+                <tr>
+
+                    <th style="text-align:left; padding:14px;">
+                        Date
+                    </th>
+
+                    <th style="text-align:left; padding:14px;">
+                        Utilisateur
+                    </th>
+
+                    <th style="text-align:left; padding:14px;">
+                        Action
+                    </th>
+
+                    <th style="text-align:left; padding:14px;">
+                        Description
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for action in actions %}
+
+                <tr style="border-top:1px solid #e5e7eb;">
+
+                    <!-- DATE -->
+
+                    <td style="padding:14px; white-space:nowrap;">
+
+                        <strong>
+                            {{ action.date|date:"d/m/Y" }}
+                        </strong>
+
+                        <br>
+
+                        <small style="color:#64748b;">
+                            {{ action.date|date:"H:i" }}
+                        </small>
+
+                    </td>
+
+
+                    <!-- UTILISATEUR -->
+
+                    <td style="padding:14px;">
+
+                        {% if action.utilisateur %}
+
+                            <strong>
+                                {{ action.utilisateur }}
+                            </strong>
+
+                        {% else %}
+
+                            <span style="color:#94a3b8;">
+                                Utilisateur supprimé
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTION -->
+
+                    <td style="padding:14px;">
+
+                        <span style="
+                            display:inline-block;
+                            padding:6px 10px;
+                            border-radius:20px;
+                            background:#e0f2fe;
+                            color:#0369a1;
+                            font-weight:600;
+                            font-size:13px;
+                        ">
+
+                            {{ action.action }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <td style="
+                        padding:14px;
+                        color:#475569;
+                    ">
+
+                        {% if action.description %}
+
+                            {{ action.description }}
+
+                        {% else %}
+
+                            <span style="color:#94a3b8;">
+                                Aucune description
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+    <!-- AUCUN HISTORIQUE -->
+
+    <div style="
+        text-align:center;
+        padding:60px 20px;
+    ">
+
+        <div style="font-size:45px; margin-bottom:15px;">
+            🕘
+        </div>
+
+        <h3>
+            Aucun historique
+        </h3>
+
+        <p style="color:#64748b; margin-top:8px;">
+            Aucune action n'a encore été enregistrée.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

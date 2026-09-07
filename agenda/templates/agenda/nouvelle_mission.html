@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if modification %}Modifier la mission{% else %}Nouvelle mission{% endif %} - DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>{% if modification %}Modifier la mission{% else %}Nouvelle mission{% endif %}</h1>
+    <p>Renseignez les informations du déplacement</p>
+</div>
+
+<div class="card">
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <div style="background:#fee2e2; color:#991b1b; padding:15px; border-radius:8px; margin-bottom:25px;">
+            ⚠️ Veuillez vérifier les informations saisies.
+        </div>
+        {% endif %}
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+            <div>
+                <label for="{{ form.motif.id_for_label }}">Motif *</label>
+                {{ form.motif }}
+            </div>
+
+            <div>
+                <label for="{{ form.lieu.id_for_label }}">Lieu *</label>
+                {{ form.lieu }}
+            </div>
+
+            <div>
+                <label for="{{ form.date_depart.id_for_label }}">Date de départ *</label>
+                {{ form.date_depart }}
+            </div>
+
+            <div>
+                <label for="{{ form.date_retour.id_for_label }}">Date de retour *</label>
+                {{ form.date_retour }}
+            </div>
+
+            <div>
+                <label for="{{ form.statut.id_for_label }}">Statut</label>
+                {{ form.statut }}
+            </div>
+
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:12px; padding-top:20px; border-top:1px solid #e5e7eb;">
+            <a href="{% url 'missions' %}" class="btn" style="background:#e5e7eb; color:#374151;">Annuler</a>
+            <button type="submit" class="btn">
+                {% if modification %}💾 Enregistrer les modifications{% else %}💾 Enregistrer la mission{% endif %}
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

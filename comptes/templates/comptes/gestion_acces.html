@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Gestion des accès - DIRAGENDA{% endblock %}
+
+{% block content %}
+
+<div class="section-header">
+    <div>
+        <h2>🔑 Gestion des accès</h2>
+        <p style="color:#5B6B78; margin-top:5px;">
+            Seul vous pouvez accorder ou retirer l'accès d'une assistante à votre agenda.
+        </p>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <h2>Mes assistantes</h2>
+    </div>
+
+    {% if mes_assistants %}
+    <table>
+        <thead>
+            <tr><th>Nom</th><th>Identifiant</th><th>Statut</th><th></th></tr>
+        </thead>
+        <tbody>
+        {% for a in mes_assistants %}
+            <tr>
+                <td>{{ a.get_full_name|default:a.username }}</td>
+                <td>{{ a.username }}</td>
+                <td>{{ a.get_statut_acces_display }}</td>
+                <td>
+                    <form method="post" action="{% url 'basculer_acces' a.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-light">
+                            {% if a.statut_acces == "actif" %}Désactiver{% else %}Activer{% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="color:#5B6B78;">Vous n'avez encore aucune assistante rattachée.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <h2>Assistantes en attente de rattachement</h2>
+    </div>
+
+    {% if assistants_disponibles %}
+    <table>
+        <thead>
+            <tr><th>Nom</th><th>Identifiant</th><th></th></tr>
+        </thead>
+        <tbody>
+        {% for a in assistants_disponibles %}
+            <tr>
+                <td>{{ a.get_full_name|default:a.username }}</td>
+                <td>{{ a.username }}</td>
+                <td>
+                    <form method="post" action="{% url 'rattacher_assistant' a.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">Rattacher à moi</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="color:#5B6B78;">Aucune assistante en attente pour le moment.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

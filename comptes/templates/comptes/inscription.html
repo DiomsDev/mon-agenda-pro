@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription — DIRAGENDA</title>
+    <style>
+        body { font-family: sans-serif; background: #16283D; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .card { background: #fff; padding: 40px; border-radius: 10px; width: 340px; }
+        h1 { font-size: 22px; color: #16283D; margin: 0 0 4px; }
+        p { color: #5B6B78; font-size: 13px; margin: 0 0 24px; }
+        label { display: block; font-size: 13px; margin-bottom: 6px; color: #5B6B78; }
+        input, select { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #D7DCE1; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #16283D; color: #fff; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; }
+        .errorlist { color: #B15E2B; font-size: 12px; padding: 0; margin: -10px 0 12px; list-style: none; }
+        a { color: #C98A2C; font-size: 12px; text-decoration: none; }
+        .foot { text-align: center; margin-top: 16px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>DIRAGENDA</h1>
+        <p>Créer un compte</p>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+    <label>{{ field.label }}</label>
+    {% if field.name == "password1" or field.name == "password2" %}
+        <div style="position:relative;">
+            {{ field }}
+            <span onclick="togglePassword('{{ field.id_for_label }}', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:16px;">👁️</span>
+        </div>
+       {% else %}
+           {{ field }}
+       {% endif %}
+         {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
+   {% endfor %}
+            <button type="submit">S'inscrire</button>
+        </form>
+        <div class="foot"><a href="{% url 'login' %}">J'ai déjà un compte</a></div>
+    </div>
+    <script>
+function togglePassword(id, icon) {
+    const input = document.getElementById(id);
+    if (input.type === "password") {
+        input.type = "text";
+        icon.textContent = "🙈";
+    } else {
+        input.type = "password";
+        icon.textContent = "👁️";
+    }
+}
+</script>
+</body>
+</html>

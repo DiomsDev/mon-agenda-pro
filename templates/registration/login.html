@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion — DIRAGENDA</title>
+    <style>
+        body { font-family: sans-serif; background: #16283D; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: #fff; padding: 40px; border-radius: 10px; width: 320px; }
+        h1 { font-size: 22px; color: #16283D; margin: 0 0 4px; }
+        p { color: #5B6B78; font-size: 13px; margin: 0 0 24px; }
+        label { display: block; font-size: 13px; margin-bottom: 6px; color: #5B6B78; }
+        input { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #D7DCE1; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #16283D; color: #fff; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; }
+        .error { color: #B15E2B; font-size: 13px; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>DIRAGENDA</h1>
+        <p>Agenda de la direction — connexion</p>
+        {% if form.errors %}
+            <div class="error">Identifiant ou mot de passe incorrect.</div>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <label>Identifiant</label>
+            <input type="text" name="username" required>
+            <label>Mot de passe</label>
+           <div style="position:relative;">
+             <input type="password" name="password" id="id_password" required style="padding-right:40px;">
+             <span onclick="togglePassword('id_password', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:16px;">👁️</span>
+           </div>
+            <button type="submit">Se connecter</button>
+        </form>
+        <div class="foot" style="text-align:center;margin-top:16px;">
+            <a href="{% url 'inscription' %}" style="color:#C98A2C;font-size:12px;text-decoration:none;">Créer un compte</a>
+        </div>
+    </div>
+    <script>
+       function togglePassword(id, icon) {
+       const input = document.getElementById(id);
+         if (input.type === "password") {
+            input.type = "text";
+            icon.textContent = "🙈";
+        } else {
+            input.type = "password";
+            icon.textContent = "👁️";
+                }
+        }
+</script>
+</body>
+</html>

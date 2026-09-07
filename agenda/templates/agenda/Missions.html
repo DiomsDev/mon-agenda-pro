@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+Missions - DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <a href="{% url 'nouvelle_mission' %}" class="btn">
+            + Nouvelle mission
+        </a>
+    </div>
+
+    {% if missions %}
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Motif</th>
+                    <th>Lieu</th>
+                    <th>Départ</th>
+                    <th>Retour</th>
+                    <th>Statut</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for mission in missions %}
+                <tr>
+                    <td>{{ mission.motif }}</td>
+                    <td>{{ mission.lieu }}</td>
+                    <td>{{ mission.date_depart|date:"d/m/Y" }}</td>
+                    <td>{{ mission.date_retour|date:"d/m/Y" }}</td>
+                    <td>{{ mission.get_statut_display }}</td>
+                    <td style="white-space:nowrap;">
+                        <a href="{% url 'modifier_mission' mission.pk %}" class="btn btn-light">✏️</a>
+                        <a href="{% url 'supprimer_mission' mission.pk %}" class="btn btn-light" style="color:#dc2626;">🗑️</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <div style="text-align: center; padding: 40px;">
+        <h3>Aucune mission</h3>
+        <p>Vous n'avez encore aucune mission enregistrée.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

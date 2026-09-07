@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+Activités - DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="card">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        
+
+        <a href="{% url 'nouvelle_activite' %}" class="btn">
+            + Nouvelle activité
+            
+        </a>
+    </div>
+
+    {% if activites %}
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Objet</th>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Lieu</th>
+                    <th>Contact</th>
+                    <th>Statut</th>
+                     <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for activite in activites %}
+                <tr>
+                    <td>{{ activite.objet }}</td>
+
+                    <td>
+                        {{ activite.date|date:"d/m/Y" }}
+                    </td>
+
+                    <td>
+                        {% if activite.heure_debut %}
+                            {{ activite.heure_debut|time:"H:i" }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if activite.lieu %}
+                            {{ activite.lieu }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if activite.contact %}
+                            {{ activite.contact }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>{{ activite.get_statut_display }}</td>
+                     <td style="white-space:nowrap;">
+                           <a href="{% url 'modifier_activite' activite.pk %}" class="btn btn-light">✏️</a>
+                           <a href="{% url 'supprimer_activite' activite.pk %}" class="btn btn-light" style="color:#dc2626;">🗑️</a>
+                     </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <div style="text-align: center; padding: 40px;">
+        <h3>Aucune activité</h3>
+        <p>Vous n'avez encore aucune activité enregistrée.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+# Variables d'environnement
+.env
+
+# Environnement virtuel Python
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+db.sqlite3
+*.log
+
+# Fichiers temporaires
+*.tmp
+*.swp
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Fichiers statiques et médias générés
+staticfiles/
+media/
+
+# Docker
+*.pid

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer le rendez-vous - DIRAGENDA{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Supprimer le rendez-vous</h1>
+    <p>Cette action est irréversible</p>
+</div>
+
+<div class="card">
+    <p style="margin-bottom: 20px;">
+        Es-tu sûr de vouloir supprimer le rendez-vous
+        <strong>{{ rendez_vous.objet }}</strong> du {{ rendez_vous.date|date:"d/m/Y" }} ?
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="display:flex; gap:12px; justify-content:flex-end;">
+            <a href="{% url 'rendez_vous' %}" class="btn" style="background:#e5e7eb; color:#374151;">Annuler</a>
+            <button type="submit" class="btn" style="background:#B15E2B;">🗑️ Confirmer la suppression</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

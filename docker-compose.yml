@@ -1,0 +1,36 @@
+services:
+
+  db:
+    image: mysql:8.4
+    container_name: diragenda_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: diragenda
+      MYSQL_USER: diragenda
+      MYSQL_PASSWORD: diragenda
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    container_name: diragenda_web
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

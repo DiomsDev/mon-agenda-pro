@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}
+Nouvelle activité - DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>{% if modification %}Modifier l'activité{% else %}Nouvelle activité{% endif %}</h1>
+    <p>Planifiez et enregistrez une nouvelle activité</p>
+</div>
+
+<div class="card">
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <div style="
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        ">
+            ⚠️ Veuillez vérifier les informations saisies.
+        </div>
+        {% endif %}
+
+
+        <!-- INFORMATIONS PRINCIPALES -->
+
+        <div style="margin-bottom: 30px;">
+
+            <h2 style="margin-bottom: 20px;">
+                📋 Informations principales
+            </h2>
+
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            ">
+
+                <div>
+                    <label for="{{ form.objet.id_for_label }}">
+                        Objet *
+                    </label>
+
+                    {{ form.objet }}
+
+                    {% if form.objet.errors %}
+                        <small style="color: #dc2626;">
+                            {{ form.objet.errors }}
+                        </small>
+                    {% endif %}
+                </div>
+
+
+                <div>
+                    <label for="{{ form.statut.id_for_label }}">
+                        Statut
+                    </label>
+
+                    {{ form.statut }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DATE ET HEURE -->
+
+        <div style="margin-bottom: 30px;">
+
+            <h2 style="margin-bottom: 20px;">
+                📅 Date et horaires
+            </h2>
+
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 20px;
+            ">
+
+                <div>
+                    <label for="{{ form.date.id_for_label }}">
+                        Date *
+                    </label>
+
+                    {{ form.date }}
+                </div>
+
+                <div>
+                    <label for="{{ form.date_fin.id_for_label }}">
+                        Date de fin
+                    </label>
+
+                    {{ form.date_fin }}
+                </div>
+
+                <div>
+                    <label for="{{ form.heure_debut.id_for_label }}">
+                        Heure de début
+                    </label>
+
+                    {{ form.heure_debut }}
+                </div>
+
+                <div>
+                    <label for="{{ form.heure_fin.id_for_label }}">
+                        Heure de fin
+                    </label>
+
+                    {{ form.heure_fin }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LIEU ET CONTACT -->
+
+        <div style="margin-bottom: 30px;">
+
+            <h2 style="margin-bottom: 20px;">
+                📍 Lieu et contact
+            </h2>
+
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            ">
+
+                <div>
+                    <label for="{{ form.lieu.id_for_label }}">
+                        Lieu
+                    </label>
+
+                    {{ form.lieu }}
+                </div>
+
+                <div>
+                    <label for="{{ form.contact.id_for_label }}">
+                        Contact
+                    </label>
+
+                    {{ form.contact }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- OBSERVATIONS -->
+
+        <div style="margin-bottom: 30px;">
+
+            <h2 style="margin-bottom: 20px;">
+                📝 Observations
+            </h2>
+
+            <label for="{{ form.observations.id_for_label }}">
+                Notes complémentaires
+            </label>
+
+            {{ form.observations }}
+
+        </div>
+
+
+        <!-- BOUTONS -->
+
+        <div style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        ">
+
+            <a
+                href="{% url 'activites' %}"
+                class="btn"
+                style="
+                    background: #e5e7eb;
+                    color: #374151;
+                "
+            >
+                Annuler
+            </a>
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                {% if modification %}💾 Enregistrer les modifications{% else %}💾 Enregistrer l'activité{% endif %}
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
