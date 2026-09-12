@@ -16,6 +16,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from docx import Document
 
+from django.conf import settings
 # =========================================================
 # TABLEAU DE BORD
 # =========================================================
@@ -650,3 +651,10 @@ def rendez_vous_word(request, pk):
     response["Content-Disposition"] = f'attachment; filename="rendez_vous_{rdv.pk}.docx"'
     document.save(response)
     return response
+
+
+
+def service_worker(request):
+    with open(settings.BASE_DIR / "static" / "service-worker.js", "r") as f:
+        contenu = f.read()
+    return HttpResponse(contenu, content_type="application/javascript")

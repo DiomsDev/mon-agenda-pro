@@ -1,9 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}DIRAGENDA{% endblock %}</title>
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <meta name="theme-color" content="#16283D">
+    <link rel="apple-touch-icon" href="{% static 'icons/icon-192.png' %}">
     <style>
         * {
             margin: 0;
@@ -103,7 +107,9 @@
             display: flex;
             align-items: center;
             gap: 22px;
+            <button id="install-btn" class="btn" style="display:none;">📲 Installer</button>
         }
+        
 
         .notification { position: relative; font-size: 21px; cursor: pointer; }
 
@@ -396,6 +402,37 @@ if (overlay) {
     overlay.addEventListener('click', () => {
         sidebar.classList.remove('open');
         overlay.classList.remove('open');
+    });
+}
+
+        
+</script>
+
+ <script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(() => console.log('Service worker enregistré'))
+        .catch((err) => console.log('Erreur service worker :', err));
+}
+</script>
+
+<script>
+let deferredPrompt;
+const installBtn = document.getElementById('install-btn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.style.display = 'inline-block';
+});
+
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        installBtn.style.display = 'none';
     });
 }
 </script>
