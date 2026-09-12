@@ -69,10 +69,12 @@ Activités - DIRAGENDA
                     </td>
 
                     <td>{{ activite.get_statut_display }}</td>
-                     <td style="white-space:nowrap;">
-                           <a href="{% url 'modifier_activite' activite.pk %}" class="btn btn-light">✏️</a>
-                           <a href="{% url 'supprimer_activite' activite.pk %}" class="btn btn-light" style="color:#dc2626;">🗑️</a>
-                     </td>
+                       <td style="white-space:nowrap;">
+                          <a href="{% url 'modifier_activite' activite.pk %}" class="btn btn-light">✏️</a>
+                          <a href="{% url 'supprimer_activite' activite.pk %}" class="btn btn-light" style="color:#dc2626;">🗑️</a>
+                          <a href="{% url 'activite_pdf' activite.pk %}" class="btn btn-light" title="Télécharger en PDF">📄</a>
+                           <a href="{% url 'activite_word' activite.pk %}" class="btn btn-light" title="Télécharger en Word">📝</a>
+                       </td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -261,24 +261,64 @@
             .stats { grid-template-columns: repeat(2, 1fr); }
         }
 
+        
         @media (max-width: 700px) {
-            .sidebar { width: 70px; }
-            .main { margin-left: 70px; width: calc(100% - 70px); }
-            .logo { justify-content: center; padding: 0; }
-            .logo h2 { font-size: 0; }
-            .menu a span:not(.menu-icon),
-            .menu-title,
-            .profile-info { display: none; }
-            .menu a { justify-content: center; }
-            .content { padding: 15px; }
-            .stats { grid-template-columns: 1fr; }
-        }
+    #menu-toggle { display: block !important; }
+
+    .sidebar {
+        width: 240px;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 1000;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .menu a span:not(.menu-icon),
+    .menu-title {
+        display: inline;
+    }
+    .logo h2 { font-size: 22px; }
+    .logo { justify-content: flex-start; padding: 0 25px; }
+
+    .topbar {
+        padding: 0 14px;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 75px;
+    }
+    .page-title { display: flex; align-items: center; }
+    .page-title h1 { font-size: 17px; }
+    .page-title p { display: none; }
+
+    .top-actions { gap: 10px; }
+    .profile-info { display: none; }
+
+    .content { padding: 15px; }
+    .stats { grid-template-columns: 1fr; }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 999;
+    }
+        .overlay.open { display: block; }
+    }
     </style>
 </head>
 <body>
 
 <div class="app">
 
+    <div class="overlay" id="overlay"></div>
     <aside class="sidebar">
         <div class="logo">
             <h2>DIR<span>AGENDA</span></h2>
@@ -295,16 +335,18 @@
             <a href="{% url 'missions' %}"><span class="menu-icon">🚗</span><span>Missions</span></a>
 
             <div class="menu-title">Administration</div>
-{% if request.user.role == 'directeur' %}
-<a href="{% url 'gestion_acces' %}"><span class="menu-icon">👤</span><span>Assistants</span></a>
-{% endif %}
-<a href="{% url 'historique' %}"><span class="menu-icon">🕘</span><span>Historique</span></a>
-<a href="{% url 'parametres' %}"><span class="menu-icon">⚙️</span><span>Paramètres</span></a>
+                 {% if request.user.role == 'directeur' %}
+                      <a href="{% url 'gestion_acces' %}"><span class="menu-icon">👤</span><span>Assistants</span></a>
+                  {% endif %}
+                       <a href="{% url 'historique' %}"><span class="menu-icon">🕘</span><span>Historique</span></a>
+                       <a href="{% url 'archives' %}"><span class="menu-icon">🗄️</span><span>Archives</span></a>
+                       <a href="{% url 'parametres' %}"><span class="menu-icon">⚙️</span><span>Paramètres</span></a>
         </nav>
     </aside>
 
     <main class="main">
         <header class="topbar">
+            <button id="menu-toggle" style="display:none; background:none; border:none; font-size:24px; cursor:pointer; color:#16283D; margin-right:12px;">☰</button>
             <div class="page-title">
                 <h1>DIRAGENDA</h1>
                 <p>Gestion professionnelle de l'agenda</p>
@@ -338,6 +380,25 @@
     </main>
 
 </div>
+
+<script>
+      const menuToggle = document.getElementById('menu-toggle');
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('overlay');
+
+if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+    });
+}
+if (overlay) {
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+}
+</script>
 
 </body>
 </html>

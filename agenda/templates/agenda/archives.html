@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Archives - DIRAGENDA{% endblock %}
+
+{% block content %}
+
+<div class="page-header" style="margin-bottom:25px;">
+    <h1>🗄️ Bienvenue sur votre gestion d'archives </h1>
+    <p>Activités, missions et rendez-vous passés</p>
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <h2>📋 Activités effectuées</h2>
+    </div>
+
+    {% if activites_archivees %}
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr><th>Objet</th><th>Date</th><th>Lieu</th><th>Observations</th></tr>
+            </thead>
+            <tbody>
+                {% for a in activites_archivees %}
+                <tr>
+                    <td>{{ a.objet }}</td>
+                    <td>{{ a.date|date:"d/m/Y" }}</td>
+                    <td>{{ a.lieu|default:"—" }}</td>
+                    <td>{{ a.observations|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color:#64748b;">Aucune activité archivée.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <h2>🚗 Missions terminées</h2>
+    </div>
+
+    {% if missions_archivees %}
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr><th>Motif</th><th>Lieu</th><th>Départ</th><th>Retour</th></tr>
+            </thead>
+            <tbody>
+                {% for m in missions_archivees %}
+                <tr>
+                    <td>{{ m.motif }}</td>
+                    <td>{{ m.lieu }}</td>
+                    <td>{{ m.date_depart|date:"d/m/Y" }}</td>
+                    <td>{{ m.date_retour|date:"d/m/Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color:#64748b;">Aucune mission archivée.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <h2>🤝 Rendez-vous terminés / annulés</h2>
+    </div>
+
+    {% if rendez_vous_archives %}
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr><th>Objet</th><th>Date</th><th>Lieu</th><th>Statut</th></tr>
+            </thead>
+            <tbody>
+                {% for r in rendez_vous_archives %}
+                <tr>
+                    <td>{{ r.objet }}</td>
+                    <td>{{ r.date|date:"d/m/Y" }}</td>
+                    <td>{{ r.lieu|default:"—" }}</td>
+                    <td>{{ r.get_statut_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color:#64748b;">Aucun rendez-vous archivé.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

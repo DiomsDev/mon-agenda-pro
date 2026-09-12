@@ -29,4 +29,11 @@ urlpatterns = [
     path("rendez-vous/nouveau/", views.nouveau_rendez_vous, name="nouveau_rendez_vous"),
     path("rendez-vous/<int:pk>/modifier/", views.modifier_rendez_vous, name="modifier_rendez_vous"),
     path("rendez-vous/<int:pk>/supprimer/", views.supprimer_rendez_vous, name="supprimer_rendez_vous"),
+    path("archives/", views.archives, name="archives"),
+    path("activites/<int:pk>/pdf/", views.activite_pdf, name="activite_pdf"),
+    path("activites/<int:pk>/word/", views.activite_word, name="activite_word"),
+    path("missions/<int:pk>/pdf/", views.mission_pdf, name="mission_pdf"),
+    path("missions/<int:pk>/word/", views.mission_word, name="mission_word"),
+    path("rendez-vous/<int:pk>/pdf/", views.rendez_vous_pdf, name="rendez_vous_pdf"),
+    path("rendez-vous/<int:pk>/word/", views.rendez_vous_word, name="rendez_vous_word"),
 ]

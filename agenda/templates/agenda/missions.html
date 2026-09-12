@@ -38,8 +38,10 @@ Missions - DIRAGENDA
                     <td>{{ mission.date_retour|date:"d/m/Y" }}</td>
                     <td>{{ mission.get_statut_display }}</td>
                     <td style="white-space:nowrap;">
-                        <a href="{% url 'modifier_mission' mission.pk %}" class="btn btn-light">✏️</a>
-                        <a href="{% url 'supprimer_mission' mission.pk %}" class="btn btn-light" style="color:#dc2626;">🗑️</a>
+                         <a href="{% url 'modifier_mission' mission.pk %}" class="btn btn-light">✏️</a>
+                         <a href="{% url 'supprimer_mission' mission.pk %}" class="btn btn-light" style="color:#dc2626;">🗑️</a>
+                         <a href="{% url 'mission_pdf' mission.pk %}" class="btn btn-light" title="Télécharger en PDF">📄</a>
+                         <a href="{% url 'mission_word' mission.pk %}" class="btn btn-light" title="Télécharger en Word">📝</a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -11,6 +11,11 @@ import calendar
 from historique.models import HistoriqueAction
 from historique.utils import enregistrer_action
 
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from docx import Document
+
 # =========================================================
 # TABLEAU DE BORD
 # =========================================================
@@ -392,3 +397,256 @@ def supprimer_rendez_vous(request, pk):
         return redirect("rendez_vous")
 
     return render(request, "agenda/supprimer_rendez_vous.html", {"rendez_vous": rdv})
+
+
+@login_required
+def archives(request):
+    activites_archivees = Activite.objects.filter(statut="effectuee").order_by("-date")
+    missions_archivees = Mission.objects.filter(statut="terminee").order_by("-date_depart")
+    rendez_vous_archives = RendezVous.objects.filter(statut__in=["termine", "annule"]).order_by("-date")
+
+    context = {
+        "activites_archivees": activites_archivees,
+        "missions_archivees": missions_archivees,
+        "rendez_vous_archives": rendez_vous_archives,
+    }
+    return render(request, "agenda/archives.html", context)
+
+
+@login_required
+def activite_pdf(request, pk):
+    activite = get_object_or_404(Activite, pk=pk)
+
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="activite_{activite.pk}.pdf"'
+
+    p = canvas.Canvas(response, pagesize=A4)
+    largeur, hauteur = A4
+    y = hauteur - 60
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(50, y, "DIRAGENDA — Fiche d'activité")
+    y -= 40
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(50, y, "Objet :")
+    p.setFont("Helvetica", 12)
+    p.drawString(150, y, activite.objet)
+    y -= 25
+
+    champs = [
+        ("Date", activite.date.strftime("%d/%m/%Y")),
+        ("Date de fin", activite.date_fin.strftime("%d/%m/%Y") if activite.date_fin else "—"),
+        ("Heure début", activite.heure_debut.strftime("%H:%M") if activite.heure_debut else "—"),
+        ("Heure fin", activite.heure_fin.strftime("%H:%M") if activite.heure_fin else "—"),
+        ("Lieu", activite.lieu or "—"),
+        ("Contact", activite.contact or "—"),
+        ("Statut", activite.get_statut_display()),
+        ("Créé par", str(activite.cree_par)),
+    ]
+
+    p.setFont("Helvetica-Bold", 12)
+    for label, valeur in champs:
+        p.drawString(50, y, f"{label} :")
+        p.setFont("Helvetica", 12)
+        p.drawString(150, y, str(valeur))
+        p.setFont("Helvetica-Bold", 12)
+        y -= 22
+
+    y -= 10
+    p.drawString(50, y, "Observations :")
+    p.setFont("Helvetica", 11)
+    y -= 20
+    for ligne in (activite.observations or "—").split("\n"):
+        p.drawString(50, y, ligne)
+        y -= 16
+
+    p.showPage()
+    p.save()
+    return response
+
+
+@login_required
+def activite_word(request, pk):
+    activite = get_object_or_404(Activite, pk=pk)
+
+    document = Document()
+    document.add_heading("DIRAGENDA — Fiche d'activité", level=1)
+
+    table = document.add_table(rows=0, cols=2)
+    table.style = "Light Grid Accent 1"
+
+    lignes = [
+        ("Objet", activite.objet),
+        ("Date", activite.date.strftime("%d/%m/%Y")),
+        ("Date de fin", activite.date_fin.strftime("%d/%m/%Y") if activite.date_fin else "—"),
+        ("Heure début", activite.heure_debut.strftime("%H:%M") if activite.heure_debut else "—"),
+        ("Heure fin", activite.heure_fin.strftime("%H:%M") if activite.heure_fin else "—"),
+        ("Lieu", activite.lieu or "—"),
+        ("Contact", activite.contact or "—"),
+        ("Statut", activite.get_statut_display()),
+        ("Créé par", str(activite.cree_par)),
+    ]
+    for label, valeur in lignes:
+        row = table.add_row().cells
+        row[0].text = label
+        row[1].text = str(valeur)
+
+    document.add_heading("Observations", level=2)
+    document.add_paragraph(activite.observations or "—")
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    response["Content-Disposition"] = f'attachment; filename="activite_{activite.pk}.docx"'
+    document.save(response)
+    return response
+
+@login_required
+def mission_pdf(request, pk):
+    mission = get_object_or_404(Mission, pk=pk)
+
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="mission_{mission.pk}.pdf"'
+
+    p = canvas.Canvas(response, pagesize=A4)
+    largeur, hauteur = A4
+    y = hauteur - 60
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(50, y, "DIRAGENDA — Fiche de mission")
+    y -= 40
+
+    champs = [
+        ("Motif", mission.motif),
+        ("Lieu", mission.lieu),
+        ("Date de départ", mission.date_depart.strftime("%d/%m/%Y")),
+        ("Date de retour", mission.date_retour.strftime("%d/%m/%Y")),
+        ("Statut", mission.get_statut_display()),
+        ("Créé par", str(mission.cree_par)),
+    ]
+
+    p.setFont("Helvetica-Bold", 12)
+    for label, valeur in champs:
+        p.drawString(50, y, f"{label} :")
+        p.setFont("Helvetica", 12)
+        p.drawString(180, y, str(valeur))
+        p.setFont("Helvetica-Bold", 12)
+        y -= 25
+
+    p.showPage()
+    p.save()
+    return response
+
+
+@login_required
+def mission_word(request, pk):
+    mission = get_object_or_404(Mission, pk=pk)
+
+    document = Document()
+    document.add_heading("DIRAGENDA — Fiche de mission", level=1)
+
+    table = document.add_table(rows=0, cols=2)
+    table.style = "Light Grid Accent 1"
+
+    lignes = [
+        ("Motif", mission.motif),
+        ("Lieu", mission.lieu),
+        ("Date de départ", mission.date_depart.strftime("%d/%m/%Y")),
+        ("Date de retour", mission.date_retour.strftime("%d/%m/%Y")),
+        ("Statut", mission.get_statut_display()),
+        ("Créé par", str(mission.cree_par)),
+    ]
+    for label, valeur in lignes:
+        row = table.add_row().cells
+        row[0].text = label
+        row[1].text = str(valeur)
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    response["Content-Disposition"] = f'attachment; filename="mission_{mission.pk}.docx"'
+    document.save(response)
+    return response
+
+@login_required
+def rendez_vous_pdf(request, pk):
+    rdv = get_object_or_404(RendezVous, pk=pk)
+
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="rendez_vous_{rdv.pk}.pdf"'
+
+    p = canvas.Canvas(response, pagesize=A4)
+    largeur, hauteur = A4
+    y = hauteur - 60
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(50, y, "DIRAGENDA — Fiche de rendez-vous")
+    y -= 40
+
+    champs = [
+        ("Objet", rdv.objet),
+        ("Date", rdv.date.strftime("%d/%m/%Y")),
+        ("Heure", rdv.heure.strftime("%H:%M") if rdv.heure else "—"),
+        ("Lieu", rdv.lieu or "—"),
+        ("Personne", rdv.personne or "—"),
+        ("Téléphone", rdv.telephone or "—"),
+        ("Statut", rdv.get_statut_display()),
+        ("Créé par", str(rdv.cree_par)),
+    ]
+
+    p.setFont("Helvetica-Bold", 12)
+    for label, valeur in champs:
+        p.drawString(50, y, f"{label} :")
+        p.setFont("Helvetica", 12)
+        p.drawString(180, y, str(valeur))
+        p.setFont("Helvetica-Bold", 12)
+        y -= 22
+
+    y -= 10
+    p.drawString(50, y, "Observations :")
+    p.setFont("Helvetica", 11)
+    y -= 20
+    for ligne in (rdv.observations or "—").split("\n"):
+        p.drawString(50, y, ligne)
+        y -= 16
+
+    p.showPage()
+    p.save()
+    return response
+
+
+@login_required
+def rendez_vous_word(request, pk):
+    rdv = get_object_or_404(RendezVous, pk=pk)
+
+    document = Document()
+    document.add_heading("DIRAGENDA — Fiche de rendez-vous", level=1)
+
+    table = document.add_table(rows=0, cols=2)
+    table.style = "Light Grid Accent 1"
+
+    lignes = [
+        ("Objet", rdv.objet),
+        ("Date", rdv.date.strftime("%d/%m/%Y")),
+        ("Heure", rdv.heure.strftime("%H:%M") if rdv.heure else "—"),
+        ("Lieu", rdv.lieu or "—"),
+        ("Personne", rdv.personne or "—"),
+        ("Téléphone", rdv.telephone or "—"),
+        ("Statut", rdv.get_statut_display()),
+        ("Créé par", str(rdv.cree_par)),
+    ]
+    for label, valeur in lignes:
+        row = table.add_row().cells
+        row[0].text = label
+        row[1].text = str(valeur)
+
+    document.add_heading("Observations", level=2)
+    document.add_paragraph(rdv.observations or "—")
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    response["Content-Disposition"] = f'attachment; filename="rendez_vous_{rdv.pk}.docx"'
+    document.save(response)
+    return response

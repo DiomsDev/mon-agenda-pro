@@ -42,9 +42,11 @@ Rendez-vous - DIRAGENDA
                     <td>{{ rdv.personne|default:"—" }}</td>
                     <td>{{ rdv.get_statut_display }}</td>
                     <td style="white-space:nowrap;">
-                        <a href="{% url 'modifier_rendez_vous' rdv.pk %}" class="btn btn-light">✏️</a>
-                        <a href="{% url 'supprimer_rendez_vous' rdv.pk %}" class="btn btn-light" style="color:#dc2626;">🗑️</a>
-                    </td>
+                         <a href="{% url 'modifier_rendez_vous' rdv.pk %}" class="btn btn-light">✏️</a>
+                         <a href="{% url 'supprimer_rendez_vous' rdv.pk %}" class="btn btn-light" style="color:#dc2626;">🗑️</a>
+                         <a href="{% url 'rendez_vous_pdf' rdv.pk %}" class="btn btn-light" title="Télécharger en PDF">📄</a>
+                        <a href="{% url 'rendez_vous_word' rdv.pk %}" class="btn btn-light" title="Télécharger en Word">📝</a>
+                   </td>
                 </tr>
                 {% endfor %}
             </tbody>
