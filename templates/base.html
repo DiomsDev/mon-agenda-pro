@@ -91,14 +91,19 @@
         }
 
         .topbar {
-            height: 75px;
-            background: white;
-            border-bottom: 1px solid #D7DCE1;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-        }
+    height: 75px;
+    background: white;
+    border-bottom: 1px solid #D7DCE1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    position: fixed;
+    top: 0;
+    left: 250px;
+    right: 0;
+    z-index: 500;
+}
 
         .page-title h1 { font-size: 21px; color: #16283D; }
         .page-title p { color: #5B6B78; font-size: 13px; margin-top: 4px; }
@@ -155,7 +160,10 @@
             font-family: inherit;
         }
 
-        .content { padding: 30px; }
+        .content {
+             padding: 30px;
+             margin-top: 75px;
+        }
 
         .btn {
             display: inline-block;
@@ -317,6 +325,7 @@
         z-index: 999;
     }
         .overlay.open { display: block; }
+        .topbar { left: 0; }
     }
     </style>
 </head>
