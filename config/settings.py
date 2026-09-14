@@ -27,6 +27,7 @@ SECRET_KEY = env_config('SECRET_KEY', default='django-insecure-change-me-in-prod
 DEBUG = env_config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = env_config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+CSRF_TRUSTED_ORIGINS = ['https://mon-agenda-pro.onrender.com']
 
 
 # Application definition
