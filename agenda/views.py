@@ -17,6 +17,12 @@ from reportlab.pdfgen import canvas
 from docx import Document
 
 from django.conf import settings
+
+
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+import json
+from datetime import timedelta
 # =========================================================
 # TABLEAU DE BORD
 # =========================================================
@@ -106,20 +112,11 @@ def agenda(request):
     }
     return render(request, "agenda/agenda.html", context)
 
-
-# =========================================================
-# ACTIVITÉS
-# =========================================================
-
 @login_required
 def activites(request):
     activites = Activite.objects.all().order_by("date", "heure_debut")
     return render(request, "agenda/activites.html", {"activites": activites})
 
-
-# =========================================================
-# MISSIONS
-# =========================================================
 
 @login_required
 def missions(request):
@@ -127,25 +124,10 @@ def missions(request):
     return render(request, "agenda/missions.html", {"missions": missions})
 
 
-# =========================================================
-# RENDEZ-VOUS
-# =========================================================
-
 @login_required
 def rendez_vous(request):
     rendez_vous = RendezVous.objects.all().order_by("date", "heure")
     return render(request, "agenda/rendez_vous.html", {"rendez_vous": rendez_vous})
-
-
-# =========================================================
-# RÉUNIONS / VISITEURS / CONTACTS / TÂCHES / RAPPELS /
-# NOTIFICATIONS / COMPTES RENDUS / DOCUMENTS / STATISTIQUES
-# (reportés à plus tard)
-# =========================================================
-
-@login_required
-def reunions(request):
-    return render(request, "agenda/reunions.html")
 
 
 @login_required
@@ -164,6 +146,15 @@ def taches(request):
 
 
 @login_required
+def comptes_rendus(request):
+    return render(request, "agenda/comptes_rendus.html")
+
+
+@login_required
+def documents(request):
+    return render(request, "agenda/documents.html")
+
+@login_required
 def rappels(request):
     return render(request, "agenda/rappels.html")
 
@@ -173,19 +164,66 @@ def notifications(request):
     return render(request, "agenda/notifications.html")
 
 
-@login_required
-def comptes_rendus(request):
-    return render(request, "agenda/comptes_rendus.html")
-
 
 @login_required
-def documents(request):
-    return render(request, "agenda/documents.html")
-
+def reunions(request):
+    return render(request, "agenda/reunions.html")
 
 @login_required
 def statistiques(request):
-    return render(request, "agenda/statistiques.html")
+    aujourdhui = timezone.localdate()
+    annee_courante = aujourdhui.year
+    debut_semaine = aujourdhui - timedelta(days=aujourdhui.weekday())
+    fin_semaine = debut_semaine + timedelta(days=6)
+    debut_mois = aujourdhui.replace(day=1)
+
+    # ===== Compteurs "en temps réel" =====
+    stats = {
+        "activites": {
+            "semaine": Activite.objects.filter(date__gte=debut_semaine, date__lte=fin_semaine).count(),
+            "mois": Activite.objects.filter(date__gte=debut_mois, date__year=annee_courante, date__month=aujourdhui.month).count(),
+            "annee": Activite.objects.filter(date__year=annee_courante).count(),
+        },
+        "missions": {
+            "semaine": Mission.objects.filter(date_depart__gte=debut_semaine, date_depart__lte=fin_semaine).count(),
+            "mois": Mission.objects.filter(date_depart__year=annee_courante, date_depart__month=aujourdhui.month).count(),
+            "annee": Mission.objects.filter(date_depart__year=annee_courante).count(),
+        },
+        "rendez_vous": {
+            "semaine": RendezVous.objects.filter(date__gte=debut_semaine, date__lte=fin_semaine).count(),
+            "mois": RendezVous.objects.filter(date__year=annee_courante, date__month=aujourdhui.month).count(),
+            "annee": RendezVous.objects.filter(date__year=annee_courante).count(),
+        },
+    }
+
+    # ===== Données mensuelles pour les graphiques (année en cours) =====
+    noms_mois = ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"]
+
+    def repartition_mensuelle(queryset, champ_date):
+        compteurs = [0] * 12
+        donnees = (
+            queryset.filter(**{f"{champ_date}__year": annee_courante})
+            .annotate(mois=TruncMonth(champ_date))
+            .values("mois")
+            .annotate(total=Count("id"))
+        )
+        for ligne in donnees:
+            compteurs[ligne["mois"].month - 1] = ligne["total"]
+        return compteurs
+
+    graphique = {
+        "labels": noms_mois,
+        "activites": repartition_mensuelle(Activite.objects.all(), "date"),
+        "missions": repartition_mensuelle(Mission.objects.all(), "date_depart"),
+        "rendez_vous": repartition_mensuelle(RendezVous.objects.all(), "date"),
+    }
+
+    context = {
+        "stats": stats,
+        "annee_courante": annee_courante,
+        "graphique_json": json.dumps(graphique),
+    }
+    return render(request, "agenda/statistiques.html", context)
 
 
 # =========================================================
