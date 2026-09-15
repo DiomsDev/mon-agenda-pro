@@ -6,33 +6,33 @@
 
 <div class="page-header" style="margin-bottom:25px;">
     <h1>📊 Statistiques</h1>
-    <p>Vue d'ensemble de l'activité de la direction — {{ annee_courante }}</p>
+    <p>Vue d'ensemble de l'activité de la direction — {{ annee_courante }} <span style="color:#2F7D5E;">🟢 mise à jour automatique</span></p>
 </div>
 
 <div class="section">
     <div class="section-header"><h2>📋 Activités</h2></div>
     <div class="stats" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong>{{ stats.activites.semaine }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong>{{ stats.activites.mois }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong>{{ stats.activites.annee }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong id="activites-semaine">{{ stats.activites.semaine }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong id="activites-mois">{{ stats.activites.mois }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong id="activites-annee">{{ stats.activites.annee }}</strong></div></div>
     </div>
 </div>
 
 <div class="section">
     <div class="section-header"><h2>🚗 Missions</h2></div>
     <div class="stats" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong>{{ stats.missions.semaine }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong>{{ stats.missions.mois }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong>{{ stats.missions.annee }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong id="missions-semaine">{{ stats.missions.semaine }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong id="missions-mois">{{ stats.missions.mois }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong id="missions-annee">{{ stats.missions.annee }}</strong></div></div>
     </div>
 </div>
 
 <div class="section">
     <div class="section-header"><h2>🤝 Rendez-vous</h2></div>
     <div class="stats" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong>{{ stats.rendez_vous.semaine }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong>{{ stats.rendez_vous.mois }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong>{{ stats.rendez_vous.annee }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong id="rdv-semaine">{{ stats.rendez_vous.semaine }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong id="rdv-mois">{{ stats.rendez_vous.mois }}</strong></div></div>
+        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong id="rdv-annee">{{ stats.rendez_vous.annee }}</strong></div></div>
     </div>
 </div>
 
@@ -45,24 +45,53 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-const data = JSON.parse(document.getElementById('graphique-data').textContent);
+const dataInitiale = JSON.parse(document.getElementById('graphique-data').textContent);
 
-new Chart(document.getElementById('graphiqueAnnuel'), {
+const chart = new Chart(document.getElementById('graphiqueAnnuel'), {
     type: 'bar',
     data: {
-        labels: data.labels,
+        labels: dataInitiale.labels,
         datasets: [
-            { label: 'Activités', data: data.activites, backgroundColor: '#2F7D5E' },
-            { label: 'Missions', data: data.missions, backgroundColor: '#C98A2C' },
-            { label: 'Rendez-vous', data: data.rendez_vous, backgroundColor: '#16283D' },
+            { label: 'Activités', data: dataInitiale.activites, backgroundColor: '#2F7D5E' },
+            { label: 'Missions', data: dataInitiale.missions, backgroundColor: '#C98A2C' },
+            { label: 'Rendez-vous', data: dataInitiale.rendez_vous, backgroundColor: '#16283D' },
         ]
     },
     options: {
         responsive: true,
+        animation: { duration: 500 },
         plugins: { legend: { position: 'bottom' } },
         scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
     }
 });
+
+async function actualiserStatistiques() {
+    try {
+        const reponse = await fetch("{% url 'statistiques_data' %}");
+        const data = await reponse.json();
+
+        document.getElementById('activites-semaine').textContent = data.stats.activites.semaine;
+        document.getElementById('activites-mois').textContent = data.stats.activites.mois;
+        document.getElementById('activites-annee').textContent = data.stats.activites.annee;
+
+        document.getElementById('missions-semaine').textContent = data.stats.missions.semaine;
+        document.getElementById('missions-mois').textContent = data.stats.missions.mois;
+        document.getElementById('missions-annee').textContent = data.stats.missions.annee;
+
+        document.getElementById('rdv-semaine').textContent = data.stats.rendez_vous.semaine;
+        document.getElementById('rdv-mois').textContent = data.stats.rendez_vous.mois;
+        document.getElementById('rdv-annee').textContent = data.stats.rendez_vous.annee;
+
+        chart.data.datasets[0].data = data.graphique.activites;
+        chart.data.datasets[1].data = data.graphique.missions;
+        chart.data.datasets[2].data = data.graphique.rendez_vous;
+        chart.update();
+    } catch (e) {
+        console.log("Erreur d'actualisation des statistiques :", e);
+    }
+}
+
+setInterval(actualiserStatistiques, 15000);
 </script>
 
 {% endblock %}

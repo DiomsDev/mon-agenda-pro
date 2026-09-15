@@ -23,6 +23,9 @@ from django.db.models.functions import TruncMonth
 from django.db.models import Count
 import json
 from datetime import timedelta
+
+
+from django.http import JsonResponse
 # =========================================================
 # TABLEAU DE BORD
 # =========================================================
@@ -696,3 +699,54 @@ def service_worker(request):
     with open(settings.BASE_DIR / "static" / "service-worker.js", "r") as f:
         contenu = f.read()
     return HttpResponse(contenu, content_type="application/javascript")
+
+
+
+@login_required
+def statistiques_data(request):
+    aujourdhui = timezone.localdate()
+    annee_courante = aujourdhui.year
+    debut_semaine = aujourdhui - timedelta(days=aujourdhui.weekday())
+    fin_semaine = debut_semaine + timedelta(days=6)
+    debut_mois = aujourdhui.replace(day=1)
+
+    stats = {
+        "activites": {
+            "semaine": Activite.objects.filter(date__gte=debut_semaine, date__lte=fin_semaine).count(),
+            "mois": Activite.objects.filter(date__gte=debut_mois, date__year=annee_courante, date__month=aujourdhui.month).count(),
+            "annee": Activite.objects.filter(date__year=annee_courante).count(),
+        },
+        "missions": {
+            "semaine": Mission.objects.filter(date_depart__gte=debut_semaine, date_depart__lte=fin_semaine).count(),
+            "mois": Mission.objects.filter(date_depart__year=annee_courante, date_depart__month=aujourdhui.month).count(),
+            "annee": Mission.objects.filter(date_depart__year=annee_courante).count(),
+        },
+        "rendez_vous": {
+            "semaine": RendezVous.objects.filter(date__gte=debut_semaine, date__lte=fin_semaine).count(),
+            "mois": RendezVous.objects.filter(date__year=annee_courante, date__month=aujourdhui.month).count(),
+            "annee": RendezVous.objects.filter(date__year=annee_courante).count(),
+        },
+    }
+
+    noms_mois = ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"]
+
+    def repartition_mensuelle(queryset, champ_date):
+        compteurs = [0] * 12
+        donnees = (
+            queryset.filter(**{f"{champ_date}__year": annee_courante})
+            .annotate(mois=TruncMonth(champ_date))
+            .values("mois")
+            .annotate(total=Count("id"))
+        )
+        for ligne in donnees:
+            compteurs[ligne["mois"].month - 1] = ligne["total"]
+        return compteurs
+
+    graphique = {
+        "labels": noms_mois,
+        "activites": repartition_mensuelle(Activite.objects.all(), "date"),
+        "missions": repartition_mensuelle(Mission.objects.all(), "date_depart"),
+        "rendez_vous": repartition_mensuelle(RendezVous.objects.all(), "date"),
+    }
+
+    return JsonResponse({"stats": stats, "graphique": graphique})

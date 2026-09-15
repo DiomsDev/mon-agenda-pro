@@ -36,4 +36,5 @@ urlpatterns = [
     path("missions/<int:pk>/word/", views.mission_word, name="mission_word"),
     path("rendez-vous/<int:pk>/pdf/", views.rendez_vous_pdf, name="rendez_vous_pdf"),
     path("rendez-vous/<int:pk>/word/", views.rendez_vous_word, name="rendez_vous_word"),
+    path("statistiques/data/", views.statistiques_data, name="statistiques_data"),
 ]
