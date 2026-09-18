@@ -335,8 +335,11 @@
 
     <div class="overlay" id="overlay"></div>
     <aside class="sidebar">
-        <div class="logo">
-            <h2>DIR<span>AGENDA</span></h2>
+        <div class="logo" style="flex-direction:column; align-items:flex-start; justify-content:center; padding:12px 25px;">
+               <h2 style="font-size:20px;">DIR<span>AGENDA</span></h2>
+              {% if request.user.entreprise %}
+                 <div style="font-size:11px; color:#8FA0C8; margin-top:2px;">{{ request.user.entreprise.nom }}</div>
+              {% endif %}
         </div>
 
         <nav class="menu">
