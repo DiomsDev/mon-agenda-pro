@@ -9,6 +9,13 @@ class HistoriqueAction(models.Model):
         null=True,
         related_name="actions_historique",
     )
+    entreprise = models.ForeignKey(
+        "entreprises.Entreprise",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="actions",
+    )
     action = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     date = models.DateTimeField(auto_now_add=True)

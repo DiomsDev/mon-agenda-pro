@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription — DIRAGENDA</title>
+    <style>
+        body { font-family: sans-serif; background: #16283D; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .card { background: #fff; padding: 40px; border-radius: 10px; width: 380px; text-align: center; }
+        h1 { font-size: 22px; color: #16283D; margin: 0 0 4px; }
+        p { color: #5B6B78; font-size: 13px; margin: 0 0 24px; }
+        .choix { display: flex; flex-direction: column; gap: 14px; }
+        .choix a { display: block; padding: 16px; border-radius: 8px; text-decoration: none; font-size: 14px; }
+        .creer { background: #16283D; color: #fff; }
+        .rejoindre { background: #EEF1F3; color: #16283D; }
+        .foot { margin-top: 20px; }
+        .foot a { color: #C98A2C; font-size: 12px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>DIRAGENDA</h1>
+        <p>Comment souhaitez-vous vous inscrire ?</p>
+        <div class="choix">
+            <a href="{% url 'creer_entreprise' %}" class="creer">🏢 Créer une nouvelle entreprise</a>
+            <a href="{% url 'rejoindre_entreprise' %}" class="rejoindre">🤝 Rejoindre une entreprise existante</a>
+        </div>
+        <div class="foot"><a href="{% url 'login' %}">J'ai déjà un compte</a></div>
+    </div>
+</body>
+</html>

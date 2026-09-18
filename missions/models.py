@@ -20,6 +20,14 @@ class Mission(models.Model):
         on_delete=models.CASCADE,
         related_name="missions_creees",
     )
+    
+    entreprise = models.ForeignKey(
+          "entreprises.Entreprise",
+          on_delete=models.CASCADE,
+          null=True,
+          blank=True,
+          related_name="missions",
+   )
 
     def __str__(self):
         return f"{self.motif} — {self.lieu} ({self.date_depart})"

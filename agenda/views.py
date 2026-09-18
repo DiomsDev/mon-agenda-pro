@@ -32,37 +32,45 @@ from django.http import JsonResponse
 
 @login_required
 def dashboard(request):
-    aujourdhui = timezone.localdate()
+    aujourd_hui = timezone.now().date()
 
+    # Entreprise de l'utilisateur connecté
+    entreprise = request.user.entreprise
+
+    # Activités de l'entreprise
     activites_a_venir = Activite.objects.filter(
-        date__gte=aujourdhui
-    ).order_by("date", "heure_debut")
+        entreprise=entreprise,
+        date__gte=aujourd_hui
+    )
 
     activites_effectuees = Activite.objects.filter(
+        entreprise=entreprise,
         statut="effectuee"
-    ).order_by("-date")
+    )
 
-    nombre_activites_a_venir = activites_a_venir.count()
-    nombre_activites_effectuees = activites_effectuees.count()
-
+    # Rendez-vous de l'entreprise
     nombre_rendez_vous = RendezVous.objects.filter(
+        entreprise=entreprise,
         statut__in=["planifie", "confirme"]
     ).count()
 
-    nombre_missions = Mission.objects.exclude(
+    # Missions de l'entreprise
+    nombre_missions = Mission.objects.filter(
+        entreprise=entreprise
+    ).exclude(
         statut__in=["terminee", "annulee"]
     ).count()
 
-    context = {
-        "activites_a_venir": activites_a_venir,
-        "activites_effectuees": activites_effectuees,
-        "nombre_activites_a_venir": nombre_activites_a_venir,
-        "nombre_activites_effectuees": nombre_activites_effectuees,
-        "nombre_rendez_vous": nombre_rendez_vous,
-        "nombre_missions": nombre_missions,
-    }
-
-    return render(request, "agenda/dashboard.html", context)
+    return render(
+        request,
+        "agenda/dashboard.html",
+        {
+            "activites_a_venir": activites_a_venir,
+            "activites_effectuees": activites_effectuees,
+            "nombre_rendez_vous": nombre_rendez_vous,
+            "nombre_missions": nombre_missions,
+        }
+    )
 
 
 # =========================================================
@@ -72,24 +80,49 @@ def dashboard(request):
 @login_required
 def agenda(request):
     aujourdhui = timezone.localdate()
+
+    # Entreprise de l'utilisateur connecté
+    entreprise = request.user.entreprise
+
     annee = int(request.GET.get("annee", aujourdhui.year))
     mois = int(request.GET.get("mois", aujourdhui.month))
 
     cal = calendar.Calendar(firstweekday=0)
     semaines = cal.monthdatescalendar(annee, mois)
 
-    activites = Activite.objects.filter(date__year=annee, date__month=mois)
-    rendez_vous = RendezVous.objects.filter(date__year=annee, date__month=mois)
+    # Seulement les activités de l'entreprise de l'utilisateur
+    activites = Activite.objects.filter(
+        entreprise=entreprise,
+        date__year=annee,
+        date__month=mois
+    )
+
+    # Seulement les rendez-vous de l'entreprise de l'utilisateur
+    rendez_vous = RendezVous.objects.filter(
+        entreprise=entreprise,
+        date__year=annee,
+        date__month=mois
+    )
 
     evenements_par_jour = {}
+
     for a in activites:
-        evenements_par_jour.setdefault(a.date, []).append({"type": "activite", "objet": a})
+        evenements_par_jour.setdefault(a.date, []).append({
+            "type": "activite",
+            "objet": a
+        })
+
     for r in rendez_vous:
-        evenements_par_jour.setdefault(r.date, []).append({"type": "rendez_vous", "objet": r})
+        evenements_par_jour.setdefault(r.date, []).append({
+            "type": "rendez_vous",
+            "objet": r
+        })
 
     semaines_avec_evenements = []
+
     for semaine in semaines:
         jours = []
+
         for jour in semaine:
             jours.append({
                 "date": jour,
@@ -97,10 +130,12 @@ def agenda(request):
                 "aujourdhui": jour == aujourdhui,
                 "evenements": evenements_par_jour.get(jour, []),
             })
+
         semaines_avec_evenements.append(jours)
 
     mois_precedent = mois - 1 if mois > 1 else 12
     annee_mois_precedent = annee if mois > 1 else annee - 1
+
     mois_suivant = mois + 1 if mois < 12 else 1
     annee_mois_suivant = annee if mois < 12 else annee + 1
 
@@ -113,25 +148,54 @@ def agenda(request):
         "mois_suivant": mois_suivant,
         "annee_mois_suivant": annee_mois_suivant,
     }
+
     return render(request, "agenda/agenda.html", context)
+
+
 
 @login_required
 def activites(request):
-    activites = Activite.objects.all().order_by("date", "heure_debut")
-    return render(request, "agenda/activites.html", {"activites": activites})
+    entreprise = request.user.entreprise
+
+    activites = Activite.objects.filter(
+        entreprise=entreprise
+    ).order_by("-date", "-heure")
+
+    return render(
+        request,
+        "agenda/activites.html",
+        {"activites": activites}
+    )
 
 
 @login_required
 def missions(request):
-    missions = Mission.objects.all().order_by("date_depart")
-    return render(request, "agenda/missions.html", {"missions": missions})
+    entreprise = request.user.entreprise
 
+    missions = Mission.objects.filter(
+        entreprise=entreprise
+    ).order_by("-date_depart")
+
+    return render(
+        request,
+        "agenda/missions.html",
+        {"missions": missions}
+    )
+    
 
 @login_required
 def rendez_vous(request):
-    rendez_vous = RendezVous.objects.all().order_by("date", "heure")
-    return render(request, "agenda/rendez_vous.html", {"rendez_vous": rendez_vous})
+    entreprise = request.user.entreprise
 
+    rendez_vous = RendezVous.objects.filter(
+        entreprise=entreprise
+    ).order_by("-date", "-heure")
+
+    return render(
+        request,
+        "agenda/rendez_vous.html",
+        {"rendez_vous": rendez_vous}
+    )
 
 @login_required
 def visiteurs(request):
@@ -235,11 +299,10 @@ def statistiques(request):
 
 @login_required
 def historique(request):
-    actions = HistoriqueAction.objects.all().order_by("-date")
+    entreprise = request.user.entreprise
+    actions = HistoriqueAction.objects.filter(entreprise=entreprise).order_by("-date")
 
-    # 🔎 Recherche
     recherche = request.GET.get("recherche", "").strip()
-
     if recherche:
         actions = actions.filter(
             utilisateur__username__icontains=recherche
@@ -249,18 +312,15 @@ def historique(request):
             description__icontains=recherche
         )
 
-    # 🏷️ Filtre par type d'action
     type_action = request.GET.get("type_action", "").strip()
-
     if type_action:
         actions = actions.filter(action=type_action)
 
-    # Limite à 200 actions
     actions = actions[:200]
 
-    # Liste des types d'actions disponibles
     types_actions = (
         HistoriqueAction.objects
+        .filter(entreprise=entreprise)
         .values_list("action", flat=True)
         .distinct()
         .order_by("action")
@@ -274,7 +334,6 @@ def historique(request):
     }
 
     return render(request, "agenda/historique.html", context)
-
 
 # =========================================================
 # ASSISTANTS
@@ -298,6 +357,7 @@ def parametres(request):
 # ACTIVITÉS — CRUD
 # =========================================================
 
+
 @login_required
 def nouvelle_activite(request):
     if request.method == "POST":
@@ -305,6 +365,7 @@ def nouvelle_activite(request):
         if form.is_valid():
             activite = form.save(commit=False)
             activite.cree_par = request.user
+            activite.entreprise = request.user.entreprise
             activite.save()
             enregistrer_action(request.user, "Création d'activité", f"Activité « {activite.objet} » créée")
             return redirect("activites")
@@ -316,7 +377,7 @@ def nouvelle_activite(request):
 
 @login_required
 def modifier_activite(request, pk):
-    activite = get_object_or_404(Activite, pk=pk)
+    activite = get_object_or_404(Activite, pk=pk, entreprise=request.user.entreprise)
 
     if request.method == "POST":
         form = ActiviteForm(request.POST, instance=activite)
@@ -332,7 +393,7 @@ def modifier_activite(request, pk):
 
 @login_required
 def supprimer_activite(request, pk):
-    activite = get_object_or_404(Activite, pk=pk)
+    activite = get_object_or_404(Activite, pk=pk, entreprise=request.user.entreprise)
 
     if request.method == "POST":
         objet = activite.objet
@@ -342,10 +403,10 @@ def supprimer_activite(request, pk):
 
     return render(request, "agenda/supprimer_activite.html", {"activite": activite})
 
-
 # =========================================================
 # MISSIONS — CRUD
 # =========================================================
+
 
 @login_required
 def nouvelle_mission(request):
@@ -354,6 +415,7 @@ def nouvelle_mission(request):
         if form.is_valid():
             mission = form.save(commit=False)
             mission.cree_par = request.user
+            mission.entreprise = request.user.entreprise
             mission.save()
             enregistrer_action(request.user, "Création de mission", f"Mission « {mission.motif} » créée")
             return redirect("missions")
@@ -365,7 +427,7 @@ def nouvelle_mission(request):
 
 @login_required
 def modifier_mission(request, pk):
-    mission = get_object_or_404(Mission, pk=pk)
+    mission = get_object_or_404(Mission, pk=pk, entreprise=request.user.entreprise)
 
     if request.method == "POST":
         form = MissionForm(request.POST, instance=mission)
@@ -381,7 +443,7 @@ def modifier_mission(request, pk):
 
 @login_required
 def supprimer_mission(request, pk):
-    mission = get_object_or_404(Mission, pk=pk)
+    mission = get_object_or_404(Mission, pk=pk, entreprise=request.user.entreprise)
 
     if request.method == "POST":
         motif = mission.motif
@@ -390,7 +452,6 @@ def supprimer_mission(request, pk):
         return redirect("missions")
 
     return render(request, "agenda/supprimer_mission.html", {"mission": mission})
-
 
 # =========================================================
 # RENDEZ-VOUS — CRUD
@@ -403,6 +464,7 @@ def nouveau_rendez_vous(request):
         if form.is_valid():
             rdv = form.save(commit=False)
             rdv.cree_par = request.user
+            rdv.entreprise = request.user.entreprise
             rdv.save()
             enregistrer_action(request.user, "Création de rendez-vous", f"Rendez-vous « {rdv.objet} » créé")
             return redirect("rendez_vous")
@@ -414,7 +476,7 @@ def nouveau_rendez_vous(request):
 
 @login_required
 def modifier_rendez_vous(request, pk):
-    rdv = get_object_or_404(RendezVous, pk=pk)
+    rdv = get_object_or_404(RendezVous, pk=pk, entreprise=request.user.entreprise)
 
     if request.method == "POST":
         form = RendezVousForm(request.POST, instance=rdv)
@@ -430,7 +492,7 @@ def modifier_rendez_vous(request, pk):
 
 @login_required
 def supprimer_rendez_vous(request, pk):
-    rdv = get_object_or_404(RendezVous, pk=pk)
+    rdv = get_object_or_404(RendezVous, pk=pk, entreprise=request.user.entreprise)
 
     if request.method == "POST":
         objet = rdv.objet
@@ -441,11 +503,17 @@ def supprimer_rendez_vous(request, pk):
     return render(request, "agenda/supprimer_rendez_vous.html", {"rendez_vous": rdv})
 
 
+# =========================================================
+# COTE ARCHIVE
+# =========================================================
+
 @login_required
 def archives(request):
-    activites_archivees = Activite.objects.filter(statut="effectuee").order_by("-date")
-    missions_archivees = Mission.objects.filter(statut="terminee").order_by("-date_depart")
-    rendez_vous_archives = RendezVous.objects.filter(statut__in=["termine", "annule"]).order_by("-date")
+    entreprise = request.user.entreprise
+
+    activites_archivees = Activite.objects.filter(entreprise=entreprise, statut="effectuee").order_by("-date")
+    missions_archivees = Mission.objects.filter(entreprise=entreprise, statut="terminee").order_by("-date_depart")
+    rendez_vous_archives = RendezVous.objects.filter(entreprise=entreprise, statut__in=["termine", "annule"]).order_by("-date")
 
     context = {
         "activites_archivees": activites_archivees,
@@ -455,9 +523,11 @@ def archives(request):
     return render(request, "agenda/archives.html", context)
 
 
+
+
 @login_required
 def activite_pdf(request, pk):
-    activite = get_object_or_404(Activite, pk=pk)
+    activite = get_object_or_404(Activite, pk=pk, entreprise=request.user.entreprise)
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="activite_{activite.pk}.pdf"'
@@ -510,7 +580,7 @@ def activite_pdf(request, pk):
 
 @login_required
 def activite_word(request, pk):
-    activite = get_object_or_404(Activite, pk=pk)
+    activite = get_object_or_404(Activite, pk=pk, entreprise=request.user.entreprise)
 
     document = Document()
     document.add_heading("DIRAGENDA — Fiche d'activité", level=1)
@@ -544,9 +614,10 @@ def activite_word(request, pk):
     document.save(response)
     return response
 
+
 @login_required
 def mission_pdf(request, pk):
-    mission = get_object_or_404(Mission, pk=pk)
+    mission = get_object_or_404(Mission, pk=pk, entreprise=request.user.entreprise)
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="mission_{mission.pk}.pdf"'
@@ -583,7 +654,7 @@ def mission_pdf(request, pk):
 
 @login_required
 def mission_word(request, pk):
-    mission = get_object_or_404(Mission, pk=pk)
+    mission = get_object_or_404(Mission, pk=pk, entreprise=request.user.entreprise)
 
     document = Document()
     document.add_heading("DIRAGENDA — Fiche de mission", level=1)
@@ -611,9 +682,11 @@ def mission_word(request, pk):
     document.save(response)
     return response
 
+
+
 @login_required
 def rendez_vous_pdf(request, pk):
-    rdv = get_object_or_404(RendezVous, pk=pk)
+    rdv = get_object_or_404(RendezVous, pk=pk, entreprise=request.user.entreprise)
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="rendez_vous_{rdv.pk}.pdf"'
@@ -660,7 +733,7 @@ def rendez_vous_pdf(request, pk):
 
 @login_required
 def rendez_vous_word(request, pk):
-    rdv = get_object_or_404(RendezVous, pk=pk)
+    rdv = get_object_or_404(RendezVous, pk=pk, entreprise=request.user.entreprise)
 
     document = Document()
     document.add_heading("DIRAGENDA — Fiche de rendez-vous", level=1)
@@ -702,8 +775,10 @@ def service_worker(request):
 
 
 
+
 @login_required
-def statistiques_data(request):
+def statistiques(request):
+    entreprise = request.user.entreprise
     aujourdhui = timezone.localdate()
     annee_courante = aujourdhui.year
     debut_semaine = aujourdhui - timedelta(days=aujourdhui.weekday())
@@ -712,19 +787,19 @@ def statistiques_data(request):
 
     stats = {
         "activites": {
-            "semaine": Activite.objects.filter(date__gte=debut_semaine, date__lte=fin_semaine).count(),
-            "mois": Activite.objects.filter(date__gte=debut_mois, date__year=annee_courante, date__month=aujourdhui.month).count(),
-            "annee": Activite.objects.filter(date__year=annee_courante).count(),
+            "semaine": Activite.objects.filter(entreprise=entreprise, date__gte=debut_semaine, date__lte=fin_semaine).count(),
+            "mois": Activite.objects.filter(entreprise=entreprise, date__gte=debut_mois, date__year=annee_courante, date__month=aujourdhui.month).count(),
+            "annee": Activite.objects.filter(entreprise=entreprise, date__year=annee_courante).count(),
         },
         "missions": {
-            "semaine": Mission.objects.filter(date_depart__gte=debut_semaine, date_depart__lte=fin_semaine).count(),
-            "mois": Mission.objects.filter(date_depart__year=annee_courante, date_depart__month=aujourdhui.month).count(),
-            "annee": Mission.objects.filter(date_depart__year=annee_courante).count(),
+            "semaine": Mission.objects.filter(entreprise=entreprise, date_depart__gte=debut_semaine, date_depart__lte=fin_semaine).count(),
+            "mois": Mission.objects.filter(entreprise=entreprise, date_depart__year=annee_courante, date_depart__month=aujourdhui.month).count(),
+            "annee": Mission.objects.filter(entreprise=entreprise, date_depart__year=annee_courante).count(),
         },
         "rendez_vous": {
-            "semaine": RendezVous.objects.filter(date__gte=debut_semaine, date__lte=fin_semaine).count(),
-            "mois": RendezVous.objects.filter(date__year=annee_courante, date__month=aujourdhui.month).count(),
-            "annee": RendezVous.objects.filter(date__year=annee_courante).count(),
+            "semaine": RendezVous.objects.filter(entreprise=entreprise, date__gte=debut_semaine, date__lte=fin_semaine).count(),
+            "mois": RendezVous.objects.filter(entreprise=entreprise, date__year=annee_courante, date__month=aujourdhui.month).count(),
+            "annee": RendezVous.objects.filter(entreprise=entreprise, date__year=annee_courante).count(),
         },
     }
 
@@ -744,9 +819,65 @@ def statistiques_data(request):
 
     graphique = {
         "labels": noms_mois,
-        "activites": repartition_mensuelle(Activite.objects.all(), "date"),
-        "missions": repartition_mensuelle(Mission.objects.all(), "date_depart"),
-        "rendez_vous": repartition_mensuelle(RendezVous.objects.all(), "date"),
+        "activites": repartition_mensuelle(Activite.objects.filter(entreprise=entreprise), "date"),
+        "missions": repartition_mensuelle(Mission.objects.filter(entreprise=entreprise), "date_depart"),
+        "rendez_vous": repartition_mensuelle(RendezVous.objects.filter(entreprise=entreprise), "date"),
+    }
+
+    context = {
+        "stats": stats,
+        "annee_courante": annee_courante,
+        "graphique_json": json.dumps(graphique),
+    }
+    return render(request, "agenda/statistiques.html", context)
+
+
+@login_required
+def statistiques_data(request):
+    entreprise = request.user.entreprise
+    aujourdhui = timezone.localdate()
+    annee_courante = aujourdhui.year
+    debut_semaine = aujourdhui - timedelta(days=aujourdhui.weekday())
+    fin_semaine = debut_semaine + timedelta(days=6)
+    debut_mois = aujourdhui.replace(day=1)
+
+    stats = {
+        "activites": {
+            "semaine": Activite.objects.filter(entreprise=entreprise, date__gte=debut_semaine, date__lte=fin_semaine).count(),
+            "mois": Activite.objects.filter(entreprise=entreprise, date__year=annee_courante, date__month=aujourdhui.month).count(),
+            "annee": Activite.objects.filter(entreprise=entreprise, date__year=annee_courante).count(),
+        },
+        "missions": {
+            "semaine": Mission.objects.filter(entreprise=entreprise, date_depart__gte=debut_semaine, date_depart__lte=fin_semaine).count(),
+            "mois": Mission.objects.filter(entreprise=entreprise, date_depart__year=annee_courante, date_depart__month=aujourdhui.month).count(),
+            "annee": Mission.objects.filter(entreprise=entreprise, date_depart__year=annee_courante).count(),
+        },
+        "rendez_vous": {
+            "semaine": RendezVous.objects.filter(entreprise=entreprise, date__gte=debut_semaine, date__lte=fin_semaine).count(),
+            "mois": RendezVous.objects.filter(entreprise=entreprise, date__year=annee_courante, date__month=aujourdhui.month).count(),
+            "annee": RendezVous.objects.filter(entreprise=entreprise, date__year=annee_courante).count(),
+        },
+    }
+
+    noms_mois = ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"]
+
+    def repartition_mensuelle(queryset, champ_date):
+        compteurs = [0] * 12
+        donnees = (
+            queryset.filter(**{f"{champ_date}__year": annee_courante})
+            .annotate(mois=TruncMonth(champ_date))
+            .values("mois")
+            .annotate(total=Count("id"))
+        )
+        for ligne in donnees:
+            compteurs[ligne["mois"].month - 1] = ligne["total"]
+        return compteurs
+
+    graphique = {
+        "labels": noms_mois,
+        "activites": repartition_mensuelle(Activite.objects.filter(entreprise=entreprise), "date"),
+        "missions": repartition_mensuelle(Mission.objects.filter(entreprise=entreprise), "date_depart"),
+        "rendez_vous": repartition_mensuelle(RendezVous.objects.filter(entreprise=entreprise), "date"),
     }
 
     return JsonResponse({"stats": stats, "graphique": graphique})

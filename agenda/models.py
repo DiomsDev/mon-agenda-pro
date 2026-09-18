@@ -34,6 +34,14 @@ class Activite(models.Model):
         on_delete=models.CASCADE,
         related_name="activites_creees",
     )
+    
+    entreprise = models.ForeignKey(
+        "entreprises.Entreprise",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="activites",
+    )
 
     valide_par = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -77,6 +85,14 @@ class RendezVous(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="rendezvous_crees",
+    )
+    
+    entreprise = models.ForeignKey(
+        "entreprises.Entreprise",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="rendez_vous",
     )
 
     def __str__(self):

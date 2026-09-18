@@ -25,6 +25,14 @@ class Utilisateur(AbstractUser):
         related_name="assistants",
         limit_choices_to={"role": "directeur"},
     )
+    
+    entreprise = models.ForeignKey(
+        "entreprises.Entreprise",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="utilisateurs",
+    )
 
     def __str__(self):
         return f"{self.get_full_name() or self.username} ({self.get_role_display()})"

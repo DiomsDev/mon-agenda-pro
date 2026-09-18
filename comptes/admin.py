@@ -5,7 +5,7 @@ from .models import Utilisateur
 
 class UtilisateurAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
-        ("Informations DIRAGENDA", {"fields": ("role", "statut_acces", "directeur")}),
+          ("Informations DIRAGENDA", {"fields": ("role", "statut_acces", "directeur", "entreprise")}),
     )
     list_display = ("username", "get_full_name", "role", "statut_acces", "directeur")
     list_filter = ("role", "statut_acces")
