@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - DIRAGENDA{% endblock %}
+
+{% block content %}
+
+<div class="page-header" style="margin-bottom:25px;">
+    <h1>🔔 Notifications</h1>
+    <p>Vos alertes et mises à jour</p>
+</div>
+
+<div class="section">
+    {% if notifications %}
+    {% for n in notifications %}
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-top:1px solid #EDF0F2;">
+        <div>
+            {% if n.lien %}
+            <a href="{{ n.lien }}" style="text-decoration:none; color:#1B2333; font-size:14px;">{{ n.message }}</a>
+            {% else %}
+            <span style="font-size:14px;">{{ n.message }}</span>
+            {% endif %}
+            <div style="font-size:11px; color:#8B96A5; margin-top:3px;">{{ n.date|date:"d/m/Y H:i" }}</div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p style="color:#64748b; text-align:center; padding:40px;">Aucune notification pour le moment.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -10,6 +10,8 @@ from .forms import ProfilForm
 from .forms import CreerEntrepriseForm, RejoindreEntrepriseForm
 
 
+
+
 def inscription(request):
     return render(request, "comptes/inscription_choix.html")
 

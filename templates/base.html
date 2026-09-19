@@ -372,10 +372,12 @@
             </div>
 
             <div class="top-actions">
-                <div class="notification">
-                    🔔
-                    <span class="notification-badge">0</span>
-                </div>
+                <a href="{% url 'notifications' %}" class="notification" style="text-decoration:none; color:inherit;">
+                                                      🔔
+                      {% if notifications_non_lues > 0 %}
+                               <span class="notification-badge">{{ notifications_non_lues }}</span>
+                      {% endif %}
+                </a>
 
                 <div class="profile">
                     <div class="avatar">{{ request.user.username|first|upper }}</div>

@@ -26,6 +26,12 @@ from datetime import timedelta
 
 
 from django.http import JsonResponse
+
+
+from historique.utils import creer_notification
+from comptes.models import Utilisateur
+
+from historique.models import Notification, Rappel
 # =========================================================
 # TABLEAU DE BORD
 # =========================================================
@@ -158,8 +164,8 @@ def activites(request):
     entreprise = request.user.entreprise
 
     activites = Activite.objects.filter(
-        entreprise=entreprise
-    ).order_by("-date", "-heure")
+          entreprise=entreprise
+    ).order_by("-date", "-heure_debut")
 
     return render(
         request,
@@ -228,7 +234,9 @@ def rappels(request):
 
 @login_required
 def notifications(request):
-    return render(request, "agenda/notifications.html")
+    mes_notifications = Notification.objects.filter(destinataire=request.user)
+    mes_notifications.filter(lue=False).update(lue=True)
+    return render(request, "agenda/notifications.html", {"notifications": mes_notifications})
 
 
 
@@ -368,6 +376,18 @@ def nouvelle_activite(request):
             activite.entreprise = request.user.entreprise
             activite.save()
             enregistrer_action(request.user, "Création d'activité", f"Activité « {activite.objet} » créée")
+
+            if activite.statut == "en_attente":
+                directeurs = Utilisateur.objects.filter(
+                    entreprise=request.user.entreprise, role="directeur"
+                )
+                for directeur in directeurs:
+                    creer_notification(
+                        directeur,
+                        f"Nouvelle activité à valider : « {activite.objet} »",
+                        lien="/activites/",
+                    )
+
             return redirect("activites")
     else:
         form = ActiviteForm()
@@ -375,20 +395,33 @@ def nouvelle_activite(request):
     return render(request, "agenda/nouvelle_activite.html", {"form": form})
 
 
+
 @login_required
 def modifier_activite(request, pk):
     activite = get_object_or_404(Activite, pk=pk, entreprise=request.user.entreprise)
+    ancien_statut = activite.statut
 
     if request.method == "POST":
         form = ActiviteForm(request.POST, instance=activite)
         if form.is_valid():
-            form.save()
+            activite = form.save()
             enregistrer_action(request.user, "Modification d'activité", f"Activité « {activite.objet} » modifiée")
+
+            if ancien_statut == "en_attente" and activite.statut in ["confirmee", "annulee"]:
+                verbe = "confirmée" if activite.statut == "confirmee" else "refusée"
+                creer_notification(
+                    activite.cree_par,
+                    f"Votre activité « {activite.objet} » a été {verbe}",
+                    lien="/activites/",
+                )
+
             return redirect("activites")
     else:
         form = ActiviteForm(instance=activite)
 
     return render(request, "agenda/nouvelle_activite.html", {"form": form, "modification": True})
+
+
 
 
 @login_required
@@ -418,6 +451,18 @@ def nouvelle_mission(request):
             mission.entreprise = request.user.entreprise
             mission.save()
             enregistrer_action(request.user, "Création de mission", f"Mission « {mission.motif} » créée")
+
+            if request.user.role == "assistant":
+                directeurs = Utilisateur.objects.filter(
+                    entreprise=request.user.entreprise, role="directeur"
+                )
+                for directeur in directeurs:
+                    creer_notification(
+                        directeur,
+                        f"Nouvelle mission ajoutée : « {mission.motif} »",
+                        lien="/missions/",
+                    )
+
             return redirect("missions")
     else:
         form = MissionForm()
@@ -467,6 +512,18 @@ def nouveau_rendez_vous(request):
             rdv.entreprise = request.user.entreprise
             rdv.save()
             enregistrer_action(request.user, "Création de rendez-vous", f"Rendez-vous « {rdv.objet} » créé")
+
+            if request.user.role == "assistant":
+                directeurs = Utilisateur.objects.filter(
+                    entreprise=request.user.entreprise, role="directeur"
+                )
+                for directeur in directeurs:
+                    creer_notification(
+                        directeur,
+                        f"Nouveau rendez-vous ajouté : « {rdv.objet} »",
+                        lien="/rendez-vous/",
+                    )
+
             return redirect("rendez_vous")
     else:
         form = RendezVousForm()
