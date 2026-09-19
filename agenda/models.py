@@ -28,6 +28,16 @@ class Activite(models.Model):
         choices=STATUT_CHOICES,
         default="brouillon"
     )
+    
+    RAPPEL_CHOICES = [
+        ("", "Aucun rappel"),
+        ("15", "15 minutes avant"),
+        ("30", "30 minutes avant"),
+        ("60", "1 heure avant"),
+        ("1440", "1 jour avant"),
+    ]
+    rappel_minutes_avant = models.CharField(max_length=10, choices=RAPPEL_CHOICES, blank=True)
+    rappel_envoye = models.BooleanField(default=False)
 
     cree_par = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -80,6 +90,16 @@ class RendezVous(models.Model):
         choices=STATUT_CHOICES,
         default="planifie"
     )
+    
+    RAPPEL_CHOICES = [
+        ("", "Aucun rappel"),
+        ("15", "15 minutes avant"),
+        ("30", "30 minutes avant"),
+        ("60", "1 heure avant"),
+        ("1440", "1 jour avant"),
+    ]
+    rappel_minutes_avant = models.CharField(max_length=10, choices=RAPPEL_CHOICES, blank=True)
+    rappel_envoye = models.BooleanField(default=False)
 
     cree_par = models.ForeignKey(
         settings.AUTH_USER_MODEL,

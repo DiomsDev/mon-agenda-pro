@@ -118,6 +118,14 @@ Nouvelle activité - DIRAGENDA
                     {{ form.heure_fin }}
                 </div>
 
+                <div>
+                    <label for="{{ form.rappel_minutes_avant.id_for_label }}">
+                        Rappel
+                    </label>
+
+                    {{ form.rappel_minutes_avant }}
+                </div>
+
             </div>
 
         </div>
@@ -185,7 +193,7 @@ Nouvelle activité - DIRAGENDA
             border-top: 1px solid #e5e7eb;
         ">
 
-            <a
+            
                 href="{% url 'activites' %}"
                 class="btn"
                 style="

@@ -18,6 +18,7 @@ class ActiviteForm(forms.ModelForm):
             "contact",
             "observations",
             "statut",
+            "rappel_minutes_avant"
         ]
 
         widgets = {
@@ -65,6 +66,8 @@ class ActiviteForm(forms.ModelForm):
             "statut": forms.Select(attrs={
                 "class": "form-control",
             }),
+            
+            "rappel_minutes_avant": forms.Select(attrs={"class": "form-control"}),
         }
 
 
@@ -84,6 +87,7 @@ class RendezVousForm(forms.ModelForm):
             "telephone",
             "observations",
             "statut",
+            "rappel_minutes_avant"
         ]
 
         widgets = {
@@ -126,4 +130,6 @@ class RendezVousForm(forms.ModelForm):
             "statut": forms.Select(attrs={
                 "class": "form-control",
             }),
+            
+            "rappel_minutes_avant": forms.Select(attrs={"class": "form-control"}),
         }      

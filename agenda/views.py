@@ -531,6 +531,7 @@ def nouveau_rendez_vous(request):
     return render(request, "agenda/nouveau_rendez_vous.html", {"form": form})
 
 
+
 @login_required
 def modifier_rendez_vous(request, pk):
     rdv = get_object_or_404(RendezVous, pk=pk, entreprise=request.user.entreprise)
