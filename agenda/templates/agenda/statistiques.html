@@ -6,7 +6,7 @@
 
 <div class="page-header" style="margin-bottom:25px;">
     <h1>📊 Statistiques</h1>
-    <p>Vue d'ensemble de l'activité de la direction — {{ annee_courante }} <span style="color:#2F7D5E;">🟢 mise à jour automatique</span></p>
+    
 </div>
 
 <div class="section">
@@ -42,6 +42,16 @@
 </div>
 
 {{ graphique_json|json_script:"graphique-data" }}
+
+<div class="section">
+    <div class="section-header"><h2> Répartition des activités par statut</h2></div>
+    <div id="legende-statut" style="display:flex; flex-wrap:wrap; gap:16px; margin-bottom:12px; font-size:12px; color:#5B6B78;"></div>
+    <div style="position:relative; height:280px;">
+        <canvas id="camembertStatut"></canvas>
+    </div>
+</div>
+
+{{ repartition_statut_json|json_script:"statut-data" }}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
@@ -92,6 +102,44 @@ async function actualiserStatistiques() {
 }
 
 setInterval(actualiserStatistiques, 15000);
+
+const donneesStatut = JSON.parse(document.getElementById('statut-data').textContent);
+const couleursStatut = {
+    "Brouillon": "#B7C0C7",
+    "En attente de validation": "#C98A2C",
+    "Confirmée": "#16283D",
+    "Effectuée": "#2F7D5E",
+    "Annulée": "#B15E2B",
+};
+const couleursAppliquees = donneesStatut.labels.map(l => couleursStatut[l] || "#8FA0C8");
+
+const legende = document.getElementById('legende-statut');
+donneesStatut.labels.forEach((label, i) => {
+    const span = document.createElement('span');
+    span.style.display = 'flex';
+    span.style.alignItems = 'center';
+    span.style.gap = '4px';
+    span.innerHTML = `<span style="width:10px;height:10px;border-radius:2px;background:${couleursAppliquees[i]};"></span>${label} (${donneesStatut.valeurs[i]})`;
+    legende.appendChild(span);
+});
+
+new Chart(document.getElementById('camembertStatut'), {
+    type: 'doughnut',
+    data: {
+        labels: donneesStatut.labels,
+        datasets: [{
+            data: donneesStatut.valeurs,
+            backgroundColor: couleursAppliquees,
+            borderColor: '#fff',
+            borderWidth: 2,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+    }
+});
 </script>
 
 {% endblock %}

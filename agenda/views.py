@@ -882,10 +882,22 @@ def statistiques(request):
         "rendez_vous": repartition_mensuelle(RendezVous.objects.filter(entreprise=entreprise), "date"),
     }
 
+    repartition_statut_qs = (
+        Activite.objects.filter(entreprise=entreprise)
+        .values("statut")
+        .annotate(total=Count("id"))
+    )
+    libelles_statut = dict(Activite.STATUT_CHOICES)
+    repartition_statut = {
+        "labels": [libelles_statut.get(ligne["statut"], ligne["statut"]) for ligne in repartition_statut_qs],
+        "valeurs": [ligne["total"] for ligne in repartition_statut_qs],
+    }
+
     context = {
         "stats": stats,
         "annee_courante": annee_courante,
-        "graphique_json": json.dumps(graphique),
+        "graphique_json": graphique,
+        "repartition_statut_json": repartition_statut,
     }
     return render(request, "agenda/statistiques.html", context)
 
