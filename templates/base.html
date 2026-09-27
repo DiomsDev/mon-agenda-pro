@@ -351,6 +351,7 @@
             <a href="{% url 'activites' %}"><span class="menu-icon">📋</span><span>Activités</span></a>
             <a href="{% url 'rendez_vous' %}"><span class="menu-icon">🤝</span><span>Rendez-vous</span></a>
             <a href="{% url 'missions' %}"><span class="menu-icon">🚗</span><span>Missions</span></a>
+            <a href="{% url 'reunions' %}"><span class="menu-icon">🗓️</span><span>Réunions</span></a>
 
             <div class="menu-title">Administration</div>
                  {% if request.user.role == 'directeur' %}

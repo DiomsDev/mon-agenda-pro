@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
-from .models import Activite, RendezVous
+from .models import Activite, RendezVous, Reunion
 from missions.models import Mission
-from .forms import ActiviteForm, RendezVousForm
+from .forms import ActiviteForm, RendezVousForm, ReunionForm
 from missions.forms import MissionForm
 
 import calendar
@@ -66,6 +66,14 @@ def dashboard(request):
     ).exclude(
         statut__in=["terminee", "annulee"]
     ).count()
+    
+    # Réunions à venir de l'entreprise
+    nombre_reunions = Reunion.objects.filter(
+       entreprise=entreprise,
+       date__gte=aujourd_hui
+    ).exclude(
+        statut="annulee"
+    ).count()
 
     return render(
         request,
@@ -75,6 +83,7 @@ def dashboard(request):
             "activites_effectuees": activites_effectuees,
             "nombre_rendez_vous": nombre_rendez_vous,
             "nombre_missions": nombre_missions,
+            "nombre_reunions": nombre_reunions,
         }
     )
 
@@ -242,7 +251,18 @@ def notifications(request):
 
 @login_required
 def reunions(request):
-    return render(request, "agenda/reunions.html")
+    entreprise = request.user.entreprise
+
+    reunions = Reunion.objects.filter(
+        entreprise=entreprise
+    ).order_by("-date", "-heure_debut")
+
+    return render(
+        request,
+        "agenda/reunions.html",
+        {"reunions": reunions}
+    )
+    
 
 @login_required
 def statistiques(request):
@@ -559,6 +579,106 @@ def supprimer_rendez_vous(request, pk):
         return redirect("rendez_vous")
 
     return render(request, "agenda/supprimer_rendez_vous.html", {"rendez_vous": rdv})
+
+
+
+# =========================================================
+# RÉUNIONS — CRUD
+# =========================================================
+
+@login_required
+def nouvelle_reunion(request):
+    if request.method == "POST":
+        form = ReunionForm(request.POST)
+
+        if form.is_valid():
+            reunion = form.save(commit=False)
+
+            reunion.cree_par = request.user
+            reunion.entreprise = request.user.entreprise
+
+            reunion.save()
+
+            enregistrer_action(
+                request.user,
+                "Création de réunion",
+                f"Réunion « {reunion.titre} » créée"
+            )
+
+            return redirect("reunions")
+
+    else:
+        form = ReunionForm()
+
+    return render(
+        request,
+        "agenda/nouvelle_reunion.html",
+        {"form": form}
+    )
+
+
+@login_required
+def modifier_reunion(request, pk):
+    reunion = get_object_or_404(
+        Reunion,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    if request.method == "POST":
+        form = ReunionForm(request.POST, instance=reunion)
+
+        if form.is_valid():
+            reunion = form.save()
+
+            enregistrer_action(
+                request.user,
+                "Modification de réunion",
+                f"Réunion « {reunion.titre} » modifiée"
+            )
+
+            return redirect("reunions")
+
+    else:
+        form = ReunionForm(instance=reunion)
+
+    return render(
+        request,
+        "agenda/nouvelle_reunion.html",
+        {
+            "form": form,
+            "modification": True
+        }
+    )
+
+
+@login_required
+def supprimer_reunion(request, pk):
+    reunion = get_object_or_404(
+        Reunion,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    if request.method == "POST":
+        titre = reunion.titre
+
+        reunion.delete()
+
+        enregistrer_action(
+            request.user,
+            "Suppression de réunion",
+            f"Réunion « {titre} » supprimée"
+        )
+
+        return redirect("reunions")
+
+    return render(
+        request,
+        "agenda/supprimer_reunion.html",
+        {"reunion": reunion}
+    )
+
 
 
 # =========================================================

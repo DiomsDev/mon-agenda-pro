@@ -1,6 +1,5 @@
 from django import forms
-from .models import Activite
-from .models import RendezVous
+from .models import Activite, RendezVous, Reunion
 
 
 class ActiviteForm(forms.ModelForm):
@@ -133,3 +132,79 @@ class RendezVousForm(forms.ModelForm):
             
             "rappel_minutes_avant": forms.Select(attrs={"class": "form-control"}),
         }      
+        
+        
+# =========================================================
+# FORMULAIRE RÉUNION
+# =========================================================
+
+class ReunionForm(forms.ModelForm):
+
+    class Meta:
+        model = Reunion
+
+        fields = [
+            "titre",
+            "date",
+            "heure_debut",
+            "heure_fin",
+            "lieu",
+            "organisateur",
+            "participants",
+            "ordre_du_jour",
+            "description",
+            "statut",
+        ]
+
+        widgets = {
+            "titre": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Ex : Réunion avec l'équipe",
+            }),
+
+            "date": forms.DateInput(attrs={
+                "type": "date",
+                "class": "form-control",
+            }),
+
+            "heure_debut": forms.TimeInput(attrs={
+                "type": "time",
+                "class": "form-control",
+            }),
+
+            "heure_fin": forms.TimeInput(attrs={
+                "type": "time",
+                "class": "form-control",
+            }),
+
+            "lieu": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Ex : Salle de réunion",
+            }),
+
+            "organisateur": forms.Select(attrs={
+                "class": "form-control",
+            }),
+
+            "participants": forms.Textarea(attrs={
+                "class": "form-control",
+                "placeholder": "Indiquez les participants à la réunion...",
+                "rows": 4,
+            }),
+
+            "ordre_du_jour": forms.Textarea(attrs={
+                "class": "form-control",
+                "placeholder": "Indiquez les points à traiter...",
+                "rows": 5,
+            }),
+
+            "description": forms.Textarea(attrs={
+                "class": "form-control",
+                "placeholder": "Ajoutez des informations complémentaires...",
+                "rows": 5,
+            }),
+
+            "statut": forms.Select(attrs={
+                "class": "form-control",
+            }),
+        }        

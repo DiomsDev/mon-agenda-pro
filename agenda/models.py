@@ -119,3 +119,58 @@ class RendezVous(models.Model):
         return f"{self.objet} - {self.date}"
 
 
+# =========================================================
+# RÉUNIONS
+# =========================================================
+
+class Reunion(models.Model):
+    STATUT_CHOICES = [
+        ("planifiee", "Planifiée"),
+        ("en_cours", "En cours"),
+        ("terminee", "Terminée"),
+        ("annulee", "Annulée"),
+    ]
+
+    titre = models.CharField(max_length=255)
+    date = models.DateField()
+    heure_debut = models.TimeField(null=True, blank=True)
+    heure_fin = models.TimeField(null=True, blank=True)
+    lieu = models.CharField(max_length=255, blank=True)
+
+    organisateur = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reunions_organisees",
+    )
+
+    participants = models.TextField(
+        blank=True,
+        help_text="Indiquez les participants à la réunion."
+    )
+
+    ordre_du_jour = models.TextField(blank=True)
+
+    description = models.TextField(blank=True)
+
+    statut = models.CharField(
+        max_length=20,
+        choices=STATUT_CHOICES,
+        default="planifiee"
+    )
+
+    cree_par = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reunions_creees",
+    )
+
+    entreprise = models.ForeignKey(
+        "entreprises.Entreprise",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="reunions",
+    )
+
+    def __str__(self):
+        return f"{self.titre} - {self.date}"

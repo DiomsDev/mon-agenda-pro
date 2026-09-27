@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Réunions</h1>
+        <p>Gérez les réunions de votre entreprise.</p>
+    </div>
+
+    <a href="{% url 'nouvelle_reunion' %}" class="btn btn-primary">
+        + Nouvelle réunion
+    </a>
+</div>
+
+
+<div class="content-card">
+
+    {% if reunions %}
+
+        <div class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Date</th>
+                        <th>Horaire</th>
+                        <th>Lieu</th>
+                        <th>Organisateur</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for reunion in reunions %}
+
+                    <tr>
+
+                        <td>
+                            <strong>{{ reunion.titre }}</strong>
+                        </td>
+
+                        <td>
+                            {{ reunion.date|date:"d/m/Y" }}
+                        </td>
+
+                        <td>
+                            {% if reunion.heure_debut %}
+                                {{ reunion.heure_debut|time:"H:i" }}
+                            {% endif %}
+
+                            {% if reunion.heure_fin %}
+                                - {{ reunion.heure_fin|time:"H:i" }}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ reunion.lieu|default:"—" }}
+                        </td>
+
+                        <td>
+                            {{ reunion.organisateur }}
+                        </td>
+
+                        <td>
+                            {{ reunion.get_statut_display }}
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'modifier_reunion' reunion.pk %}"
+                                class="btn btn-sm btn-secondary"
+                            >
+                                Modifier
+                            </a>
+
+                            <a
+                                href="{% url 'supprimer_reunion' reunion.pk %}"
+                                class="btn btn-sm btn-danger"
+                            >
+                                Supprimer
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <h3>Aucune réunion</h3>
+
+            <p>
+                Aucune réunion n'a encore été enregistrée.
+            </p>
+
+            <a
+                href="{% url 'nouvelle_reunion' %}"
+                class="btn btn-primary"
+            >
+                Créer une réunion
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

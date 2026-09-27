@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if modification %}Modifier la réunion{% else %}Nouvelle réunion{% endif %} - DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>
+        {% if modification %}
+            Modifier la réunion
+        {% else %}
+            Nouvelle réunion
+        {% endif %}
+    </h1>
+
+```
+<p>Planifiez et enregistrez une nouvelle réunion</p>
+```
+
+</div>
+
+<div class="card">
+
+```
+<form method="post">
+
+    {% csrf_token %}
+
+    {% if form.errors %}
+    <div style="
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+    ">
+        ⚠️ Veuillez vérifier les informations saisies.
+    </div>
+    {% endif %}
+
+
+    <!-- INFORMATIONS PRINCIPALES -->
+
+    <div style="margin-bottom: 30px;">
+
+        <h2 style="margin-bottom: 20px;">
+            📋 Informations principales
+        </h2>
+
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        ">
+
+            <div>
+                <label for="{{ form.titre.id_for_label }}">
+                    Titre *
+                </label>
+
+                {{ form.titre }}
+
+                {% if form.titre.errors %}
+                    <small style="color: #dc2626;">
+                        {{ form.titre.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+
+            <div>
+                <label for="{{ form.statut.id_for_label }}">
+                    Statut
+                </label>
+
+                {{ form.statut }}
+
+                {% if form.statut.errors %}
+                    <small style="color: #dc2626;">
+                        {{ form.statut.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DATE ET HEURE -->
+
+    <div style="margin-bottom: 30px;">
+
+        <h2 style="margin-bottom: 20px;">
+            📅 Date et horaires
+        </h2>
+
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        ">
+
+            <div>
+                <label for="{{ form.date.id_for_label }}">
+                    Date *
+                </label>
+
+                {{ form.date }}
+
+                {% if form.date.errors %}
+                    <small style="color: #dc2626;">
+                        {{ form.date.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+
+            <div>
+                <label for="{{ form.heure_debut.id_for_label }}">
+                    Heure de début
+                </label>
+
+                {{ form.heure_debut }}
+
+                {% if form.heure_debut.errors %}
+                    <small style="color: #dc2626;">
+                        {{ form.heure_debut.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+
+            <div>
+                <label for="{{ form.heure_fin.id_for_label }}">
+                    Heure de fin
+                </label>
+
+                {{ form.heure_fin }}
+
+                {% if form.heure_fin.errors %}
+                    <small style="color: #dc2626;">
+                        {{ form.heure_fin.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LIEU ET ORGANISATEUR -->
+
+    <div style="margin-bottom: 30px;">
+
+        <h2 style="margin-bottom: 20px;">
+            📍 Lieu et organisation
+        </h2>
+
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        ">
+
+            <div>
+                <label for="{{ form.lieu.id_for_label }}">
+                    Lieu
+                </label>
+
+                {{ form.lieu }}
+
+                {% if form.lieu.errors %}
+                    <small style="color: #dc2626;">
+                        {{ form.lieu.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+
+            <div>
+                <label for="{{ form.organisateur.id_for_label }}">
+                    Organisateur *
+                </label>
+
+                {{ form.organisateur }}
+
+                {% if form.organisateur.errors %}
+                    <small style="color: #dc2626;">
+                        {{ form.organisateur.errors }}
+                    </small>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PARTICIPANTS -->
+
+    <div style="margin-bottom: 30px;">
+
+        <h2 style="margin-bottom: 20px;">
+            👥 Participants
+        </h2>
+
+        <label for="{{ form.participants.id_for_label }}">
+            Participants
+        </label>
+
+        {{ form.participants }}
+
+        {% if form.participants.errors %}
+            <small style="color: #dc2626;">
+                {{ form.participants.errors }}
+            </small>
+        {% endif %}
+
+    </div>
+
+
+    <!-- ORDRE DU JOUR -->
+
+    <div style="margin-bottom: 30px;">
+
+        <h2 style="margin-bottom: 20px;">
+            📋 Ordre du jour
+        </h2>
+
+        <label for="{{ form.ordre_du_jour.id_for_label }}">
+            Points à traiter
+        </label>
+
+        {{ form.ordre_du_jour }}
+
+        {% if form.ordre_du_jour.errors %}
+            <small style="color: #dc2626;">
+                {{ form.ordre_du_jour.errors }}
+            </small>
+        {% endif %}
+
+    </div>
+
+
+    <!-- DESCRIPTION -->
+
+    <div style="margin-bottom: 30px;">
+
+        <h2 style="margin-bottom: 20px;">
+            📝 Description
+        </h2>
+
+        <label for="{{ form.description.id_for_label }}">
+            Informations complémentaires
+        </label>
+
+        {{ form.description }}
+
+        {% if form.description.errors %}
+            <small style="color: #dc2626;">
+                {{ form.description.errors }}
+            </small>
+        {% endif %}
+
+    </div>
+
+
+    <!-- BOUTONS -->
+
+    <div style="
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+    ">
+
+        <a
+            href="{% url 'reunions' %}"
+            class="btn"
+            style="background: #e5e7eb; color: #374151;"
+        >
+            Annuler
+        </a>
+
+        <button
+            type="submit"
+            class="btn"
+        >
+            {% if modification %}
+                💾 Enregistrer les modifications
+            {% else %}
+                💾 Enregistrer la réunion
+            {% endif %}
+        </button>
+
+    </div>
+
+</form>
+```
+
+</div>
+
+{% endblock %}
