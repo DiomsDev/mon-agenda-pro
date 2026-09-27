@@ -7,11 +7,59 @@ Historique - DIRAGENDA
 {% block content %}
 
 
+<!-- =========================================================
+     EN-TÊTE
+========================================================= -->
+
+<div style="
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:20px;
+">
+
+    <!-- Icône historique -->
+    <svg width="30" height="30"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="#78909C"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         aria-hidden="true">
+
+        <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+
+        <polyline points="3 4 3 9 8 9"></polyline>
+
+        <polyline points="12 7 12 12 15 14"></polyline>
+
+    </svg>
+
+    <div>
+
+        <h1 style="margin:0;">
+            Historique
+        </h1>
+
+        <p style="
+            margin-top:5px;
+            color:#64748b;
+        ">
+            Consultez les actions enregistrées dans DIRAGENDA
+        </p>
+
+    </div>
+
+</div>
 
 
 <div class="card">
 
-    <!-- EN-TÊTE -->
+
+    <!-- =====================================================
+         COMPTEUR
+    ====================================================== -->
 
     <div style="
         display:flex;
@@ -22,106 +70,215 @@ Historique - DIRAGENDA
         flex-wrap:wrap;
     ">
 
-        
-
         <div style="
             background:#f1f5f9;
             padding:10px 15px;
             border-radius:8px;
             font-weight:600;
+            color:#334155;
         ">
-            {{ actions|length }} action{{ actions|length|pluralize }}
+
+            {{ actions|length }}
+            action{{ actions|length|pluralize }}
+
         </div>
 
     </div>
 
-    <!-- RECHERCHE ET FILTRES -->
 
-<form method="get" style="
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-">
+    <!-- =====================================================
+         RECHERCHE ET FILTRES
+    ====================================================== -->
 
-    <!-- Recherche -->
-    <input
-        type="text"
-        name="recherche"
-        value="{{ recherche }}"
-        placeholder="🔎 Rechercher..."
-        style="
+    <form method="get" style="
+        display:flex;
+        gap:12px;
+        flex-wrap:wrap;
+        margin-bottom:20px;
+    ">
+
+
+        <!-- Recherche -->
+
+        <div style="
+            position:relative;
             flex:1;
             min-width:220px;
-            padding:11px 14px;
-            border:1px solid #cbd5e1;
-            border-radius:8px;
-            font-size:14px;
-        "
-    >
+        ">
 
-    <!-- Type d'action -->
-    <select
-        name="type_action"
-        style="
-            padding:11px 14px;
-            border:1px solid #cbd5e1;
-            border-radius:8px;
-            font-size:14px;
-            background:white;
-        "
-    >
+            <!-- Icône recherche -->
 
-        <option value="">Toutes les actions</option>
-
-        {% for type in types_actions %}
-
-            <option
-                value="{{ type }}"
-                {% if type_action == type %}selected{% endif %}
+            <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#64748b"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="
+                    position:absolute;
+                    left:13px;
+                    top:50%;
+                    transform:translateY(-50%);
+                    pointer-events:none;
+                "
+                aria-hidden="true"
             >
-                {{ type }}
+
+                <circle cx="11" cy="11" r="7"></circle>
+
+                <line x1="16.5" y1="16.5"
+                      x2="21" y2="21"></line>
+
+            </svg>
+
+
+            <input
+                type="text"
+                name="recherche"
+                value="{{ recherche }}"
+                placeholder="Rechercher..."
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:11px 14px 11px 40px;
+                    border:1px solid #cbd5e1;
+                    border-radius:8px;
+                    font-size:14px;
+                "
+            >
+
+        </div>
+
+
+        <!-- Type d'action -->
+
+        <select
+            name="type_action"
+            style="
+                padding:11px 14px;
+                border:1px solid #cbd5e1;
+                border-radius:8px;
+                font-size:14px;
+                background:white;
+            "
+        >
+
+            <option value="">
+                Toutes les actions
             </option>
 
-        {% endfor %}
+            {% for type in types_actions %}
 
-    </select>
+                <option
+                    value="{{ type }}"
+                    {% if type_action == type %}selected{% endif %}
+                >
 
-    <!-- Bouton -->
-    <button
-        type="submit"
-        style="
-            padding:11px 18px;
-            border:none;
-            border-radius:8px;
-            background:#2563eb;
-            color:white;
-            font-weight:600;
-            cursor:pointer;
-        "
-    >
-        Rechercher
-    </button>
+                    {{ type }}
 
-    <!-- Réinitialiser -->
-    <a
-        href="{% url 'historique' %}"
-        style="
-            display:flex;
-            align-items:center;
-            padding:11px 18px;
-            border-radius:8px;
-            background:#f1f5f9;
-            color:#334155;
-            text-decoration:none;
-            font-weight:600;
-        "
-    >
-        Réinitialiser
-    </a>
+                </option>
 
-</form>
+            {% endfor %}
 
+        </select>
+
+
+        <!-- Bouton rechercher -->
+
+        <button
+            type="submit"
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                gap:7px;
+                padding:11px 18px;
+                border:none;
+                border-radius:8px;
+                background:#2563eb;
+                color:white;
+                font-weight:600;
+                cursor:pointer;
+            "
+        >
+
+            <!-- Icône recherche -->
+
+            <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+
+                <circle cx="11" cy="11" r="7"></circle>
+
+                <line x1="16.5" y1="16.5"
+                      x2="21" y2="21"></line>
+
+            </svg>
+
+            Rechercher
+
+        </button>
+
+
+        <!-- Réinitialiser -->
+
+        <a
+            href="{% url 'historique' %}"
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                gap:7px;
+                padding:11px 18px;
+                border-radius:8px;
+                background:#f1f5f9;
+                color:#334155;
+                text-decoration:none;
+                font-weight:600;
+            "
+        >
+
+            <!-- Icône réinitialisation -->
+
+            <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+
+                <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+
+                <polyline points="3 4 3 9 8 9"></polyline>
+
+            </svg>
+
+            Réinitialiser
+
+        </a>
+
+    </form>
+
+
+    <!-- =====================================================
+         LISTE DES ACTIONS
+    ====================================================== -->
 
     {% if actions %}
 
@@ -136,19 +293,34 @@ Historique - DIRAGENDA
 
                 <tr>
 
-                    <th style="text-align:left; padding:14px;">
+                    <th style="
+                        text-align:left;
+                        padding:14px;
+                    ">
                         Date
                     </th>
 
-                    <th style="text-align:left; padding:14px;">
+
+                    <th style="
+                        text-align:left;
+                        padding:14px;
+                    ">
                         Utilisateur
                     </th>
 
-                    <th style="text-align:left; padding:14px;">
+
+                    <th style="
+                        text-align:left;
+                        padding:14px;
+                    ">
                         Action
                     </th>
 
-                    <th style="text-align:left; padding:14px;">
+
+                    <th style="
+                        text-align:left;
+                        padding:14px;
+                    ">
                         Description
                     </th>
 
@@ -161,11 +333,17 @@ Historique - DIRAGENDA
 
                 {% for action in actions %}
 
-                <tr style="border-top:1px solid #e5e7eb;">
+                <tr style="
+                    border-top:1px solid #e5e7eb;
+                ">
+
 
                     <!-- DATE -->
 
-                    <td style="padding:14px; white-space:nowrap;">
+                    <td style="
+                        padding:14px;
+                        white-space:nowrap;
+                    ">
 
                         <strong>
                             {{ action.date|date:"d/m/Y" }}
@@ -173,7 +351,9 @@ Historique - DIRAGENDA
 
                         <br>
 
-                        <small style="color:#64748b;">
+                        <small style="
+                            color:#64748b;
+                        ">
                             {{ action.date|date:"H:i" }}
                         </small>
 
@@ -182,7 +362,9 @@ Historique - DIRAGENDA
 
                     <!-- UTILISATEUR -->
 
-                    <td style="padding:14px;">
+                    <td style="
+                        padding:14px;
+                    ">
 
                         {% if action.utilisateur %}
 
@@ -192,7 +374,9 @@ Historique - DIRAGENDA
 
                         {% else %}
 
-                            <span style="color:#94a3b8;">
+                            <span style="
+                                color:#94a3b8;
+                            ">
                                 Utilisateur supprimé
                             </span>
 
@@ -203,7 +387,9 @@ Historique - DIRAGENDA
 
                     <!-- ACTION -->
 
-                    <td style="padding:14px;">
+                    <td style="
+                        padding:14px;
+                    ">
 
                         <span style="
                             display:inline-block;
@@ -235,7 +421,9 @@ Historique - DIRAGENDA
 
                         {% else %}
 
-                            <span style="color:#94a3b8;">
+                            <span style="
+                                color:#94a3b8;
+                            ">
                                 Aucune description
                             </span>
 
@@ -256,28 +444,58 @@ Historique - DIRAGENDA
 
     {% else %}
 
-    <!-- AUCUN HISTORIQUE -->
+
+    <!-- =====================================================
+         AUCUN HISTORIQUE
+    ====================================================== -->
 
     <div style="
         text-align:center;
         padding:60px 20px;
     ">
 
-        <div style="font-size:45px; margin-bottom:15px;">
-            🕘
-        </div>
+
+        <!-- Icône historique vide -->
+
+        <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#78909C"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style="margin-bottom:15px;"
+            aria-hidden="true"
+        >
+
+            <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+
+            <polyline points="3 4 3 9 8 9"></polyline>
+
+            <polyline points="12 7 12 12 15 14"></polyline>
+
+        </svg>
+
 
         <h3>
             Aucun historique
         </h3>
 
-        <p style="color:#64748b; margin-top:8px;">
+
+        <p style="
+            color:#64748b;
+            margin-top:8px;
+        ">
             Aucune action n'a encore été enregistrée.
         </p>
 
     </div>
 
+
     {% endif %}
+
 
 </div>
 

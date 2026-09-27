@@ -4,24 +4,122 @@
 
 {% block content %}
 
-<div class="page-header">
-    <h1>Supprimer la mission</h1>
-    <p>Cette action est irréversible</p>
+<div class="page-header" style="margin-bottom:25px;">
+
+    <h1 style="display:flex; align-items:center; gap:10px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+             stroke="#B15E2B" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6l-1 14H6L5 6"></path>
+            <path d="M10 11v5"></path>
+            <path d="M14 11v5"></path>
+            <path d="M9 6V4h6v2"></path>
+        </svg>
+        Supprimer la mission
+    </h1>
+
+    <p style="display:flex; align-items:center; gap:6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="#B15E2B" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12" y2="16"></line>
+        </svg>
+        Cette action est irréversible
+    </p>
+
 </div>
 
 <div class="card">
-    <p style="margin-bottom: 20px;">
-        Es-tu sûr de vouloir supprimer la mission
-        <strong>{{ mission.motif }}</strong> à {{ mission.lieu }} ({{ mission.date_depart|date:"d/m/Y" }}) ?
-    </p>
+
+    <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:20px;">
+
+        <div style="
+            width:42px;
+            height:42px;
+            min-width:42px;
+            border-radius:50%;
+            background:#FBE9E4;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        ">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="#B15E2B" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <path d="M10.3 3.5L2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.5a2 2 0 0 0-3.4 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12" y2="17"></line>
+            </svg>
+        </div>
+
+        <p style="margin:0; line-height:1.6;">
+            Es-tu sûr de vouloir supprimer la mission
+            <strong>{{ mission.motif }}</strong>
+            à {{ mission.lieu }}
+            ({{ mission.date_depart|date:"d/m/Y" }}) ?
+        </p>
+
+    </div>
 
     <form method="post">
+
         {% csrf_token %}
+
         <div style="display:flex; gap:12px; justify-content:flex-end;">
-            <a href="{% url 'missions' %}" class="btn" style="background:#e5e7eb; color:#374151;">Annuler</a>
-            <button type="submit" class="btn" style="background:#B15E2B;">🗑️ Confirmer la suppression</button>
+
+            <a href="{% url 'missions' %}"
+               class="btn"
+               style="
+                   background:#e5e7eb;
+                   color:#374151;
+                   display:inline-flex;
+                   align-items:center;
+                   gap:7px;
+               ">
+
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+
+                Annuler
+
+            </a>
+
+            <button type="submit"
+                    class="btn"
+                    style="
+                        background:#B15E2B;
+                        display:inline-flex;
+                        align-items:center;
+                        gap:7px;
+                    ">
+
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14H6L5 6"></path>
+                    <path d="M10 11v5"></path>
+                    <path d="M14 11v5"></path>
+                    <path d="M9 6V4h6v2"></path>
+                </svg>
+
+                Confirmer la suppression
+
+            </button>
+
         </div>
+
     </form>
+
 </div>
 
 {% endblock %}

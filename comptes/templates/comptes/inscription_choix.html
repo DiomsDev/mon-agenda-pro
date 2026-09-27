@@ -1,32 +1,218 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Inscription — DIRAGENDA</title>
+
     <style>
-        body { font-family: sans-serif; background: #16283D; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .card { background: #fff; padding: 40px; border-radius: 10px; width: 380px; text-align: center; }
-        h1 { font-size: 22px; color: #16283D; margin: 0 0 4px; }
-        p { color: #5B6B78; font-size: 13px; margin: 0 0 24px; }
-        .choix { display: flex; flex-direction: column; gap: 14px; }
-        .choix a { display: block; padding: 16px; border-radius: 8px; text-decoration: none; font-size: 14px; }
-        .creer { background: #16283D; color: #fff; }
-        .rejoindre { background: #EEF1F3; color: #16283D; }
-        .foot { margin-top: 20px; }
-        .foot a { color: #C98A2C; font-size: 12px; text-decoration: none; }
+
+        body {
+            font-family: sans-serif;
+            background: #16283D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            width: 380px;
+            max-width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 22px;
+            color: #16283D;
+            margin: 0 0 4px;
+        }
+
+        p {
+            color: #5B6B78;
+            font-size: 13px;
+            margin: 0 0 24px;
+        }
+
+        .choix {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .choix a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            text-align: left;
+            transition: 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .choix a svg {
+            flex-shrink: 0;
+        }
+
+        .creer {
+            background: #16283D;
+            color: #fff;
+        }
+
+        .creer:hover {
+            background: #203954;
+        }
+
+        .rejoindre {
+            background: #EEF1F3;
+            color: #16283D;
+        }
+
+        .rejoindre:hover {
+            background: #E1E6EA;
+        }
+
+        .foot {
+            margin-top: 20px;
+        }
+
+        .foot a {
+            color: #C98A2C;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .foot a:hover {
+            text-decoration: underline;
+        }
+
+        .option-description {
+            display: block;
+            font-size: 11px;
+            margin-top: 3px;
+            opacity: 0.7;
+        }
+
     </style>
+
 </head>
+
 <body>
+
     <div class="card">
+
         <h1>DIRAGENDA</h1>
-        <p>Comment souhaitez-vous vous inscrire ?</p>
+
+        <p>
+            Comment souhaitez-vous vous inscrire ?
+        </p>
+
+
         <div class="choix">
-            <a href="{% url 'creer_entreprise' %}" class="creer">🏢 Créer une nouvelle entreprise</a>
-            <a href="{% url 'rejoindre_entreprise' %}" class="rejoindre">🤝 Rejoindre une entreprise existante</a>
+
+            <!-- CRÉER UNE ENTREPRISE -->
+
+            <a href="{% url 'creer_entreprise' %}"
+               class="creer">
+
+                <svg width="23"
+                     height="23"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+
+                    <path d="M3 21h18"></path>
+
+                    <path d="M5 21V5l7-3 7 3v16"></path>
+
+                    <path d="M9 21v-4h6v4"></path>
+
+                    <path d="M8 8h1"></path>
+
+                    <path d="M12 8h1"></path>
+
+                    <path d="M16 8h1"></path>
+
+                    <path d="M8 12h1"></path>
+
+                    <path d="M12 12h1"></path>
+
+                    <path d="M16 12h1"></path>
+
+                </svg>
+
+                <span>
+                    Créer une nouvelle entreprise
+                </span>
+
+            </a>
+
+
+            <!-- REJOINDRE UNE ENTREPRISE -->
+
+            <a href="{% url 'rejoindre_entreprise' %}"
+               class="rejoindre">
+
+                <svg width="23"
+                     height="23"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+
+                    <circle cx="9" cy="7" r="4"></circle>
+
+                    <path d="M3 21v-2a4 4 0 0 1 4-4h4"></path>
+
+                    <path d="M16 11v6"></path>
+
+                    <path d="M13 14h6"></path>
+
+                </svg>
+
+                <span>
+                    Rejoindre une entreprise existante
+                </span>
+
+            </a>
+
         </div>
-        <div class="foot"><a href="{% url 'login' %}">J'ai déjà un compte</a></div>
+
+
+        <div class="foot">
+
+            <a href="{% url 'login' %}">
+                J'ai déjà un compte
+            </a>
+
+        </div>
+
     </div>
+
 </body>
+
 </html>

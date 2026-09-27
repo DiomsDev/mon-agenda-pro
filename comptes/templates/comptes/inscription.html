@@ -1,55 +1,326 @@
+```html
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Connexion — DIRAGENDA</title>
+
     <style>
-        body { font-family: sans-serif; background: #16283D; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .card { background: #fff; padding: 40px; border-radius: 10px; width: 340px; }
-        h1 { font-size: 22px; color: #16283D; margin: 0 0 4px; }
-        p { color: #5B6B78; font-size: 13px; margin: 0 0 24px; }
-        label { display: block; font-size: 13px; margin-bottom: 6px; color: #5B6B78; }
-        input, select { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #D7DCE1; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #16283D; color: #fff; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; }
-        .errorlist { color: #B15E2B; font-size: 12px; padding: 0; margin: -10px 0 12px; list-style: none; }
-        a { color: #C98A2C; font-size: 12px; text-decoration: none; }
-        .foot { text-align: center; margin-top: 16px; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #16283D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            width: 380px;
+            max-width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            color: #C98A2C;
+        }
+
+        h1 {
+            font-size: 23px;
+            color: #16283D;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            color: #5B6B78;
+            font-size: 13px;
+            text-align: center;
+            margin: 0 0 26px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #5B6B78;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            margin-bottom: 16px;
+            border: 1px solid #D7DCE1;
+            border-radius: 6px;
+            background: #FFFFFF;
+            color: #16283D;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #5B9BD5;
+            box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.12);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 44px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border: none;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            color: #78909C;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle:hover {
+            color: #16283D;
+            background: transparent;
+        }
+
+        .password-toggle svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 4px;
+            background: #16283D;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        button[type="submit"]:hover {
+            background: #213B58;
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(1px);
+        }
+
+        .errorlist {
+            color: #B15E2B;
+            font-size: 12px;
+            padding: 0;
+            margin: -10px 0 12px;
+            list-style: none;
+        }
+
+        .foot {
+            text-align: center;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #EEF1F3;
+        }
+
+        .foot a {
+            color: #C98A2C;
+            font-size: 12px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .foot a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 30px 24px;
+            }
+        }
     </style>
 </head>
+
 <body>
+
     <div class="card">
-        <h1>DIRAGENDA</h1>
-        <p>Créer un compte</p>
-        <form method="post">
-            {% csrf_token %}
-            {% for field in form %}
-    <label>{{ field.label }}</label>
-    {% if field.name == "password1" or field.name == "password2" %}
-        <div style="position:relative;">
-            {{ field }}
-            <span onclick="togglePassword('{{ field.id_for_label }}', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:16px;">👁️</span>
+
+        <div class="logo">
+
+            <!-- Icône utilisateur -->
+            <svg
+                class="logo-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M20 21a8 8 0 0 0-16 0"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+
+            <h1>DIRAGENDA</h1>
+
         </div>
-       {% else %}
-           {{ field }}
-       {% endif %}
-         {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
-   {% endfor %}
-            <button type="submit">S'inscrire</button>
+
+        <p>Créer un compte</p>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {% for field in form %}
+
+                <label>{{ field.label }}</label>
+
+                {% if field.name == "password1" or field.name == "password2" %}
+
+                    <div class="password-wrapper">
+
+                        {{ field }}
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('{{ field.id_for_label }}', this)"
+                            aria-label="Afficher le mot de passe"
+                        >
+
+                            <!-- Icône œil -->
+                            <svg
+                                class="eye-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+                {% else %}
+
+                    {{ field }}
+
+                {% endif %}
+
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {{ field.errors }}
+                    </ul>
+                {% endif %}
+
+            {% endfor %}
+
+            <button type="submit">
+                S'inscrire
+            </button>
+
         </form>
-        <div class="foot"><a href="{% url 'login' %}">J'ai déjà un compte</a></div>
+
+        <div class="foot">
+            <a href="{% url 'login' %}">
+                J'ai déjà un compte
+            </a>
+        </div>
+
     </div>
+
     <script>
-function togglePassword(id, icon) {
-    const input = document.getElementById(id);
-    if (input.type === "password") {
-        input.type = "text";
-        icon.textContent = "🙈";
-    } else {
-        input.type = "password";
-        icon.textContent = "👁️";
-    }
-}
-</script>
+
+        function togglePassword(id, button) {
+
+            const input = document.getElementById(id);
+            const icon = button.querySelector(".eye-icon");
+
+            if (input.type === "password") {
+
+                input.type = "text";
+
+                button.setAttribute(
+                    "aria-label",
+                    "Masquer le mot de passe"
+                );
+
+                icon.innerHTML = `
+                    <path d="M3 3l18 18"></path>
+                    <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+                    <path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a17.7 17.7 0 0 1-3.1 4.4"></path>
+                    <path d="M6.6 6.6C3.7 8.6 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 4.1-.8"></path>
+                `;
+
+            } else {
+
+                input.type = "password";
+
+                button.setAttribute(
+                    "aria-label",
+                    "Afficher le mot de passe"
+                );
+
+                icon.innerHTML = `
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                `;
+            }
+        }
+
+    </script>
+
 </body>
 </html>
+```

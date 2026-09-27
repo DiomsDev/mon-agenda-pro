@@ -1,53 +1,460 @@
+```html
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Connexion — DIRAGENDA</title>
+
     <style>
-        body { font-family: sans-serif; background: #16283D; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .card { background: #fff; padding: 40px; border-radius: 10px; width: 320px; }
-        h1 { font-size: 22px; color: #16283D; margin: 0 0 4px; }
-        p { color: #5B6B78; font-size: 13px; margin: 0 0 24px; }
-        label { display: block; font-size: 13px; margin-bottom: 6px; color: #5B6B78; }
-        input { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #D7DCE1; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #16283D; color: #fff; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; }
-        .error { color: #B15E2B; font-size: 13px; margin-bottom: 12px; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #16283D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            width: 380px;
+            max-width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* =====================================================
+           LOGO
+        ===================================================== */
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            color: #C98A2C;
+        }
+
+        h1 {
+            font-size: 23px;
+            color: #16283D;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            color: #5B6B78;
+            font-size: 13px;
+            text-align: center;
+            margin: 0 0 26px;
+        }
+
+        /* =====================================================
+           ERREUR
+        ===================================================== */
+
+        .error {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            color: #B15E2B;
+            background: #FFF6F0;
+            border: 1px solid #E8C9B7;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 18px;
+        }
+
+        .error svg {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+        }
+
+        /* =====================================================
+           CHAMPS
+        ===================================================== */
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #5B6B78;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #D7DCE1;
+            border-radius: 6px;
+            background: #FFFFFF;
+            color: #16283D;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: #5B9BD5;
+            box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.12);
+        }
+
+        /* =====================================================
+           MOT DE PASSE
+        ===================================================== */
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 46px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: 28px;
+            height: 28px;
+
+            padding: 0;
+            margin: 0;
+
+            border: none;
+            border-radius: 4px;
+
+            background: transparent;
+            color: #78909C;
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle:hover {
+            background: #F1F4F6;
+            color: #16283D;
+        }
+
+        .password-toggle svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        /* =====================================================
+           BOUTON CONNEXION
+        ===================================================== */
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 4px;
+
+            background: #16283D;
+            color: #FFFFFF;
+
+            border: none;
+            border-radius: 6px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s,
+                transform 0.2s;
+        }
+
+        .login-button:hover {
+            background: #213B58;
+        }
+
+        .login-button:active {
+            transform: translateY(1px);
+        }
+
+        /* =====================================================
+           INSCRIPTION
+        ===================================================== */
+
+        .foot {
+            text-align: center;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #EEF1F3;
+        }
+
+        .foot a {
+            color: #C98A2C;
+            font-size: 12px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .foot a:hover {
+            text-decoration: underline;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 480px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 30px 24px;
+            }
+        }
     </style>
 </head>
+
 <body>
+
     <div class="card">
-        <h1>DIRAGENDA</h1>
-        <p>Agenda de la direction — connexion</p>
-        {% if form.errors %}
-            <div class="error">Identifiant ou mot de passe incorrect.</div>
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            <label>Identifiant</label>
-            <input type="text" name="username" required>
-            <label>Mot de passe</label>
-           <div style="position:relative;">
-             <input type="password" name="password" id="id_password" required style="padding-right:40px;">
-             <span onclick="togglePassword('id_password', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:16px;">👁️</span>
-           </div>
-            <button type="submit">Se connecter</button>
-        </form>
-        <div class="foot" style="text-align:center;margin-top:16px;">
-            <a href="{% url 'inscription' %}" style="color:#C98A2C;font-size:12px;text-decoration:none;">Créer un compte</a>
+
+        <!-- =================================================
+             LOGO DIRAGENDA
+        ================================================== -->
+
+        <div class="logo">
+
+            <!-- Icône utilisateur -->
+            <svg
+                class="logo-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M20 21a8 8 0 0 0-16 0"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+
+            <h1>DIRAGENDA</h1>
+
         </div>
+
+        <p class="subtitle">
+            Agenda de la direction — connexion
+        </p>
+
+
+        <!-- =================================================
+             MESSAGE D'ERREUR
+        ================================================== -->
+
+        {% if form.errors %}
+
+            <div class="error">
+
+                <!-- Icône avertissement -->
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M10.3 3.8L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.8a2 2 0 0 0-3.4 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <circle cx="12" cy="16.5" r="0.8"></circle>
+                </svg>
+
+                <span>
+                    Identifiant ou mot de passe incorrect.
+                </span>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             FORMULAIRE DE CONNEXION
+        ================================================== -->
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <!-- IDENTIFIANT -->
+
+            <div class="field">
+
+                <label for="id_username">
+                    Identifiant
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    id="id_username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <!-- MOT DE PASSE -->
+
+            <div class="field">
+
+                <label for="id_password">
+                    Mot de passe
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="id_password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <!-- Bouton afficher / masquer -->
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword('id_password', this)"
+                        aria-label="Afficher le mot de passe"
+                    >
+
+                        <!-- Icône œil -->
+                        <svg
+                            class="eye-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOUTON -->
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                Se connecter
+            </button>
+
+        </form>
+
+
+        <!-- =================================================
+             INSCRIPTION
+        ================================================== -->
+
+        <div class="foot">
+
+            <a href="{% url 'inscription' %}">
+                Créer un compte
+            </a>
+
+        </div>
+
     </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
     <script>
-       function togglePassword(id, icon) {
-       const input = document.getElementById(id);
-         if (input.type === "password") {
-            input.type = "text";
-            icon.textContent = "🙈";
-        } else {
-            input.type = "password";
-            icon.textContent = "👁️";
-                }
+
+        function togglePassword(id, button) {
+
+            const input = document.getElementById(id);
+            const icon = button.querySelector(".eye-icon");
+
+            if (input.type === "password") {
+
+                input.type = "text";
+
+                button.setAttribute(
+                    "aria-label",
+                    "Masquer le mot de passe"
+                );
+
+                icon.innerHTML = `
+                    <path d="M3 3l18 18"></path>
+                    <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+                    <path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a17.7 17.7 0 0 1-3.1 4.4"></path>
+                    <path d="M6.6 6.6C3.7 8.6 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 4.1-.8"></path>
+                `;
+
+            } else {
+
+                input.type = "password";
+
+                button.setAttribute(
+                    "aria-label",
+                    "Afficher le mot de passe"
+                );
+
+                icon.innerHTML = `
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                `;
+            }
         }
-</script>
+
+    </script>
+
 </body>
 </html>
+```

@@ -1,3 +1,4 @@
+```html
 {% extends "base.html" %}
 
 {% block title %}Modifier mon profil - DIRAGENDA{% endblock %}
@@ -5,34 +6,199 @@
 {% block content %}
 
 <div class="page-header">
-    <h1>👤 Modifier mon profil</h1>
-    <p>Mettez à jour vos informations personnelles</p>
+
+    <h1 style="display:flex; align-items:center; gap:10px;">
+
+        <!-- Icône profil -->
+        <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#4F8FC0"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+        >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21a8 8 0 0 1 16 0"></path>
+        </svg>
+
+        Modifier mon profil
+
+    </h1>
+
+    <p>
+        Mettez à jour vos informations personnelles
+    </p>
+
 </div>
+
 
 <div class="card" style="max-width:480px;">
 
     <form method="post">
+
         {% csrf_token %}
 
+
+        <!-- Message d'erreur -->
+
         {% if form.errors %}
-        <div style="background:#fee2e2; color:#991b1b; padding:15px; border-radius:8px; margin-bottom:25px;">
-            ⚠️ Veuillez corriger les erreurs ci-dessous.
+
+        <div
+            style="
+                display:flex;
+                align-items:flex-start;
+                gap:10px;
+                background:#FFF6F0;
+                color:#B15E2B;
+                border:1px solid #E8C9B7;
+                padding:13px 15px;
+                border-radius:8px;
+                margin-bottom:25px;
+            "
+        >
+
+            <!-- Icône avertissement -->
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="min-width:20px;"
+                aria-hidden="true"
+            >
+                <path d="M10.3 3.8L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.8a2 2 0 0 0-3.4 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <circle cx="12" cy="16.5" r="0.8"></circle>
+            </svg>
+
+            <span>
+                Veuillez corriger les erreurs ci-dessous.
+            </span>
+
         </div>
+
         {% endif %}
 
+
+        <!-- Champs du profil -->
+
         {% for field in form %}
+
         <div style="margin-bottom:20px;">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+
             {{ field }}
+
             {% if field.errors %}
-                <small style="color:#dc2626;">{{ field.errors }}</small>
+
+                <small
+                    style="
+                        color:#dc2626;
+                        display:block;
+                        margin-top:5px;
+                    "
+                >
+                    {{ field.errors }}
+                </small>
+
             {% endif %}
+
         </div>
+
         {% endfor %}
 
-        <div style="display:flex; justify-content:flex-end; gap:12px; padding-top:20px; border-top:1px solid #e5e7eb;">
-            <a href="{% url 'parametres' %}" class="btn" style="background:#e5e7eb; color:#374151;">Annuler</a>
-            <button type="submit" class="btn">💾 Enregistrer</button>
+
+        <!-- Boutons -->
+
+        <div
+            style="
+                display:flex;
+                justify-content:flex-end;
+                gap:12px;
+                padding-top:20px;
+                border-top:1px solid #e5e7eb;
+            "
+        >
+
+            <!-- Annuler -->
+
+            <a
+                href="{% url 'parametres' %}"
+                class="btn"
+                style="
+                    background:#e5e7eb;
+                    color:#374151;
+                    display:inline-flex;
+                    align-items:center;
+                    gap:7px;
+                "
+            >
+
+                <!-- Icône X -->
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+
+                Annuler
+
+            </a>
+
+
+            <!-- Enregistrer -->
+
+            <button
+                type="submit"
+                class="btn"
+                style="
+                    display:inline-flex;
+                    align-items:center;
+                    gap:7px;
+                "
+            >
+
+                <!-- Icône sauvegarde -->
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+
+                Enregistrer
+
+            </button>
+
         </div>
 
     </form>
@@ -40,3 +206,4 @@
 </div>
 
 {% endblock %}
+```

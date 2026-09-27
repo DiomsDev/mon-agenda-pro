@@ -4,48 +4,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Créer une entreprise — DIRAGENDA</title>
+
     <style>
-        body { font-family: sans-serif; background: #16283D; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: #fff; padding: 40px; border-radius: 10px; width: 380px; }
-        h1 { font-size: 20px; color: #16283D; margin: 0 0 4px; }
-        p { color: #5B6B78; font-size: 13px; margin: 0 0 24px; }
-        label { display: block; font-size: 13px; margin-bottom: 6px; color: #5B6B78; }
-        input, select { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #D7DCE1; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #16283D; color: #fff; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; }
-        .errorlist { color: #B15E2B; font-size: 12px; padding: 0; margin: -10px 0 12px; list-style: none; }
-        .foot { text-align: center; margin-top: 16px; }
-        .foot a { color: #C98A2C; font-size: 12px; text-decoration: none; }
+        body {
+            font-family: sans-serif;
+            background: #16283D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            width: 380px;
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #16283D;
+            margin: 0 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        p {
+            color: #5B6B78;
+            font-size: 13px;
+            margin: 0 0 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #5B6B78;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #D7DCE1;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #16283D;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #203954;
+        }
+
+        .errorlist {
+            color: #B15E2B;
+            font-size: 12px;
+            padding: 0;
+            margin: -10px 0 12px;
+            list-style: none;
+        }
+
+        .foot {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .foot a {
+            color: #C98A2C;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .foot a:hover {
+            text-decoration: underline;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 42px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            color: #78909C;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle:hover {
+            background: transparent;
+            color: #16283D;
+        }
+
+        .password-toggle svg {
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+        }
     </style>
 </head>
+
 <body>
+
     <div class="card">
-        <h1>🏢 Créer votre entreprise</h1>
-        <p>Vous serez le premier compte, avec le rôle Directeur, actif immédiatement.</p>
+
+        <h1>
+            <svg width="23" height="23" viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="#C98A2C"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 aria-hidden="true">
+                <path d="M3 21h18"></path>
+                <path d="M5 21V5l7-3 7 3v16"></path>
+                <path d="M9 21v-4h6v4"></path>
+                <path d="M8 8h1"></path>
+                <path d="M12 8h1"></path>
+                <path d="M16 8h1"></path>
+                <path d="M8 12h1"></path>
+                <path d="M12 12h1"></path>
+                <path d="M16 12h1"></path>
+            </svg>
+
+            Créer votre entreprise
+        </h1>
+
+        <p>
+            Vous serez le premier compte, avec le rôle Directeur,
+            actif immédiatement.
+        </p>
+
         <form method="post">
+
             {% csrf_token %}
+
             {% for field in form %}
-                <label>{{ field.label }}</label>
+
+                <label>
+                    {{ field.label }}
+                </label>
+
                 {% if field.name == "password1" or field.name == "password2" %}
-                    <div style="position:relative;">
+
+                    <div class="password-wrapper">
+
                         {{ field }}
-                        <span onclick="togglePassword('{{ field.id_for_label }}', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:16px;">👁️</span>
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('{{ field.id_for_label }}', this)"
+                            aria-label="Afficher le mot de passe">
+
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+
+                                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+
+                            </svg>
+
+                        </button>
+
                     </div>
+
                 {% else %}
+
                     {{ field }}
+
                 {% endif %}
-                {% if field.errors %}<ul class="errorlist">{{ field.errors }}</ul>{% endif %}
+
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {{ field.errors }}
+                    </ul>
+                {% endif %}
+
             {% endfor %}
-            <button type="submit">Créer mon entreprise</button>
+
+            <button type="submit">
+                Créer mon entreprise
+            </button>
+
         </form>
-        <div class="foot"><a href="{% url 'inscription' %}">← Retour</a></div>
+
+        <div class="foot">
+            <a href="{% url 'inscription' %}">
+                <svg width="14" height="14" viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     style="vertical-align:-2px; margin-right:4px;">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Retour
+            </a>
+        </div>
+
     </div>
+
     <script>
-    function togglePassword(id, icon) {
-        const input = document.getElementById(id);
-        if (input.type === "password") { input.type = "text"; icon.textContent = "🙈"; }
-        else { input.type = "password"; icon.textContent = "👁️"; }
-    }
+        function togglePassword(id, button) {
+
+            const input = document.getElementById(id);
+
+            if (input.type === "password") {
+
+                input.type = "text";
+
+                button.innerHTML = `
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <path d="M3 3l18 18"></path>
+
+                        <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+
+                        <path d="M9.9 5.1A10.5 10.5 0 0 1 12 5
+                                 c6.5 0 10 7 10 7
+                                 a17.5 17.5 0 0 1-3.1 4.1"></path>
+
+                        <path d="M6.6 6.6C3.5 8.7 2 12 2 12
+                                 s3.5 7 10 7
+                                 c1.2 0 2.3-.2 3.3-.6"></path>
+
+                    </svg>
+                `;
+
+                button.setAttribute(
+                    "aria-label",
+                    "Masquer le mot de passe"
+                );
+
+            } else {
+
+                input.type = "password";
+
+                button.innerHTML = `
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <path d="M2 12s3.5-6 10-6 10 6 10 6
+                                 -3.5 6-10 6S2 12 2 12z"></path>
+
+                        <circle cx="12" cy="12" r="3"></circle>
+
+                    </svg>
+                `;
+
+                button.setAttribute(
+                    "aria-label",
+                    "Afficher le mot de passe"
+                );
+            }
+        }
     </script>
+
 </body>
 </html>

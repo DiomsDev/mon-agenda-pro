@@ -4,28 +4,219 @@
 
 {% block content %}
 
+<!-- =========================================================
+     EN-TÊTE
+========================================================= -->
+
 <div class="page-header" style="margin-bottom:25px;">
-    <h1>🔔 Notifications</h1>
-    <p>Vos alertes et mises à jour</p>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:12px;
+    ">
+
+        <!-- Icône notifications -->
+
+        <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#5B9BD5"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+        >
+
+            <path d="
+                M18 8
+                a6 6 0 0 0-12 0
+                c0 7-3 7-3 9
+                h18
+                c0-2-3-2-3-9
+            "></path>
+
+            <path d="M10 21h4"></path>
+
+        </svg>
+
+
+        <div>
+
+            <h1>
+                Notifications
+            </h1>
+
+            <p>
+                Vos alertes et mises à jour
+            </p>
+
+        </div>
+
+    </div>
+
 </div>
 
+
+<!-- =========================================================
+     LISTE DES NOTIFICATIONS
+========================================================= -->
+
 <div class="section">
+
     {% if notifications %}
-    {% for n in notifications %}
-    <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-top:1px solid #EDF0F2;">
-        <div>
-            {% if n.lien %}
-            <a href="{{ n.lien }}" style="text-decoration:none; color:#1B2333; font-size:14px;">{{ n.message }}</a>
-            {% else %}
-            <span style="font-size:14px;">{{ n.message }}</span>
-            {% endif %}
-            <div style="font-size:11px; color:#8B96A5; margin-top:3px;">{{ n.date|date:"d/m/Y H:i" }}</div>
+
+        {% for n in notifications %}
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:14px 0;
+            border-top:1px solid #EDF0F2;
+            gap:15px;
+        ">
+
+            <!-- Icône de notification -->
+
+            <div style="
+                width:36px;
+                height:36px;
+                min-width:36px;
+                border-radius:50%;
+                background:#EAF3FB;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            ">
+
+                <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#5B9BD5"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+
+                    <path d="
+                        M18 8
+                        a6 6 0 0 0-12 0
+                        c0 7-3 7-3 9
+                        h18
+                        c0-2-3-2-3-9
+                    "></path>
+
+                    <path d="M10 21h4"></path>
+
+                </svg>
+
+            </div>
+
+
+            <!-- Contenu -->
+
+            <div style="
+                flex:1;
+                min-width:0;
+            ">
+
+                {% if n.lien %}
+
+                    <a
+                        href="{{ n.lien }}"
+                        style="
+                            text-decoration:none;
+                            color:#1B2333;
+                            font-size:14px;
+                            font-weight:500;
+                        "
+                    >
+                        {{ n.message }}
+                    </a>
+
+                {% else %}
+
+                    <span style="
+                        font-size:14px;
+                        color:#1B2333;
+                    ">
+                        {{ n.message }}
+                    </span>
+
+                {% endif %}
+
+
+                <div style="
+                    font-size:11px;
+                    color:#8B96A5;
+                    margin-top:3px;
+                ">
+                    {{ n.date|date:"d/m/Y H:i" }}
+                </div>
+
+            </div>
+
         </div>
-    </div>
-    {% endfor %}
+
+        {% endfor %}
+
     {% else %}
-    <p style="color:#64748b; text-align:center; padding:40px;">Aucune notification pour le moment.</p>
+
+
+        <!-- =================================================
+             AUCUNE NOTIFICATION
+        ================================================== -->
+
+        <div style="
+            text-align:center;
+            padding:50px 20px;
+        ">
+
+            <!-- Icône notifications vide -->
+
+            <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#8B96A5"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="margin-bottom:15px;"
+                aria-hidden="true"
+            >
+
+                <path d="
+                    M18 8
+                    a6 6 0 0 0-12 0
+                    c0 7-3 7-3 9
+                    h18
+                    c0-2-3-2-3-9
+                "></path>
+
+                <path d="M10 21h4"></path>
+
+            </svg>
+
+
+            <p style="
+                color:#64748b;
+                margin:0;
+            ">
+                Aucune notification pour le moment.
+            </p>
+
+        </div>
+
     {% endif %}
+
 </div>
 
 {% endblock %}

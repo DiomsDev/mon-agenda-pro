@@ -13,7 +13,22 @@ Tableau de bord - DIRAGENDA
 <div class="section-header">
 
     <div>
-        <h2>📊 Tableau de bord</h2>
+        <h2 class="dashboard-title">
+
+            <span class="dashboard-title-icon">
+
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                </svg>
+
+            </span>
+
+            Tableau de bord
+
+        </h2>
 
         <p style="color:#7b8794; margin-top:5px;">
             Bienvenue sur votre espace de gestion de l'agenda.
@@ -33,79 +48,271 @@ Tableau de bord - DIRAGENDA
 
 <div class="stats">
 
+
+    <!-- ACTIVITÉS À VENIR -->
+
     <div class="stat-card">
 
         <div class="stat-info">
-            <span>Activités à venir</span>
-            <strong>{{ activites_a_venir|length }}</strong>
+
+            <span>
+                Activités à venir
+            </span>
+
+            <strong>
+                {{ activites_a_venir|length }}
+            </strong>
+
         </div>
 
-        <div class="stat-icon">
-            📋
+
+        <div class="stat-icon stat-icon-activites">
+
+            <svg viewBox="0 0 24 24">
+
+                <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="17"
+                    rx="2"
+                ></rect>
+
+                <line
+                    x1="16"
+                    y1="2"
+                    x2="16"
+                    y2="6"
+                ></line>
+
+                <line
+                    x1="8"
+                    y1="2"
+                    x2="8"
+                    y2="6"
+                ></line>
+
+                <line
+                    x1="3"
+                    y1="10"
+                    x2="21"
+                    y2="10"
+                ></line>
+
+                <line
+                    x1="8"
+                    y1="14"
+                    x2="8"
+                    y2="14"
+                ></line>
+
+                <line
+                    x1="12"
+                    y1="14"
+                    x2="12"
+                    y2="14"
+                ></line>
+
+                <line
+                    x1="16"
+                    y1="14"
+                    x2="16"
+                    y2="14"
+                ></line>
+
+            </svg>
+
         </div>
 
     </div>
 
 
+    <!-- ACTIVITÉS EFFECTUÉES -->
+
     <div class="stat-card">
 
         <div class="stat-info">
-            <span>Activités effectuées</span>
-            <strong>{{ activites_effectuees|length }}</strong>
+
+            <span>
+                Activités effectuées
+            </span>
+
+            <strong>
+                {{ activites_effectuees|length }}
+            </strong>
+
         </div>
 
-        <div class="stat-icon">
-            ✅
+
+        <div class="stat-icon stat-icon-effectuees">
+
+            <svg viewBox="0 0 24 24">
+
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="9"
+                ></circle>
+
+                <polyline
+                    points="8 12 11 15 16 9"
+                ></polyline>
+
+            </svg>
+
         </div>
 
     </div>
 
 
+    <!-- RENDEZ-VOUS -->
+
     <div class="stat-card">
 
         <div class="stat-info">
-            <span>Rendez-vous</span>
-            <strong>{{ nombre_rendez_vous }}</strong>
+
+            <span>
+                Rendez-vous
+            </span>
+
+            <strong>
+                {{ nombre_rendez_vous }}
+            </strong>
+
         </div>
 
-        <div class="stat-icon">
-            🤝
+
+        <div class="stat-icon stat-icon-rendezvous">
+
+            <svg viewBox="0 0 24 24">
+
+                <circle
+                    cx="9"
+                    cy="8"
+                    r="4"
+                ></circle>
+
+                <path
+                    d="M3 21c0-4 2.7-7 6-7s6 3 6 7"
+                ></path>
+
+                <circle
+                    cx="17"
+                    cy="9"
+                    r="3"
+                ></circle>
+
+                <path
+                    d="M16 14c2.8.2 5 2.7 5 6"
+                ></path>
+
+            </svg>
+
         </div>
 
     </div>
 
 
+    <!-- MISSIONS -->
+
     <div class="stat-card">
 
         <div class="stat-info">
-            <span>Missions</span>
-            <strong>{{ nombre_missions }}</strong>
+
+            <span>
+                Missions
+            </span>
+
+            <strong>
+                {{ nombre_missions }}
+            </strong>
+
         </div>
 
-        <div class="stat-icon">
-            🚗
+
+        <div class="stat-icon stat-icon-missions">
+
+            <svg viewBox="0 0 24 24">
+
+                <rect
+                    x="3"
+                    y="6"
+                    width="18"
+                    height="13"
+                    rx="2"
+                ></rect>
+
+                <path
+                    d="M8 6V4h8v2"
+                ></path>
+
+                <line
+                    x1="3"
+                    y1="11"
+                    x2="21"
+                    y2="11"
+                ></line>
+
+                <line
+                    x1="10"
+                    y1="15"
+                    x2="14"
+                    y2="15"
+                ></line>
+
+            </svg>
+
         </div>
 
     </div>
 
-     <!-- RÉUNIONS -->
 
-        <div class="stat-card">
+    <!-- RÉUNIONS -->
 
-            <div class="stat-info">
-               <span>Réunions</span>
-               <strong>{{ nombre_reunions }}</strong>
-            </div>
+    <div class="stat-card">
 
-            <div class="stat-icon">
-                👥
-            </div>
+        <div class="stat-info">
+
+            <span>
+                Réunions
+            </span>
+
+            <strong>
+                {{ nombre_reunions }}
+            </strong>
 
         </div>
 
 
-    </a>
+        <div class="stat-icon stat-icon-reunions">
 
+            <svg viewBox="0 0 24 24">
+
+                <circle
+                    cx="9"
+                    cy="8"
+                    r="3"
+                ></circle>
+
+                <circle
+                    cx="17"
+                    cy="8"
+                    r="3"
+                ></circle>
+
+                <path
+                    d="M3 20c0-3.5 2.5-6 6-6s6 2.5 6 6"
+                ></path>
+
+                <path
+                    d="M14 14c3.5-.3 6 2.2 6 6"
+                ></path>
+
+            </svg>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -118,11 +325,54 @@ Tableau de bord - DIRAGENDA
 
     <div class="section-header">
 
-        <h2>
-            📅 Activités à venir
+        <h2 class="section-title-icon">
+
+            <span class="section-icon section-icon-calendar">
+
+                <svg viewBox="0 0 24 24">
+
+                    <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="17"
+                        rx="2"
+                    ></rect>
+
+                    <line
+                        x1="16"
+                        y1="2"
+                        x2="16"
+                        y2="6"
+                    ></line>
+
+                    <line
+                        x1="8"
+                        y1="2"
+                        x2="8"
+                        y2="6"
+                    ></line>
+
+                    <line
+                        x1="3"
+                        y1="10"
+                        x2="21"
+                        y2="10"
+                    ></line>
+
+                </svg>
+
+            </span>
+
+            Activités à venir
+
         </h2>
 
-        <a href="{% url 'activites' %}" class="btn btn-light">
+
+        <a
+            href="{% url 'activites' %}"
+            class="btn btn-light"
+        >
             Voir toutes
         </a>
 
@@ -136,11 +386,17 @@ Tableau de bord - DIRAGENDA
         <thead>
 
             <tr>
+
                 <th>Date</th>
+
                 <th>Heure</th>
+
                 <th>Activité</th>
+
                 <th>Lieu</th>
+
                 <th>Statut</th>
+
             </tr>
 
         </thead>
@@ -157,17 +413,25 @@ Tableau de bord - DIRAGENDA
                 </td>
 
                 <td>
+
                     {% if activite.heure_debut %}
+
                         {{ activite.heure_debut|time:"H:i" }}
+
                     {% else %}
+
                         —
+
                     {% endif %}
+
                 </td>
 
                 <td>
+
                     <strong>
                         {{ activite.objet }}
                     </strong>
+
                 </td>
 
                 <td>
@@ -205,11 +469,35 @@ Tableau de bord - DIRAGENDA
 
     <div class="section-header">
 
-        <h2>
-            📋 Activités effectuées
+        <h2 class="section-title-icon">
+
+            <span class="section-icon section-icon-check">
+
+                <svg viewBox="0 0 24 24">
+
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                    ></circle>
+
+                    <polyline
+                        points="8 12 11 15 16 9"
+                    ></polyline>
+
+                </svg>
+
+            </span>
+
+            Activités effectuées
+
         </h2>
 
-        <a href="{% url 'activites' %}" class="btn btn-light">
+
+        <a
+            href="{% url 'activites' %}"
+            class="btn btn-light"
+        >
             Voir toutes
         </a>
 
@@ -223,10 +511,15 @@ Tableau de bord - DIRAGENDA
         <thead>
 
             <tr>
+
                 <th>Date</th>
+
                 <th>Activité</th>
+
                 <th>Lieu</th>
+
                 <th>Observation</th>
+
             </tr>
 
         </thead>
@@ -243,9 +536,11 @@ Tableau de bord - DIRAGENDA
                 </td>
 
                 <td>
+
                     <strong>
                         {{ activite.objet }}
                     </strong>
+
                 </td>
 
                 <td>
@@ -273,5 +568,151 @@ Tableau de bord - DIRAGENDA
     {% endif %}
 
 </div>
+
+
+<!-- =========================
+     STYLE DES ICÔNES DU DASHBOARD
+========================= -->
+
+<style>
+
+/* =========================================================
+   TITRE TABLEAU DE BORD
+========================================================= */
+
+.dashboard-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+
+.dashboard-title-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #5B9BD5;
+}
+
+
+.dashboard-title-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* =========================================================
+   ICÔNES DES CARTES
+========================================================= */
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.stat-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* Activités à venir */
+
+.stat-icon-activites {
+    color: #4FA3D1;
+    background: #E8F4FA;
+}
+
+
+/* Activités effectuées */
+
+.stat-icon-effectuees {
+    color: #5CB85C;
+    background: #EAF6EA;
+}
+
+
+/* Rendez-vous */
+
+.stat-icon-rendezvous {
+    color: #8E7CC3;
+    background: #F0ECF8;
+}
+
+
+/* Missions */
+
+.stat-icon-missions {
+    color: #E6A23C;
+    background: #FBF2E3;
+}
+
+
+/* Réunions */
+
+.stat-icon-reunions {
+    color: #38B2AC;
+    background: #E6F6F5;
+}
+
+
+/* =========================================================
+   ICÔNES DES SECTIONS
+========================================================= */
+
+.section-title-icon {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+
+.section-icon {
+    width: 25px;
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.section-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+.section-icon-calendar {
+    color: #5B9BD5;
+}
+
+
+.section-icon-check {
+    color: #5CB85C;
+}
+
+</style>
 
 {% endblock %}

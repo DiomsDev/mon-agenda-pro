@@ -4,66 +4,321 @@
 
 {% block content %}
 
+<!-- =========================================================
+     EN-TÊTE DE L'AGENDA
+========================================================= -->
+
 <div class="section-header">
-    <div>
-        <h2>📅 Agenda — {{ nom_mois }} {{ annee }}</h2>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+    ">
+
+        <!-- Icône calendrier -->
+        <svg width="28" height="28"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="#8E7CC3"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+
+            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+
+            <path d="M8 14h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M16 14h.01"></path>
+
+            <path d="M8 18h.01"></path>
+            <path d="M12 18h.01"></path>
+            <path d="M16 18h.01"></path>
+
+        </svg>
+
+        <h2>
+            Agenda — {{ nom_mois }} {{ annee }}
+        </h2>
+
     </div>
-    <div style="display:flex; gap:10px;">
-        <a href="?annee={{ annee_mois_precedent }}&mois={{ mois_precedent }}" class="btn btn-light">‹ Précédent</a>
-        <a href="?annee={{ annee_mois_suivant }}&mois={{ mois_suivant }}" class="btn btn-light">Suivant ›</a>
+
+
+    <!-- Navigation entre les mois -->
+
+    <div style="
+        display:flex;
+        gap:10px;
+    ">
+
+        <a
+            href="?annee={{ annee_mois_precedent }}&mois={{ mois_precedent }}"
+            class="btn btn-light"
+            style="
+                display:flex;
+                align-items:center;
+                gap:6px;
+            "
+        >
+
+            <!-- Flèche gauche -->
+            <svg width="16" height="16"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <polyline points="15 18 9 12 15 6"></polyline>
+
+            </svg>
+
+            Précédent
+
+        </a>
+
+
+        <a
+            href="?annee={{ annee_mois_suivant }}&mois={{ mois_suivant }}"
+            class="btn btn-light"
+            style="
+                display:flex;
+                align-items:center;
+                gap:6px;
+            "
+        >
+
+            Suivant
+
+            <!-- Flèche droite -->
+            <svg width="16" height="16"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <polyline points="9 18 15 12 9 6"></polyline>
+
+            </svg>
+
+        </a>
+
     </div>
+
 </div>
 
-<div class="card" style="overflow-x:auto;">
-    <table style="width:100%; border-collapse:collapse; table-layout:fixed;">
+
+<!-- =========================================================
+     CALENDRIER
+========================================================= -->
+
+<div class="card" style="
+    overflow-x:auto;
+">
+
+    <table style="
+        width:100%;
+        border-collapse:collapse;
+        table-layout:fixed;
+    ">
+
         <thead>
+
             <tr>
-                <th style="width:14.28%;">Lun</th>
-                <th style="width:14.28%;">Mar</th>
-                <th style="width:14.28%;">Mer</th>
-                <th style="width:14.28%;">Jeu</th>
-                <th style="width:14.28%;">Ven</th>
-                <th style="width:14.28%;">Sam</th>
-                <th style="width:14.28%;">Dim</th>
+
+                <th style="width:14.28%;">
+                    Lun
+                </th>
+
+                <th style="width:14.28%;">
+                    Mar
+                </th>
+
+                <th style="width:14.28%;">
+                    Mer
+                </th>
+
+                <th style="width:14.28%;">
+                    Jeu
+                </th>
+
+                <th style="width:14.28%;">
+                    Ven
+                </th>
+
+                <th style="width:14.28%;">
+                    Sam
+                </th>
+
+                <th style="width:14.28%;">
+                    Dim
+                </th>
+
             </tr>
+
         </thead>
+
+
         <tbody>
+
             {% for semaine in semaines %}
+
             <tr>
+
                 {% for jour in semaine %}
+
                 <td style="
                     vertical-align:top;
                     height:110px;
                     padding:8px;
                     border:1px solid #EDF0F2;
-                    {% if not jour.dans_le_mois %}background:#F8FAF9; color:#b7c0c7;{% endif %}
-                    {% if jour.aujourdhui %}background:#F3E3C8;{% endif %}
+
+                    {% if not jour.dans_le_mois %}
+                        background:#F8FAF9;
+                        color:#B7C0C7;
+                    {% endif %}
+
+                    {% if jour.aujourdhui %}
+                        background:#F3E3C8;
+                    {% endif %}
                 ">
-                    <div style="font-size:12px; font-weight:600; margin-bottom:6px;">
+
+                    <!-- Numéro du jour -->
+
+                    <div style="
+                        font-size:12px;
+                        font-weight:600;
+                        margin-bottom:6px;
+                    ">
+
                         {{ jour.date.day }}
+
                     </div>
+
+
+                    <!-- Événements -->
+
                     {% for e in jour.evenements %}
+
                         {% if e.type == "activite" %}
-                        <div style="background:#DCEBE3; color:#2F7D5E; border-radius:4px; padding:2px 6px; font-size:11px; margin-bottom:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+
+                        <div style="
+                            background:#DCEBE3;
+                            color:#2F7D5E;
+                            border-radius:4px;
+                            padding:3px 6px;
+                            font-size:11px;
+                            margin-bottom:3px;
+                            overflow:hidden;
+                            text-overflow:ellipsis;
+                            white-space:nowrap;
+                        ">
+
                             {{ e.objet.objet }}
+
                         </div>
+
                         {% else %}
-                        <div style="background:#F3E0D2; color:#B15E2B; border-radius:4px; padding:2px 6px; font-size:11px; margin-bottom:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+
+                        <div style="
+                            background:#F3E0D2;
+                            color:#B15E2B;
+                            border-radius:4px;
+                            padding:3px 6px;
+                            font-size:11px;
+                            margin-bottom:3px;
+                            overflow:hidden;
+                            text-overflow:ellipsis;
+                            white-space:nowrap;
+                        ">
+
                             {{ e.objet.objet }}
+
                         </div>
+
                         {% endif %}
+
                     {% endfor %}
+
                 </td>
+
                 {% endfor %}
+
             </tr>
+
             {% endfor %}
+
         </tbody>
+
     </table>
+
 </div>
 
-<div style="display:flex; gap:20px; margin-top:14px; font-size:12px; color:#5B6B78;">
-    <div><span style="display:inline-block; width:10px; height:10px; background:#DCEBE3; border-radius:2px; margin-right:6px;"></span>Activité</div>
-    <div><span style="display:inline-block; width:10px; height:10px; background:#F3E0D2; border-radius:2px; margin-right:6px;"></span>Rendez-vous</div>
+
+<!-- =========================================================
+     LÉGENDE
+========================================================= -->
+
+<div style="
+    display:flex;
+    gap:20px;
+    margin-top:14px;
+    font-size:12px;
+    color:#5B6B78;
+    align-items:center;
+    flex-wrap:wrap;
+">
+
+    <!-- Activité -->
+
+    <div style="
+        display:flex;
+        align-items:center;
+    ">
+
+        <span style="
+            display:inline-block;
+            width:10px;
+            height:10px;
+            background:#DCEBE3;
+            border-radius:2px;
+            margin-right:6px;
+        "></span>
+
+        Activité
+
+    </div>
+
+
+    <!-- Rendez-vous -->
+
+    <div style="
+        display:flex;
+        align-items:center;
+    ">
+
+        <span style="
+            display:inline-block;
+            width:10px;
+            height:10px;
+            background:#F3E0D2;
+            border-radius:2px;
+            margin-right:6px;
+        "></span>
+
+        Rendez-vous
+
+    </div>
+
 </div>
 
 {% endblock %}

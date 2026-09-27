@@ -4,93 +4,436 @@
 
 {% block content %}
 
+<!-- =========================================================
+     EN-TÊTE
+========================================================= -->
+
 <div class="page-header" style="margin-bottom:25px;">
-    <h1>🗄️ Bienvenue sur votre gestion d'archives </h1>
-    <p>Activités, missions et rendez-vous passés</p>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:12px;
+    ">
+
+        <!-- Icône archives -->
+        <svg width="32" height="32"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="#C98A2C"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+
+            <path d="M3 6h18"></path>
+            <path d="M5 6v13h14V6"></path>
+            <path d="M4 3h16v3H4z"></path>
+            <path d="M9 10h6"></path>
+            <path d="M9 14h6"></path>
+
+        </svg>
+
+        <div>
+
+            <h1>Bienvenue sur votre gestion d'archives</h1>
+
+            <p>
+                Activités, missions et rendez-vous passés
+            </p>
+
+        </div>
+
+    </div>
+
 </div>
 
+
+<!-- =========================================================
+     ACTIVITÉS EFFECTUÉES
+========================================================= -->
+
 <div class="section">
+
     <div class="section-header">
-        <h2>📋 Activités effectuées</h2>
+
+        <div style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+        ">
+
+            <!-- Icône activités -->
+            <svg width="22" height="22"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="#4FA3D1"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+
+                <path d="M8 14h.01"></path>
+                <path d="M12 14h.01"></path>
+                <path d="M16 14h.01"></path>
+
+                <path d="M8 18h.01"></path>
+                <path d="M12 18h.01"></path>
+                <path d="M16 18h.01"></path>
+
+            </svg>
+
+            <h2>Activités effectuées</h2>
+
+        </div>
+
     </div>
+
 
     {% if activites_archivees %}
+
     <div style="overflow-x:auto;">
+
         <table>
+
             <thead>
-                <tr><th>Objet</th><th>Date</th><th>Lieu</th><th>Observations</th></tr>
-            </thead>
-            <tbody>
-                {% for a in activites_archivees %}
+
                 <tr>
-                    <td>{{ a.objet }}</td>
-                    <td>{{ a.date|date:"d/m/Y" }}</td>
-                    <td>{{ a.lieu|default:"—" }}</td>
-                    <td>{{ a.observations|default:"—" }}</td>
+                    <th>Objet</th>
+                    <th>Date</th>
+                    <th>Lieu</th>
+                    <th>Observations</th>
                 </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for a in activites_archivees %}
+
+                <tr>
+
+                    <td>
+                        {{ a.objet }}
+                    </td>
+
+                    <td>
+                        {{ a.date|date:"d/m/Y" }}
+                    </td>
+
+                    <td>
+                        {{ a.lieu|default:"—" }}
+                    </td>
+
+                    <td>
+                        {{ a.observations|default:"—" }}
+                    </td>
+
+                </tr>
+
                 {% endfor %}
+
             </tbody>
+
         </table>
+
     </div>
+
     {% else %}
-    <p style="color:#64748b;">Aucune activité archivée.</p>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+        color:#64748b;
+    ">
+
+        <!-- Icône archive vide -->
+        <svg width="20" height="20"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+            <path d="M4 4h16v16H4z"></path>
+            <path d="M8 9h8"></path>
+            <path d="M8 13h5"></path>
+
+        </svg>
+
+        <span>
+            Aucune activité archivée.
+        </span>
+
+    </div>
+
     {% endif %}
+
 </div>
 
+
+<!-- =========================================================
+     MISSIONS TERMINÉES
+========================================================= -->
+
 <div class="section">
+
     <div class="section-header">
-        <h2>🚗 Missions terminées</h2>
+
+        <div style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+        ">
+
+            <!-- Icône mission -->
+            <svg width="22" height="22"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="#E6A23C"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+
+                <path d="M8 5V3h8v2"></path>
+
+                <path d="M8 12h8"></path>
+                <path d="M8 16h5"></path>
+
+                <circle cx="6" cy="9" r="1"></circle>
+
+            </svg>
+
+            <h2>Missions terminées</h2>
+
+        </div>
+
     </div>
+
 
     {% if missions_archivees %}
+
     <div style="overflow-x:auto;">
+
         <table>
+
             <thead>
-                <tr><th>Motif</th><th>Lieu</th><th>Départ</th><th>Retour</th></tr>
-            </thead>
-            <tbody>
-                {% for m in missions_archivees %}
+
                 <tr>
-                    <td>{{ m.motif }}</td>
-                    <td>{{ m.lieu }}</td>
-                    <td>{{ m.date_depart|date:"d/m/Y" }}</td>
-                    <td>{{ m.date_retour|date:"d/m/Y" }}</td>
+                    <th>Motif</th>
+                    <th>Lieu</th>
+                    <th>Départ</th>
+                    <th>Retour</th>
                 </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for m in missions_archivees %}
+
+                <tr>
+
+                    <td>
+                        {{ m.motif }}
+                    </td>
+
+                    <td>
+                        {{ m.lieu }}
+                    </td>
+
+                    <td>
+                        {{ m.date_depart|date:"d/m/Y" }}
+                    </td>
+
+                    <td>
+                        {{ m.date_retour|date:"d/m/Y" }}
+                    </td>
+
+                </tr>
+
                 {% endfor %}
+
             </tbody>
+
         </table>
+
     </div>
+
     {% else %}
-    <p style="color:#64748b;">Aucune mission archivée.</p>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+        color:#64748b;
+    ">
+
+        <!-- Icône archive vide -->
+        <svg width="20" height="20"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+            <path d="M4 4h16v16H4z"></path>
+            <path d="M8 9h8"></path>
+            <path d="M8 13h5"></path>
+
+        </svg>
+
+        <span>
+            Aucune mission archivée.
+        </span>
+
+    </div>
+
     {% endif %}
+
 </div>
+
+
+<!-- =========================================================
+     RENDEZ-VOUS TERMINÉS / ANNULÉS
+========================================================= -->
 
 <div class="section">
+
     <div class="section-header">
-        <h2>🤝 Rendez-vous terminés / annulés</h2>
+
+        <div style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+        ">
+
+            <!-- Icône rendez-vous -->
+            <svg width="22" height="22"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="#8E7CC3"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+
+                <circle cx="12" cy="15" r="3"></circle>
+
+                <line x1="12" y1="13.5" x2="12" y2="15"></line>
+                <line x1="12" y1="15" x2="13" y2="16"></line>
+
+            </svg>
+
+            <h2>Rendez-vous terminés / annulés</h2>
+
+        </div>
+
     </div>
 
+
     {% if rendez_vous_archives %}
+
     <div style="overflow-x:auto;">
+
         <table>
+
             <thead>
-                <tr><th>Objet</th><th>Date</th><th>Lieu</th><th>Statut</th></tr>
-            </thead>
-            <tbody>
-                {% for r in rendez_vous_archives %}
+
                 <tr>
-                    <td>{{ r.objet }}</td>
-                    <td>{{ r.date|date:"d/m/Y" }}</td>
-                    <td>{{ r.lieu|default:"—" }}</td>
-                    <td>{{ r.get_statut_display }}</td>
+                    <th>Objet</th>
+                    <th>Date</th>
+                    <th>Lieu</th>
+                    <th>Statut</th>
                 </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for r in rendez_vous_archives %}
+
+                <tr>
+
+                    <td>
+                        {{ r.objet }}
+                    </td>
+
+                    <td>
+                        {{ r.date|date:"d/m/Y" }}
+                    </td>
+
+                    <td>
+                        {{ r.lieu|default:"—" }}
+                    </td>
+
+                    <td>
+                        {{ r.get_statut_display }}
+                    </td>
+
+                </tr>
+
                 {% endfor %}
+
             </tbody>
+
         </table>
+
     </div>
+
     {% else %}
-    <p style="color:#64748b;">Aucun rendez-vous archivé.</p>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+        color:#64748b;
+    ">
+
+        <!-- Icône archive vide -->
+        <svg width="20" height="20"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+            <path d="M4 4h16v16H4z"></path>
+            <path d="M8 9h8"></path>
+            <path d="M8 13h5"></path>
+
+        </svg>
+
+        <span>
+            Aucun rendez-vous archivé.
+        </span>
+
+    </div>
+
     {% endif %}
+
 </div>
+
 
 {% endblock %}

@@ -5,47 +5,183 @@
 {% block content %}
 
 <div class="page-header" style="margin-bottom:25px;">
-    <h1>📊 Statistiques</h1>
-    
+    <h1 style="display:flex; align-items:center; gap:10px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+             stroke="#4F8FC0" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" y1="19" x2="4" y2="10"></line>
+            <line x1="9" y1="19" x2="9" y2="5"></line>
+            <line x1="14" y1="19" x2="14" y2="12"></line>
+            <line x1="19" y1="19" x2="19" y2="8"></line>
+        </svg>
+        Statistiques
+    </h1>
 </div>
 
 <div class="section">
-    <div class="section-header"><h2>📋 Activités</h2></div>
+    <div class="section-header">
+        <h2 style="display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="#4FA3D1" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+                <line x1="8" y1="14" x2="8" y2="14"></line>
+                <line x1="12" y1="14" x2="12" y2="14"></line>
+                <line x1="16" y1="14" x2="16" y2="14"></line>
+                <line x1="8" y1="18" x2="8" y2="18"></line>
+                <line x1="12" y1="18" x2="12" y2="18"></line>
+                <line x1="16" y1="18" x2="16" y2="18"></line>
+            </svg>
+            Activités
+        </h2>
+    </div>
+
     <div class="stats" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong id="activites-semaine">{{ stats.activites.semaine }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong id="activites-mois">{{ stats.activites.mois }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong id="activites-annee">{{ stats.activites.annee }}</strong></div></div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Cette semaine</span>
+                <strong id="activites-semaine">{{ stats.activites.semaine }}</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Ce mois</span>
+                <strong id="activites-mois">{{ stats.activites.mois }}</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Cette année</span>
+                <strong id="activites-annee">{{ stats.activites.annee }}</strong>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="section">
-    <div class="section-header"><h2>🚗 Missions</h2></div>
+    <div class="section-header">
+        <h2 style="display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="#E6A23C" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 17h14"></path>
+                <path d="M6 17l1-7h10l1 7"></path>
+                <path d="M8 10V7h8v3"></path>
+                <circle cx="8" cy="19" r="1.5"></circle>
+                <circle cx="16" cy="19" r="1.5"></circle>
+            </svg>
+            Missions
+        </h2>
+    </div>
+
     <div class="stats" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong id="missions-semaine">{{ stats.missions.semaine }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong id="missions-mois">{{ stats.missions.mois }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong id="missions-annee">{{ stats.missions.annee }}</strong></div></div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Cette semaine</span>
+                <strong id="missions-semaine">{{ stats.missions.semaine }}</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Ce mois</span>
+                <strong id="missions-mois">{{ stats.missions.mois }}</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Cette année</span>
+                <strong id="missions-annee">{{ stats.missions.annee }}</strong>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="section">
-    <div class="section-header"><h2>🤝 Rendez-vous</h2></div>
+    <div class="section-header">
+        <h2 style="display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="#8E7CC3" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+                <circle cx="12" cy="15" r="3"></circle>
+                <line x1="12" y1="13" x2="12" y2="15"></line>
+                <line x1="12" y1="15" x2="14" y2="16"></line>
+            </svg>
+            Rendez-vous
+        </h2>
+    </div>
+
     <div class="stats" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-info"><span>Cette semaine</span><strong id="rdv-semaine">{{ stats.rendez_vous.semaine }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Ce mois</span><strong id="rdv-mois">{{ stats.rendez_vous.mois }}</strong></div></div>
-        <div class="stat-card"><div class="stat-info"><span>Cette année</span><strong id="rdv-annee">{{ stats.rendez_vous.annee }}</strong></div></div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Cette semaine</span>
+                <strong id="rdv-semaine">{{ stats.rendez_vous.semaine }}</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Ce mois</span>
+                <strong id="rdv-mois">{{ stats.rendez_vous.mois }}</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-info">
+                <span>Cette année</span>
+                <strong id="rdv-annee">{{ stats.rendez_vous.annee }}</strong>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="section">
-    <div class="section-header"><h2>📈 Répartition mensuelle — {{ annee_courante }}</h2></div>
+    <div class="section-header">
+        <h2 style="display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="#4F8FC0" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <line x1="4" y1="19" x2="4" y2="5"></line>
+                <line x1="4" y1="19" x2="21" y2="19"></line>
+                <polyline points="6,15 10,11 13,13 19,7"></polyline>
+                <polyline points="16,7 19,7 19,10"></polyline>
+            </svg>
+            Répartition mensuelle — {{ annee_courante }}
+        </h2>
+    </div>
+
     <canvas id="graphiqueAnnuel" height="90"></canvas>
 </div>
 
 {{ graphique_json|json_script:"graphique-data" }}
 
 <div class="section">
-    <div class="section-header"><h2> Répartition des activités par statut</h2></div>
-    <div id="legende-statut" style="display:flex; flex-wrap:wrap; gap:16px; margin-bottom:12px; font-size:12px; color:#5B6B78;"></div>
+    <div class="section-header">
+        <h2 style="display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="#78909C" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 3a9 9 0 0 1 9 9h-9z"></path>
+            </svg>
+            Répartition des activités par statut
+        </h2>
+    </div>
+
+    <div id="legende-statut"
+         style="display:flex; flex-wrap:wrap; gap:16px; margin-bottom:12px; font-size:12px; color:#5B6B78;">
+    </div>
+
     <div style="position:relative; height:280px;">
         <canvas id="camembertStatut"></canvas>
     </div>
@@ -54,92 +190,231 @@
 {{ repartition_statut_json|json_script:"statut-data" }}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script>
-const dataInitiale = JSON.parse(document.getElementById('graphique-data').textContent);
 
-const chart = new Chart(document.getElementById('graphiqueAnnuel'), {
-    type: 'bar',
-    data: {
-        labels: dataInitiale.labels,
-        datasets: [
-            { label: 'Activités', data: dataInitiale.activites, backgroundColor: '#2F7D5E' },
-            { label: 'Missions', data: dataInitiale.missions, backgroundColor: '#C98A2C' },
-            { label: 'Rendez-vous', data: dataInitiale.rendez_vous, backgroundColor: '#16283D' },
-        ]
-    },
-    options: {
-        responsive: true,
-        animation: { duration: 500 },
-        plugins: { legend: { position: 'bottom' } },
-        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+<script>
+const dataInitiale = JSON.parse(
+    document.getElementById('graphique-data').textContent
+);
+
+const chart = new Chart(
+    document.getElementById('graphiqueAnnuel'),
+    {
+        type: 'bar',
+
+        data: {
+            labels: dataInitiale.labels,
+
+            datasets: [
+                {
+                    label: 'Activités',
+                    data: dataInitiale.activites,
+                    backgroundColor: '#2F7D5E'
+                },
+                {
+                    label: 'Missions',
+                    data: dataInitiale.missions,
+                    backgroundColor: '#C98A2C'
+                },
+                {
+                    label: 'Rendez-vous',
+                    data: dataInitiale.rendez_vous,
+                    backgroundColor: '#16283D'
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            animation: {
+                duration: 500
+            },
+
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: true,
+
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
     }
-});
+);
+
 
 async function actualiserStatistiques() {
+
     try {
-        const reponse = await fetch("{% url 'statistiques_data' %}");
+
+        const reponse = await fetch(
+            "{% url 'statistiques_data' %}"
+        );
+
         const data = await reponse.json();
 
-        document.getElementById('activites-semaine').textContent = data.stats.activites.semaine;
-        document.getElementById('activites-mois').textContent = data.stats.activites.mois;
-        document.getElementById('activites-annee').textContent = data.stats.activites.annee;
 
-        document.getElementById('missions-semaine').textContent = data.stats.missions.semaine;
-        document.getElementById('missions-mois').textContent = data.stats.missions.mois;
-        document.getElementById('missions-annee').textContent = data.stats.missions.annee;
+        document.getElementById('activites-semaine').textContent =
+            data.stats.activites.semaine;
 
-        document.getElementById('rdv-semaine').textContent = data.stats.rendez_vous.semaine;
-        document.getElementById('rdv-mois').textContent = data.stats.rendez_vous.mois;
-        document.getElementById('rdv-annee').textContent = data.stats.rendez_vous.annee;
+        document.getElementById('activites-mois').textContent =
+            data.stats.activites.mois;
 
-        chart.data.datasets[0].data = data.graphique.activites;
-        chart.data.datasets[1].data = data.graphique.missions;
-        chart.data.datasets[2].data = data.graphique.rendez_vous;
+        document.getElementById('activites-annee').textContent =
+            data.stats.activites.annee;
+
+
+        document.getElementById('missions-semaine').textContent =
+            data.stats.missions.semaine;
+
+        document.getElementById('missions-mois').textContent =
+            data.stats.missions.mois;
+
+        document.getElementById('missions-annee').textContent =
+            data.stats.missions.annee;
+
+
+        document.getElementById('rdv-semaine').textContent =
+            data.stats.rendez_vous.semaine;
+
+        document.getElementById('rdv-mois').textContent =
+            data.stats.rendez_vous.mois;
+
+        document.getElementById('rdv-annee').textContent =
+            data.stats.rendez_vous.annee;
+
+
+        chart.data.datasets[0].data =
+            data.graphique.activites;
+
+        chart.data.datasets[1].data =
+            data.graphique.missions;
+
+        chart.data.datasets[2].data =
+            data.graphique.rendez_vous;
+
         chart.update();
+
     } catch (e) {
-        console.log("Erreur d'actualisation des statistiques :", e);
+
+        console.log(
+            "Erreur d'actualisation des statistiques :",
+            e
+        );
+
     }
 }
 
-setInterval(actualiserStatistiques, 15000);
 
-const donneesStatut = JSON.parse(document.getElementById('statut-data').textContent);
+setInterval(
+    actualiserStatistiques,
+    15000
+);
+
+
+const donneesStatut = JSON.parse(
+    document.getElementById('statut-data').textContent
+);
+
+
 const couleursStatut = {
+
     "Brouillon": "#B7C0C7",
+
     "En attente de validation": "#C98A2C",
+
     "Confirmée": "#16283D",
+
     "Effectuée": "#2F7D5E",
-    "Annulée": "#B15E2B",
+
+    "Annulée": "#B15E2B"
+
 };
-const couleursAppliquees = donneesStatut.labels.map(l => couleursStatut[l] || "#8FA0C8");
 
-const legende = document.getElementById('legende-statut');
-donneesStatut.labels.forEach((label, i) => {
-    const span = document.createElement('span');
-    span.style.display = 'flex';
-    span.style.alignItems = 'center';
-    span.style.gap = '4px';
-    span.innerHTML = `<span style="width:10px;height:10px;border-radius:2px;background:${couleursAppliquees[i]};"></span>${label} (${donneesStatut.valeurs[i]})`;
-    legende.appendChild(span);
-});
 
-new Chart(document.getElementById('camembertStatut'), {
-    type: 'doughnut',
-    data: {
-        labels: donneesStatut.labels,
-        datasets: [{
-            data: donneesStatut.valeurs,
-            backgroundColor: couleursAppliquees,
-            borderColor: '#fff',
-            borderWidth: 2,
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } }
+const couleursAppliquees =
+    donneesStatut.labels.map(
+        l => couleursStatut[l] || "#8FA0C8"
+    );
+
+
+const legende =
+    document.getElementById('legende-statut');
+
+
+donneesStatut.labels.forEach(
+    (label, i) => {
+
+        const span =
+            document.createElement('span');
+
+        span.style.display = 'flex';
+
+        span.style.alignItems = 'center';
+
+        span.style.gap = '4px';
+
+
+        span.innerHTML = `
+            <span
+                style="
+                    width:10px;
+                    height:10px;
+                    border-radius:2px;
+                    background:${couleursAppliquees[i]};
+                ">
+            </span>
+            ${label} (${donneesStatut.valeurs[i]})
+        `;
+
+
+        legende.appendChild(span);
+
     }
-});
+);
+
+
+new Chart(
+    document.getElementById('camembertStatut'),
+    {
+        type: 'doughnut',
+
+        data: {
+            labels: donneesStatut.labels,
+
+            datasets: [
+                {
+                    data: donneesStatut.valeurs,
+
+                    backgroundColor: couleursAppliquees,
+
+                    borderColor: '#fff',
+
+                    borderWidth: 2
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    }
+);
 </script>
 
 {% endblock %}

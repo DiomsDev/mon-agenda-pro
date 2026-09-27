@@ -7,301 +7,607 @@
 {% block content %}
 
 <div class="page-header">
-    <h1>
+
+    <h1 style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    ">
+
+        <!-- Icône réunion -->
+        <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#38B2AC"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+        >
+            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <circle cx="9" cy="15" r="1.5"></circle>
+            <circle cx="15" cy="15" r="1.5"></circle>
+        </svg>
+
         {% if modification %}
             Modifier la réunion
         {% else %}
             Nouvelle réunion
         {% endif %}
+
     </h1>
 
-```
-<p>Planifiez et enregistrez une nouvelle réunion</p>
-```
+    <p>Planifiez et enregistrez une nouvelle réunion</p>
 
 </div>
 
+
 <div class="card">
 
-```
-<form method="post">
+    <form method="post">
 
-    {% csrf_token %}
-
-    {% if form.errors %}
-    <div style="
-        background: #fee2e2;
-        color: #991b1b;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 25px;
-    ">
-        ⚠️ Veuillez vérifier les informations saisies.
-    </div>
-    {% endif %}
+        {% csrf_token %}
 
 
-    <!-- INFORMATIONS PRINCIPALES -->
-
-    <div style="margin-bottom: 30px;">
-
-        <h2 style="margin-bottom: 20px;">
-            📋 Informations principales
-        </h2>
+        {% if form.errors %}
 
         <div style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         ">
 
-            <div>
-                <label for="{{ form.titre.id_for_label }}">
-                    Titre *
-                </label>
+            <!-- Icône avertissement -->
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#dc2626"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M10.3 3.5L2.4 17a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.5a2 2 0 0 0-3.4 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <circle cx="12" cy="17" r="1"></circle>
+            </svg>
 
-                {{ form.titre }}
+            <span>
+                Veuillez vérifier les informations saisies.
+            </span>
 
-                {% if form.titre.errors %}
-                    <small style="color: #dc2626;">
-                        {{ form.titre.errors }}
-                    </small>
-                {% endif %}
-            </div>
+        </div>
+
+        {% endif %}
 
 
-            <div>
-                <label for="{{ form.statut.id_for_label }}">
-                    Statut
-                </label>
 
-                {{ form.statut }}
+        <!-- INFORMATIONS PRINCIPALES -->
 
-                {% if form.statut.errors %}
-                    <small style="color: #dc2626;">
-                        {{ form.statut.errors }}
-                    </small>
-                {% endif %}
+        <div style="margin-bottom: 30px;">
+
+            <h2 style="
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
+
+                <!-- Icône informations -->
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#38B2AC"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <line x1="12" y1="11" x2="12" y2="16"></line>
+                    <circle cx="12" cy="7.5" r="1"></circle>
+                </svg>
+
+                Informations principales
+
+            </h2>
+
+
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            ">
+
+                <div>
+
+                    <label for="{{ form.titre.id_for_label }}">
+                        Titre *
+                    </label>
+
+                    {{ form.titre }}
+
+                    {% if form.titre.errors %}
+
+                        <small style="color: #dc2626;">
+                            {{ form.titre.errors }}
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <label for="{{ form.statut.id_for_label }}">
+                        Statut
+                    </label>
+
+                    {{ form.statut }}
+
+                    {% if form.statut.errors %}
+
+                        <small style="color: #dc2626;">
+                            {{ form.statut.errors }}
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
             </div>
 
         </div>
 
-    </div>
 
 
-    <!-- DATE ET HEURE -->
+        <!-- DATE ET HEURE -->
 
-    <div style="margin-bottom: 30px;">
+        <div style="margin-bottom: 30px;">
 
-        <h2 style="margin-bottom: 20px;">
-            📅 Date et horaires
-        </h2>
+            <h2 style="
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
 
-        <div style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        ">
+                <!-- Icône calendrier -->
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#38B2AC"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                    <path d="M8 15h.01"></path>
+                    <path d="M12 15h.01"></path>
+                    <path d="M16 15h.01"></path>
+                    <path d="M8 18h.01"></path>
+                    <path d="M12 18h.01"></path>
+                    <path d="M16 18h.01"></path>
+                </svg>
 
-            <div>
-                <label for="{{ form.date.id_for_label }}">
-                    Date *
-                </label>
+                Date et horaires
 
-                {{ form.date }}
-
-                {% if form.date.errors %}
-                    <small style="color: #dc2626;">
-                        {{ form.date.errors }}
-                    </small>
-                {% endif %}
-            </div>
-
-
-            <div>
-                <label for="{{ form.heure_debut.id_for_label }}">
-                    Heure de début
-                </label>
-
-                {{ form.heure_debut }}
-
-                {% if form.heure_debut.errors %}
-                    <small style="color: #dc2626;">
-                        {{ form.heure_debut.errors }}
-                    </small>
-                {% endif %}
-            </div>
+            </h2>
 
 
-            <div>
-                <label for="{{ form.heure_fin.id_for_label }}">
-                    Heure de fin
-                </label>
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 20px;
+            ">
 
-                {{ form.heure_fin }}
+                <div>
 
-                {% if form.heure_fin.errors %}
-                    <small style="color: #dc2626;">
-                        {{ form.heure_fin.errors }}
-                    </small>
-                {% endif %}
-            </div>
+                    <label for="{{ form.date.id_for_label }}">
+                        Date *
+                    </label>
 
-        </div>
+                    {{ form.date }}
 
-    </div>
+                    {% if form.date.errors %}
 
+                        <small style="color: #dc2626;">
+                            {{ form.date.errors }}
+                        </small>
 
-    <!-- LIEU ET ORGANISATEUR -->
+                    {% endif %}
 
-    <div style="margin-bottom: 30px;">
-
-        <h2 style="margin-bottom: 20px;">
-            📍 Lieu et organisation
-        </h2>
-
-        <div style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        ">
-
-            <div>
-                <label for="{{ form.lieu.id_for_label }}">
-                    Lieu
-                </label>
-
-                {{ form.lieu }}
-
-                {% if form.lieu.errors %}
-                    <small style="color: #dc2626;">
-                        {{ form.lieu.errors }}
-                    </small>
-                {% endif %}
-            </div>
+                </div>
 
 
-            <div>
-                <label for="{{ form.organisateur.id_for_label }}">
-                    Organisateur *
-                </label>
+                <div>
 
-                {{ form.organisateur }}
+                    <label for="{{ form.heure_debut.id_for_label }}">
+                        Heure de début
+                    </label>
 
-                {% if form.organisateur.errors %}
-                    <small style="color: #dc2626;">
-                        {{ form.organisateur.errors }}
-                    </small>
-                {% endif %}
+                    {{ form.heure_debut }}
+
+                    {% if form.heure_debut.errors %}
+
+                        <small style="color: #dc2626;">
+                            {{ form.heure_debut.errors }}
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <label for="{{ form.heure_fin.id_for_label }}">
+                        Heure de fin
+                    </label>
+
+                    {{ form.heure_fin }}
+
+                    {% if form.heure_fin.errors %}
+
+                        <small style="color: #dc2626;">
+                            {{ form.heure_fin.errors }}
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
             </div>
 
         </div>
 
-    </div>
 
 
-    <!-- PARTICIPANTS -->
+        <!-- LIEU ET ORGANISATEUR -->
 
-    <div style="margin-bottom: 30px;">
+        <div style="margin-bottom: 30px;">
 
-        <h2 style="margin-bottom: 20px;">
-            👥 Participants
-        </h2>
+            <h2 style="
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
 
-        <label for="{{ form.participants.id_for_label }}">
-            Participants
-        </label>
+                <!-- Icône localisation -->
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#38B2AC"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path>
+                    <circle cx="12" cy="10" r="2.5"></circle>
+                </svg>
 
-        {{ form.participants }}
+                Lieu et organisation
 
-        {% if form.participants.errors %}
-            <small style="color: #dc2626;">
-                {{ form.participants.errors }}
-            </small>
-        {% endif %}
-
-    </div>
-
-
-    <!-- ORDRE DU JOUR -->
-
-    <div style="margin-bottom: 30px;">
-
-        <h2 style="margin-bottom: 20px;">
-            📋 Ordre du jour
-        </h2>
-
-        <label for="{{ form.ordre_du_jour.id_for_label }}">
-            Points à traiter
-        </label>
-
-        {{ form.ordre_du_jour }}
-
-        {% if form.ordre_du_jour.errors %}
-            <small style="color: #dc2626;">
-                {{ form.ordre_du_jour.errors }}
-            </small>
-        {% endif %}
-
-    </div>
+            </h2>
 
 
-    <!-- DESCRIPTION -->
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            ">
 
-    <div style="margin-bottom: 30px;">
+                <div>
 
-        <h2 style="margin-bottom: 20px;">
-            📝 Description
-        </h2>
+                    <label for="{{ form.lieu.id_for_label }}">
+                        Lieu
+                    </label>
 
-        <label for="{{ form.description.id_for_label }}">
-            Informations complémentaires
-        </label>
+                    {{ form.lieu }}
 
-        {{ form.description }}
+                    {% if form.lieu.errors %}
 
-        {% if form.description.errors %}
-            <small style="color: #dc2626;">
-                {{ form.description.errors }}
-            </small>
-        {% endif %}
+                        <small style="color: #dc2626;">
+                            {{ form.lieu.errors }}
+                        </small>
 
-    </div>
+                    {% endif %}
+
+                </div>
 
 
-    <!-- BOUTONS -->
+                <div>
 
-    <div style="
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        padding-top: 20px;
-        border-top: 1px solid #e5e7eb;
-    ">
+                    <label for="{{ form.organisateur.id_for_label }}">
+                        Organisateur *
+                    </label>
 
-        <a
-            href="{% url 'reunions' %}"
-            class="btn"
-            style="background: #e5e7eb; color: #374151;"
-        >
-            Annuler
-        </a>
+                    {{ form.organisateur }}
 
-        <button
-            type="submit"
-            class="btn"
-        >
-            {% if modification %}
-                💾 Enregistrer les modifications
-            {% else %}
-                💾 Enregistrer la réunion
+                    {% if form.organisateur.errors %}
+
+                        <small style="color: #dc2626;">
+                            {{ form.organisateur.errors }}
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PARTICIPANTS -->
+
+        <div style="margin-bottom: 30px;">
+
+            <h2 style="
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
+
+                <!-- Icône participants -->
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#38B2AC"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <circle cx="9" cy="8" r="3"></circle>
+                    <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path>
+                    <path d="M16 5.5a3 3 0 0 1 0 5.8"></path>
+                    <path d="M18 14c1.8.8 3 2.5 3 4.5"></path>
+                </svg>
+
+                Participants
+
+            </h2>
+
+
+            <label for="{{ form.participants.id_for_label }}">
+                Participants
+            </label>
+
+            {{ form.participants }}
+
+            {% if form.participants.errors %}
+
+                <small style="color: #dc2626;">
+                    {{ form.participants.errors }}
+                </small>
+
             {% endif %}
-        </button>
 
-    </div>
+        </div>
 
-</form>
-```
+
+
+        <!-- ORDRE DU JOUR -->
+
+        <div style="margin-bottom: 30px;">
+
+            <h2 style="
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
+
+                <!-- Icône liste -->
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#38B2AC"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <line x1="8" y1="6" x2="20" y2="6"></line>
+                    <line x1="8" y1="12" x2="20" y2="12"></line>
+                    <line x1="8" y1="18" x2="20" y2="18"></line>
+                    <circle cx="4" cy="6" r="1"></circle>
+                    <circle cx="4" cy="12" r="1"></circle>
+                    <circle cx="4" cy="18" r="1"></circle>
+                </svg>
+
+                Ordre du jour
+
+            </h2>
+
+
+            <label for="{{ form.ordre_du_jour.id_for_label }}">
+                Points à traiter
+            </label>
+
+            {{ form.ordre_du_jour }}
+
+            {% if form.ordre_du_jour.errors %}
+
+                <small style="color: #dc2626;">
+                    {{ form.ordre_du_jour.errors }}
+                </small>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- DESCRIPTION -->
+
+        <div style="margin-bottom: 30px;">
+
+            <h2 style="
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
+
+                <!-- Icône document -->
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#38B2AC"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="8" y1="13" x2="16" y2="13"></line>
+                    <line x1="8" y1="17" x2="14" y2="17"></line>
+                </svg>
+
+                Description
+
+            </h2>
+
+
+            <label for="{{ form.description.id_for_label }}">
+                Informations complémentaires
+            </label>
+
+            {{ form.description }}
+
+            {% if form.description.errors %}
+
+                <small style="color: #dc2626;">
+                    {{ form.description.errors }}
+                </small>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- BOUTONS -->
+
+        <div style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            flex-wrap: wrap;
+        ">
+
+            <!-- Annuler -->
+
+            <a
+                href="{% url 'reunions' %}"
+                class="btn"
+                style="
+                    background: #e5e7eb;
+                    color: #374151;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 7px;
+                "
+            >
+
+                <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+
+                Annuler
+
+            </a>
+
+
+            <!-- Enregistrer -->
+
+            <button
+                type="submit"
+                class="btn"
+                style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 7px;
+                "
+            >
+
+                <!-- Icône enregistrer -->
+                <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M5 3h12l4 4v14H3V3z"></path>
+                    <path d="M7 3v6h10V3"></path>
+                    <rect x="7" y="14" width="10" height="5"></rect>
+                </svg>
+
+                {% if modification %}
+                    Enregistrer les modifications
+                {% else %}
+                    Enregistrer la réunion
+                {% endif %}
+
+            </button>
+
+        </div>
+
+    </form>
 
 </div>
 
