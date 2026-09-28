@@ -137,11 +137,14 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+
+# Email
+# Configuration temporaire pour les tests en local.
+# Les emails apparaîtront directement dans le terminal.
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@diragenda.com'
+
 
 
 LOGIN_URL = 'login'
