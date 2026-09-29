@@ -174,3 +174,71 @@ class Reunion(models.Model):
 
     def __str__(self):
         return f"{self.titre} - {self.date}"
+    
+    
+    
+
+# =========================================================
+# COMPTES RENDUS DE RÉUNION
+# =========================================================
+
+class CompteRendu(models.Model):
+
+    reunion = models.OneToOneField(
+        Reunion,
+        on_delete=models.CASCADE,
+        related_name="compte_rendu",
+    )
+
+    date_redaction = models.DateField(
+        auto_now_add=True
+    )
+
+    participants = models.TextField(
+        blank=True,
+        help_text="Participants présents à la réunion."
+    )
+
+    resume = models.TextField(
+        blank=True,
+        help_text="Résumé général de la réunion."
+    )
+
+    points_discutes = models.TextField(
+        blank=True,
+        help_text="Principaux points abordés pendant la réunion."
+    )
+
+    decisions = models.TextField(
+        blank=True,
+        help_text="Décisions prises pendant la réunion."
+    )
+
+    actions_a_realiser = models.TextField(
+        blank=True,
+        help_text="Actions ou tâches à réaliser après la réunion."
+    )
+
+    observations = models.TextField(
+        blank=True,
+        help_text="Observations ou informations complémentaires."
+    )
+
+    cree_par = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="comptes_rendus_crees",
+    )
+
+    entreprise = models.ForeignKey(
+        "entreprises.Entreprise",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="comptes_rendus",
+    )
+
+    def __str__(self):
+        return f"Compte rendu - {self.reunion.titre}"
+
+    

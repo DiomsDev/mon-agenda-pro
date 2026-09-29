@@ -1,0 +1,268 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+    {% if modification %}
+        Modifier le compte rendu
+    {% else %}
+        Nouveau compte rendu
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container">
+
+    <!-- EN-TÊTE -->
+    <div class="page-header">
+
+        <div class="page-header-left">
+
+            <div class="page-header-icon">
+                <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="8" y1="13" x2="16" y2="13"></line>
+                    <line x1="8" y1="17" x2="14" y2="17"></line>
+                </svg>
+            </div>
+
+            <div>
+                <h1>
+                    {% if modification %}
+                        Modifier le compte rendu
+                    {% else %}
+                        Nouveau compte rendu
+                    {% endif %}
+                </h1>
+
+                <p>
+                    Réunion : <strong>{{ reunion.titre }}</strong>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMATIONS DE LA RÉUNION -->
+    <div class="form-card">
+
+        <div class="form-card-header">
+
+            <div>
+                <h2>Réunion concernée</h2>
+                <p>
+                    Informations générales sur la réunion.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="reunion-info">
+
+            <div class="info-item">
+                <span class="info-label">Titre</span>
+                <strong>{{ reunion.titre }}</strong>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Date</span>
+                <strong>{{ reunion.date|date:"d/m/Y" }}</strong>
+            </div>
+
+            {% if reunion.lieu %}
+                <div class="info-item">
+                    <span class="info-label">Lieu</span>
+                    <strong>{{ reunion.lieu }}</strong>
+                </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- FORMULAIRE -->
+    <div class="form-card">
+
+        <div class="form-card-header">
+
+            <div>
+                <h2>
+                    {% if modification %}
+                        Informations du compte rendu
+                    {% else %}
+                        Rédiger le compte rendu
+                    {% endif %}
+                </h2>
+
+                <p>
+                    Complétez les différentes informations de la réunion.
+                </p>
+            </div>
+
+        </div>
+
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+
+            <!-- PARTICIPANTS -->
+            <div class="form-group">
+
+                <label for="{{ form.participants.id_for_label }}">
+                    Participants
+                </label>
+
+                {{ form.participants }}
+
+                {% if form.participants.errors %}
+                    <div class="field-error">
+                        {{ form.participants.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- RÉSUMÉ -->
+            <div class="form-group">
+
+                <label for="{{ form.resume.id_for_label }}">
+                    Résumé de la réunion
+                </label>
+
+                {{ form.resume }}
+
+                {% if form.resume.errors %}
+                    <div class="field-error">
+                        {{ form.resume.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- POINTS DISCUTÉS -->
+            <div class="form-group">
+
+                <label for="{{ form.points_discutes.id_for_label }}">
+                    Points discutés
+                </label>
+
+                {{ form.points_discutes }}
+
+                {% if form.points_discutes.errors %}
+                    <div class="field-error">
+                        {{ form.points_discutes.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- DÉCISIONS -->
+            <div class="form-group">
+
+                <label for="{{ form.decisions.id_for_label }}">
+                    Décisions prises
+                </label>
+
+                {{ form.decisions }}
+
+                {% if form.decisions.errors %}
+                    <div class="field-error">
+                        {{ form.decisions.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- ACTIONS -->
+            <div class="form-group">
+
+                <label for="{{ form.actions_a_realiser.id_for_label }}">
+                    Actions à réaliser
+                </label>
+
+                {{ form.actions_a_realiser }}
+
+                {% if form.actions_a_realiser.errors %}
+                    <div class="field-error">
+                        {{ form.actions_a_realiser.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- OBSERVATIONS -->
+            <div class="form-group">
+
+                <label for="{{ form.observations.id_for_label }}">
+                    Observations
+                </label>
+
+                {{ form.observations }}
+
+                {% if form.observations.errors %}
+                    <div class="field-error">
+                        {{ form.observations.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- BOUTONS -->
+            <div class="form-actions">
+
+                <a
+                    href="{% url 'reunions' %}"
+                    class="btn btn-secondary"
+                >
+                    Annuler
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    {% if modification %}
+                        Enregistrer les modifications
+                    {% else %}
+                        Enregistrer le compte rendu
+                    {% endif %}
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

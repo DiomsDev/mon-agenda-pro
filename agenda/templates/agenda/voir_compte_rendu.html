@@ -1,0 +1,347 @@
+
+{% extends "base.html" %}
+
+{% block title %}Compte rendu{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Compte rendu</h1>
+        <p>Consultation du compte rendu de la réunion</p>
+    </div>
+</div>
+
+<div class="content-card">
+
+    <!-- INFORMATIONS DE LA RÉUNION -->
+    <div class="section-header">
+        <h2>Informations de la réunion</h2>
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info-item">
+            <span class="info-label">Réunion</span>
+            <strong>{{ reunion.titre }}</strong>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">Date</span>
+            <strong>{{ reunion.date|date:"d/m/Y" }}</strong>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">Heure</span>
+            <strong>
+                {% if reunion.heure_debut %}
+                    {{ reunion.heure_debut|time:"H:i" }}
+                {% else %}
+                    Non précisée
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">Lieu</span>
+            <strong>
+                {% if reunion.lieu %}
+                    {{ reunion.lieu }}
+                {% else %}
+                    Non précisé
+                {% endif %}
+            </strong>
+        </div>
+
+    </div>
+
+
+    <!-- PARTICIPANTS -->
+    <div class="report-section">
+        <h2>Participants</h2>
+
+        <div class="report-content">
+            {% if compte_rendu.participants %}
+                {{ compte_rendu.participants|linebreaks }}
+            {% else %}
+                <span class="empty-value">Aucun participant renseigné.</span>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- RÉSUMÉ -->
+    <div class="report-section">
+        <h2>Résumé</h2>
+
+        <div class="report-content">
+            {% if compte_rendu.resume %}
+                {{ compte_rendu.resume|linebreaks }}
+            {% else %}
+                <span class="empty-value">Aucun résumé renseigné.</span>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- POINTS DISCUTÉS -->
+    <div class="report-section">
+        <h2>Points discutés</h2>
+
+        <div class="report-content">
+            {% if compte_rendu.points_discutes %}
+                {{ compte_rendu.points_discutes|linebreaks }}
+            {% else %}
+                <span class="empty-value">Aucun point renseigné.</span>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- DÉCISIONS -->
+    <div class="report-section">
+        <h2>Décisions prises</h2>
+
+        <div class="report-content">
+            {% if compte_rendu.decisions %}
+                {{ compte_rendu.decisions|linebreaks }}
+            {% else %}
+                <span class="empty-value">Aucune décision renseignée.</span>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- ACTIONS -->
+    <div class="report-section">
+        <h2>Actions à réaliser</h2>
+
+        <div class="report-content">
+            {% if compte_rendu.actions_a_realiser %}
+                {{ compte_rendu.actions_a_realiser|linebreaks }}
+            {% else %}
+                <span class="empty-value">Aucune action renseignée.</span>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- OBSERVATIONS -->
+    <div class="report-section">
+        <h2>Observations</h2>
+
+        <div class="report-content">
+            {% if compte_rendu.observations %}
+                {{ compte_rendu.observations|linebreaks }}
+            {% else %}
+                <span class="empty-value">Aucune observation renseignée.</span>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- INFORMATIONS DE CRÉATION -->
+    <div class="report-meta">
+
+        <div>
+            <span>Rédigé par</span>
+            <strong>{{ compte_rendu.cree_par }}</strong>
+        </div>
+
+        <div>
+            <span>Date de rédaction</span>
+            <strong>
+                {{ compte_rendu.date_redaction|date:"d/m/Y" }}
+            </strong>
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+    <div class="form-actions">
+
+        <a
+            href="{% url 'comptes_rendus' %}"
+            class="btn btn-secondary"
+        >
+            Retour
+        </a>
+
+        <a
+            href="{% url 'modifier_compte_rendu' compte_rendu.pk %}"
+            class="btn btn-primary"
+        >
+            Modifier
+        </a>
+
+    </div>
+
+</div>
+
+
+<style>
+
+.page-header {
+    margin-bottom: 25px;
+}
+
+.page-header h1 {
+    margin-bottom: 5px;
+}
+
+.page-header p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.content-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-label {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.info-item strong {
+    font-size: 15px;
+    color: #111827;
+}
+
+.report-section {
+    margin-top: 28px;
+}
+
+.report-section h2 {
+    margin-bottom: 10px;
+    font-size: 17px;
+    color: #111827;
+}
+
+.report-content {
+    padding: 15px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    line-height: 1.7;
+    color: #374151;
+}
+
+.report-content p {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.empty-value {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+.report-meta {
+    display: flex;
+    gap: 50px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.report-meta div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.report-meta span {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.report-meta strong {
+    color: #111827;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .report-meta {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+

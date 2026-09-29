@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
-from .models import Activite, RendezVous, Reunion
+from .models import Activite, RendezVous, Reunion, CompteRendu
 from missions.models import Mission
-from .forms import ActiviteForm, RendezVousForm, ReunionForm
+from .forms import (ActiviteForm,RendezVousForm,ReunionForm,CompteRenduForm,)
 from missions.forms import MissionForm
 
 import calendar
@@ -74,6 +74,14 @@ def dashboard(request):
     ).exclude(
         statut="annulee"
     ).count()
+    
+    
+           # Comptes rendus de l'entreprise
+    nombre_comptes_rendus = CompteRendu.objects.filter(
+        entreprise=entreprise
+    ).count()
+
+
 
     return render(
         request,
@@ -84,6 +92,7 @@ def dashboard(request):
             "nombre_rendez_vous": nombre_rendez_vous,
             "nombre_missions": nombre_missions,
             "nombre_reunions": nombre_reunions,
+            "nombre_comptes_rendus": nombre_comptes_rendus,
         }
     )
 
@@ -197,6 +206,7 @@ def missions(request):
         {"missions": missions}
     )
     
+    
 
 @login_required
 def rendez_vous(request):
@@ -227,9 +237,32 @@ def taches(request):
     return render(request, "agenda/taches.html")
 
 
+
+# =========================================================
+# COMPTES RENDUS
+# =========================================================
+
 @login_required
 def comptes_rendus(request):
-    return render(request, "agenda/comptes_rendus.html")
+
+    comptes_rendus = CompteRendu.objects.filter(
+        entreprise=request.user.entreprise
+    ).select_related(
+        "reunion",
+        "cree_par"
+    ).order_by(
+        "-date_redaction"
+    )
+
+    return render(
+        request,
+        "agenda/comptes_rendus.html",
+        {
+            "comptes_rendus": comptes_rendus,
+        }
+    )
+
+
 
 
 @login_required
@@ -678,6 +711,152 @@ def supprimer_reunion(request, pk):
         "agenda/supprimer_reunion.html",
         {"reunion": reunion}
     )
+
+
+
+# =========================================================
+# COMPTES RENDUS — CRUD
+# =========================================================
+
+@login_required
+def nouveau_compte_rendu(request, pk):
+
+    reunion = get_object_or_404(
+        Reunion,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    # Une réunion ne peut avoir qu'un seul compte rendu
+    compte_rendu_existant = CompteRendu.objects.filter(
+        reunion=reunion
+    ).first()
+
+    if compte_rendu_existant:
+        return redirect(
+            "modifier_compte_rendu",
+            pk=compte_rendu_existant.pk
+        )
+
+    if request.method == "POST":
+
+        form = CompteRenduForm(request.POST)
+
+        if form.is_valid():
+
+            compte_rendu = form.save(commit=False)
+
+            # La réunion est définie automatiquement
+            # à partir de l'URL
+            compte_rendu.reunion = reunion
+
+            # L'utilisateur connecté est automatiquement
+            # enregistré comme créateur
+            compte_rendu.cree_par = request.user
+
+            # L'entreprise est automatiquement définie
+            compte_rendu.entreprise = request.user.entreprise
+
+            compte_rendu.save()
+
+            enregistrer_action(
+                request.user,
+                "Création de compte rendu",
+                f"Compte rendu de la réunion « {reunion.titre} » créé"
+            )
+
+            return redirect("reunions")
+
+    else:
+
+        form = CompteRenduForm(
+            initial={
+                "participants": reunion.participants,
+            }
+        )
+
+    return render(
+        request,
+        "agenda/nouveau_compte_rendu.html",
+        {
+            "form": form,
+            "reunion": reunion,
+        }
+    )
+
+
+
+
+# =========================================================
+# MODIFIER UN COMPTE RENDU
+# =========================================================
+
+@login_required
+def modifier_compte_rendu(request, pk):
+
+    compte_rendu = get_object_or_404(
+        CompteRendu,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    if request.method == "POST":
+
+        form = CompteRenduForm(
+            request.POST,
+            instance=compte_rendu
+        )
+
+        if form.is_valid():
+
+            compte_rendu = form.save()
+
+            enregistrer_action(
+                request.user,
+                "Modification de compte rendu",
+                f"Compte rendu de la réunion « {compte_rendu.reunion.titre} » modifié"
+            )
+
+            return redirect("reunions")
+
+    else:
+
+        form = CompteRenduForm(
+            instance=compte_rendu
+        )
+
+    return render(
+        request,
+        "agenda/nouveau_compte_rendu.html",
+        {
+            "form": form,
+            "reunion": compte_rendu.reunion,
+            "modification": True,
+        }
+    )
+
+
+
+@login_required
+def voir_compte_rendu(request, pk):
+    compte_rendu = get_object_or_404(
+        CompteRendu,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    return render(
+        request,
+        "agenda/voir_compte_rendu.html",
+        {
+            "compte_rendu": compte_rendu,
+            "reunion": compte_rendu.reunion,
+        }
+    )
+
+
+
+
 
 
 

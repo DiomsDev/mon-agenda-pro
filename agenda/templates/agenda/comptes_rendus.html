@@ -1,0 +1,240 @@
+
+{% extends "base.html" %}
+
+{% block title %}Comptes rendus - DIRAGENDA{% endblock %}
+
+{% block content %}
+
+<div class="page-container">
+
+    <!-- EN-TÊTE -->
+    <div class="page-header">
+
+        <div class="page-header-left">
+
+            <div class="page-header-icon">
+                <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="8" y1="13" x2="16" y2="13"></line>
+                    <line x1="8" y1="17" x2="14" y2="17"></line>
+                </svg>
+            </div>
+
+            <div>
+                <h1>Comptes rendus</h1>
+                <p>
+                    Consultez les comptes rendus des réunions de votre entreprise.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENU -->
+    <div class="form-card">
+
+        <div class="form-card-header">
+
+            <div>
+                <h2>Liste des comptes rendus</h2>
+
+                <p>
+                    {{ comptes_rendus|length }}
+                    compte{{ comptes_rendus|length|pluralize }}
+                    rendu{{ comptes_rendus|length|pluralize }}
+                    enregistré{{ comptes_rendus|length|pluralize }}
+                </p>
+            </div>
+
+        </div>
+
+
+        {% if comptes_rendus %}
+
+            <div class="table-container">
+
+                <table class="data-table">
+
+                    <thead>
+                        <tr>
+                            <th>Réunion</th>
+                            <th>Date de la réunion</th>
+                            <th>Date de rédaction</th>
+                            <th>Créé par</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for compte_rendu in comptes_rendus %}
+
+                            <tr>
+
+                                <!-- RÉUNION -->
+                                <td>
+                                    <strong>
+                                        {{ compte_rendu.reunion.titre }}
+                                    </strong>
+                                </td>
+
+
+                                <!-- DATE DE LA RÉUNION -->
+                                <td>
+                                    {{ compte_rendu.reunion.date|date:"d/m/Y" }}
+                                </td>
+
+
+                                <!-- DATE DE RÉDACTION -->
+                                <td>
+                                    {{ compte_rendu.date_redaction|date:"d/m/Y" }}
+                                </td>
+
+
+                                <!-- CRÉATEUR -->
+                                <td>
+                                    {{ compte_rendu.cree_par.get_full_name|default:compte_rendu.cree_par.username }}
+                                </td>
+
+
+                                <!-- ACTIONS -->
+                                <td>
+
+                                    <div
+                                        style="
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 8px;
+                                        "
+                                    >
+
+                                        <!-- MODIFIER -->
+                                        <a
+                                            href="{% url 'modifier_compte_rendu' compte_rendu.pk %}"
+                                            class="btn btn-sm btn-primary"
+                                            title="Modifier le compte rendu"
+                                            aria-label="Modifier le compte rendu"
+                                        >
+
+                                            <svg
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                aria-hidden="true"
+                                            >
+                                                <path d="M12 20h9"></path>
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                                            </svg>
+
+                                            <span style="margin-left: 5px;">
+                                                Modifier
+                                            </span>
+
+                                        </a>
+
+
+                                        <!-- VOIR -->
+                                        <a href="{% url 'voir_compte_rendu' compte_rendu.pk %}" class="btn btn-sm btn-secondary"> Voir</a>
+
+                                            <svg
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                aria-hidden="true"
+                                            >
+                                                
+                                            </svg>
+
+                                            
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <!-- AUCUN COMPTE RENDU -->
+            <div
+                style="
+                    text-align: center;
+                    padding: 50px 20px;
+                "
+            >
+
+                <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="8" y1="13" x2="16" y2="13"></line>
+                    <line x1="8" y1="17" x2="14" y2="17"></line>
+                </svg>
+
+                <h3>
+                    Aucun compte rendu
+                </h3>
+
+                <p>
+                    Aucun compte rendu de réunion n'a encore été enregistré.
+                </p>
+
+                <a
+                    href="{% url 'reunions' %}"
+                    class="btn btn-primary"
+                >
+                    Voir les réunions
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+

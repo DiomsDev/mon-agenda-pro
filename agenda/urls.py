@@ -108,6 +108,30 @@ urlpatterns = [
         views.supprimer_reunion,
         name="supprimer_reunion"
     ),
+    
+    
+
+
+
+         # COMPTES RENDUS
+        path(
+              "reunions/<int:pk>/compte-rendu/",
+               views.nouveau_compte_rendu,
+               name="nouveau_compte_rendu"
+        ),
+       path(
+             "comptes-rendus/<int:pk>/modifier/",
+              views.modifier_compte_rendu,
+              name="modifier_compte_rendu"
+        ),
+        path(
+              "comptes-rendus/<int:pk>/voir/",
+              views.voir_compte_rendu,
+              name="voir_compte_rendu"
+        ),
+
+
+    
 
     # =========================================================
     # ARCHIVES
