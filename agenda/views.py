@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
-from .models import Activite, RendezVous, Reunion, CompteRendu
+from .models import Activite, RendezVous, Reunion, CompteRendu, Tache
 from missions.models import Mission
-from .forms import (ActiviteForm,RendezVousForm,ReunionForm,CompteRenduForm,)
+from .forms import (ActiviteForm,RendezVousForm,ReunionForm,CompteRenduForm, TacheForm,)
 from missions.forms import MissionForm
 
 import calendar
@@ -32,6 +33,7 @@ from historique.utils import creer_notification
 from comptes.models import Utilisateur
 
 from historique.models import Notification, Rappel
+from comptes.models import Utilisateur
 # =========================================================
 # TABLEAU DE BORD
 # =========================================================
@@ -232,11 +234,143 @@ def contacts(request):
     return render(request, "agenda/contacts.html")
 
 
+
 @login_required
 def taches(request):
-    return render(request, "agenda/taches.html")
 
+    entreprise = request.user.entreprise
 
+    # =========================================================
+    # DIRECTEUR
+    # Le directeur voit toutes les tâches de son entreprise.
+    # =========================================================
+
+    if request.user.role == "directeur":
+
+        taches = Tache.objects.filter(
+            entreprise=entreprise
+        )
+
+    # =========================================================
+    # ASSISTANT
+    # L'assistant voit :
+    # - les tâches qui lui sont attribuées
+    # - ses propres tâches personnelles
+    # =========================================================
+
+    else:
+
+        taches = Tache.objects.filter(
+            entreprise=entreprise
+        ).filter(
+            Q(responsable=request.user)
+            |
+            Q(
+                responsable__isnull=True,
+                cree_par=request.user
+            )
+        )
+
+    # =========================================================
+    # OPTIMISATION + TRI
+    # =========================================================
+
+    taches = taches.select_related(
+        "cree_par",
+        "responsable"
+    ).order_by(
+        "statut",
+        "date_echeance",
+        "-date_creation"
+    )
+
+    return render(
+        request,
+        "agenda/taches.html",
+        {
+            "taches": taches,
+        }
+    )
+    
+
+@login_required
+def nouvelle_tache(request):
+
+    entreprise = request.user.entreprise
+
+    # =========================================================
+    # RESPONSABLES AUTORISÉS
+    # =========================================================
+
+    if request.user.role == "directeur":
+
+        responsables = Utilisateur.objects.filter(
+            entreprise=entreprise,
+            role="assistant",
+            statut_acces="actif"
+        ).order_by(
+            "first_name",
+            "last_name",
+            "username"
+        )
+
+    else:
+
+        # Un assistant ne peut pas attribuer
+        # une tâche à un autre utilisateur.
+        responsables = Utilisateur.objects.filter(
+            pk=request.user.pk
+        )
+
+    # =========================================================
+    # TRAITEMENT DU FORMULAIRE
+    # =========================================================
+
+    if request.method == "POST":
+
+        form = TacheForm(
+            request.POST,
+            responsables=responsables
+        )
+
+        if form.is_valid():
+
+            tache = form.save(commit=False)
+
+            # Utilisateur qui crée la tâche
+            tache.cree_par = request.user
+
+            # Entreprise de l'utilisateur connecté
+            tache.entreprise = entreprise
+
+            # Un assistant crée uniquement une tâche
+            # personnelle.
+            if request.user.role != "directeur":
+                tache.responsable = None
+
+            tache.save()
+
+            enregistrer_action(
+                request.user,
+                "Création de tâche",
+                f"Tâche « {tache.titre} » créée"
+            )
+
+            return redirect("taches")
+
+    else:
+
+        form = TacheForm(
+            responsables=responsables
+        )
+
+    return render(
+        request,
+        "agenda/nouvelle_tache.html",
+        {
+            "form": form,
+        }
+    )
 
 # =========================================================
 # COMPTES RENDUS

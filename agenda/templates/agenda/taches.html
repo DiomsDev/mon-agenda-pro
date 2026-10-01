@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}
+Tâches | DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+<div class="section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>
+                Tâches
+            </h2>
+
+            <p style="color:#5B6B78; font-size:13px; margin-top:5px;">
+                Gérez vos tâches et suivez leur progression.
+            </p>
+        </div>
+
+        <a
+            href="{% url 'nouvelle_tache' %}"
+            class="btn"
+        >
+            + Nouvelle tâche
+        </a>
+
+    </div>
+
+
+    {% if taches %}
+
+        <div style="overflow-x:auto;">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Tâche
+                        </th>
+
+                        <th>
+                            Responsable
+                        </th>
+
+                        <th>
+                            Échéance
+                        </th>
+
+                        <th>
+                            Priorité
+                        </th>
+
+                        <th>
+                            Statut
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for tache in taches %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    {{ tache.titre }}
+                                </strong>
+
+                                {% if tache.description %}
+
+                                    <div
+                                        style="
+                                            color:#6B7280;
+                                            font-size:12px;
+                                            margin-top:4px;
+                                        "
+                                    >
+                                        {{ tache.description|truncatechars:80 }}
+                                    </div>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if tache.responsable %}
+
+                                    {{ tache.responsable.get_full_name|default:tache.responsable.username }}
+
+                                {% else %}
+
+                                    <span style="color:#6B7280;">
+                                        Personnel
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if tache.date_echeance %}
+
+                                    {{ tache.date_echeance|date:"d/m/Y" }}
+
+                                {% else %}
+
+                                    <span style="color:#6B7280;">
+                                        Non définie
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ tache.get_priorite_display }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ tache.get_statut_display }}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div
+            style="
+                text-align:center;
+                padding:50px 20px;
+                color:#6B7280;
+            "
+        >
+
+            <div
+                style="
+                    font-size:40px;
+                    margin-bottom:15px;
+                "
+            >
+                ✓
+            </div>
+
+            <h3
+                style="
+                    color:#16283D;
+                    margin-bottom:8px;
+                "
+            >
+                Aucune tâche
+            </h3>
+
+            <p style="font-size:13px; margin-bottom:20px;">
+                Vous n'avez encore créé aucune tâche.
+            </p>
+
+            <a
+                href="{% url 'nouvelle_tache' %}"
+                class="btn"
+            >
+                + Créer ma première tâche
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

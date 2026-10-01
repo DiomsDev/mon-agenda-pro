@@ -192,4 +192,12 @@ urlpatterns = [
         views.statistiques_data,
         name="statistiques_data"
     ),
+    
+    
+    path(
+        "taches/nouveau/",
+        views.nouvelle_tache,
+        name="nouvelle_tache"
+    ),
+    
 ]

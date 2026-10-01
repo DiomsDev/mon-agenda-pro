@@ -5,6 +5,7 @@ from .models import (
     RendezVous,
     Reunion,
     CompteRendu,
+    Tache,
 )
 
 
@@ -358,3 +359,75 @@ class CompteRenduForm(forms.ModelForm):
                 }
             ),
         }
+# =========================================================
+# FORMULAIRE TÂCHE / TO-DO LIST
+# =========================================================
+
+
+class TacheForm(forms.ModelForm):
+
+    class Meta:
+        model = Tache
+
+        fields = [
+            "titre",
+            "description",
+            "date_echeance",
+            "priorite",
+            "statut",
+            "responsable",
+        ]
+
+        widgets = {
+            "titre": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Ex : Préparer le rapport mensuel",
+                }
+            ),
+
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Décrivez la tâche à réaliser...",
+                    "rows": 5,
+                }
+            ),
+
+            "date_echeance": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control",
+                }
+            ),
+
+            "priorite": forms.Select(
+                attrs={
+                    "class": "form-control",
+                }
+            ),
+
+            "statut": forms.Select(
+                attrs={
+                    "class": "form-control",
+                }
+            ),
+
+            "responsable": forms.Select(
+                attrs={
+                    "class": "form-control",
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+
+        responsables = kwargs.pop("responsables", None)
+
+        super().__init__(*args, **kwargs)
+
+        if responsables is not None:
+
+            self.fields["responsable"].queryset = responsables
+
+        self.fields["responsable"].required = False

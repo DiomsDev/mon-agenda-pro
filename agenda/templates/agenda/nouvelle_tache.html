@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}
+Nouvelle tâche | DIRAGENDA
+{% endblock %}
+
+
+{% block content %}
+
+<div class="section">
+
+    <!-- =========================================================
+         EN-TÊTE
+    ========================================================== -->
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>
+                Nouvelle tâche
+            </h2>
+
+            <p style="color:#5B6B78; font-size:13px; margin-top:5px;">
+                Créez une nouvelle tâche à réaliser.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'taches' %}"
+            class="btn btn-light"
+        >
+            Retour aux tâches
+        </a>
+
+    </div>
+
+
+    <!-- =========================================================
+         FORMULAIRE
+    ========================================================== -->
+
+    <form method="post">
+
+        {% csrf_token %}
+
+
+        <!-- TITRE -->
+
+        <div style="margin-bottom:20px;">
+
+            <label for="{{ form.titre.id_for_label }}">
+                Titre de la tâche
+            </label>
+
+            {{ form.titre }}
+
+            {% if form.titre.errors %}
+
+                <div style="color:#B15E2B; font-size:12px; margin-top:5px;">
+                    {{ form.titre.errors }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div style="margin-bottom:20px;">
+
+            <label for="{{ form.description.id_for_label }}">
+                Description
+            </label>
+
+            {{ form.description }}
+
+            {% if form.description.errors %}
+
+                <div style="color:#B15E2B; font-size:12px; margin-top:5px;">
+                    {{ form.description.errors }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- DATE D'ÉCHÉANCE -->
+
+        <div style="margin-bottom:20px;">
+
+            <label for="{{ form.date_echeance.id_for_label }}">
+                Date d'échéance
+            </label>
+
+            {{ form.date_echeance }}
+
+            {% if form.date_echeance.errors %}
+
+                <div style="color:#B15E2B; font-size:12px; margin-top:5px;">
+                    {{ form.date_echeance.errors }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- PRIORITÉ -->
+
+        <div style="margin-bottom:20px;">
+
+            <label for="{{ form.priorite.id_for_label }}">
+                Priorité
+            </label>
+
+            {{ form.priorite }}
+
+            {% if form.priorite.errors %}
+
+                <div style="color:#B15E2B; font-size:12px; margin-top:5px;">
+                    {{ form.priorite.errors }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- STATUT -->
+
+        <div style="margin-bottom:20px;">
+
+            <label for="{{ form.statut.id_for_label }}">
+                Statut
+            </label>
+
+            {{ form.statut }}
+
+            {% if form.statut.errors %}
+
+                <div style="color:#B15E2B; font-size:12px; margin-top:5px;">
+                    {{ form.statut.errors }}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- RESPONSABLE -->
+
+        <div style="margin-bottom:25px;">
+
+            <label for="{{ form.responsable.id_for_label }}">
+                Responsable
+            </label>
+
+            {{ form.responsable }}
+
+            {% if form.responsable.errors %}
+
+                <div style="color:#B15E2B; font-size:12px; margin-top:5px;">
+                    {{ form.responsable.errors }}
+                </div>
+
+            {% endif %}
+
+            <p style="color:#6B7280; font-size:12px; margin-top:6px;">
+                Vous pouvez laisser ce champ vide pour une tâche personnelle.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             BOUTONS
+        ====================================================== -->
+
+        <div
+            style="
+                display:flex;
+                gap:10px;
+                align-items:center;
+                flex-wrap:wrap;
+            "
+        >
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                Créer la tâche
+            </button>
+
+
+            <a
+                href="{% url 'taches' %}"
+                class="btn btn-light"
+            >
+                Annuler
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

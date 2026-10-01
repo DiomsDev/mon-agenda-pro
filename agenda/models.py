@@ -282,5 +282,83 @@ class CompteRendu(models.Model):
 
     def __str__(self):
         return f"Compte rendu - {self.reunion.titre}"
+    
+    
+    
+# =========================================================
+# TÂCHES / TO-DO LIST
+# =========================================================
+
+class Tache(models.Model):
+
+    PRIORITE_CHOICES = [
+        ("basse", "Basse"),
+        ("normale", "Normale"),
+        ("haute", "Haute"),
+        ("urgente", "Urgente"),
+    ]
+
+    STATUT_CHOICES = [
+        ("a_faire", "À faire"),
+        ("en_cours", "En cours"),
+        ("terminee", "Terminée"),
+        ("annulee", "Annulée"),
+    ]
+
+    titre = models.CharField(max_length=255)
+
+    description = models.TextField(
+        blank=True
+    )
+
+    date_echeance = models.DateField(
+        null=True,
+        blank=True
+    )
+
+    priorite = models.CharField(
+        max_length=20,
+        choices=PRIORITE_CHOICES,
+        default="normale"
+    )
+
+    statut = models.CharField(
+        max_length=20,
+        choices=STATUT_CHOICES,
+        default="a_faire"
+    )
+
+    cree_par = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="taches_creees",
+    )
+
+    responsable = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="taches_assignees",
+    )
+
+    entreprise = models.ForeignKey(
+        "entreprises.Entreprise",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="taches",
+    )
+
+    date_creation = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    date_modification = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return self.titre    
 
     
