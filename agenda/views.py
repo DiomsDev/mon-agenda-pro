@@ -269,9 +269,41 @@ def comptes_rendus(request):
 def documents(request):
     return render(request, "agenda/documents.html")
 
+
 @login_required
 def rappels(request):
-    return render(request, "agenda/rappels.html")
+    aujourd_hui = timezone.now().date()
+
+    activites = Activite.objects.filter(
+        entreprise=request.user.entreprise,
+        date__gte=aujourd_hui,
+    ).exclude(
+        rappel_minutes_avant=""
+    ).order_by(
+        "date",
+        "heure_debut"
+    )
+
+    rendez_vous = RendezVous.objects.filter(
+        entreprise=request.user.entreprise,
+        date__gte=aujourd_hui,
+    ).exclude(
+        rappel_minutes_avant=""
+    ).order_by(
+        "date",
+        "heure"
+    )
+
+    return render(
+        request,
+        "agenda/rappels.html",
+        {
+            "activites": activites,
+            "rendez_vous": rendez_vous,
+        }
+    )
+
+
 
 
 @login_required

@@ -1,0 +1,184 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Rappels - DIRAGENDA
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1>
+            🔔 Rappels
+        </h1>
+
+        <p>
+            Consultez les rappels programmés pour vos activités et rendez-vous.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="content-card">
+
+    <!-- =========================
+         RAPPELS DES ACTIVITÉS
+    ========================== -->
+
+    <h2 style="margin-bottom: 20px;">
+        Activités
+    </h2>
+
+    {% if activites %}
+
+        <div class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th>Activité</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Lieu</th>
+                        <th>Rappel</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for activite in activites %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ activite.objet }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ activite.date|date:"d/m/Y" }}
+                        </td>
+
+                        <td>
+                            {% if activite.heure_debut %}
+                                {{ activite.heure_debut|time:"H:i" }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ activite.lieu|default:"—" }}
+                        </td>
+
+                        <td>
+                            {{ activite.rappel_minutes_avant }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <p style="color:#7b8794;">
+            Aucun rappel d'activité programmé.
+        </p>
+
+    {% endif %}
+
+
+    <!-- =========================
+         RAPPELS DES RENDEZ-VOUS
+    ========================== -->
+
+    <h2 style="margin-top: 40px; margin-bottom: 20px;">
+        Rendez-vous
+    </h2>
+
+    {% if rendez_vous %}
+
+        <div class="table-responsive">
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th>Rendez-vous</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Lieu</th>
+                        <th>Personne</th>
+                        <th>Rappel</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for rdv in rendez_vous %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ rdv.objet }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ rdv.date|date:"d/m/Y" }}
+                        </td>
+
+                        <td>
+                            {% if rdv.heure %}
+                                {{ rdv.heure|time:"H:i" }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ rdv.lieu|default:"—" }}
+                        </td>
+
+                        <td>
+                            {{ rdv.personne|default:"—" }}
+                        </td>
+
+                        <td>
+                            {{ rdv.rappel_minutes_avant }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <p style="color:#7b8794;">
+            Aucun rappel de rendez-vous programmé.
+        </p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+

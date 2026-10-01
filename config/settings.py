@@ -84,13 +84,42 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env_config('DB_NAME', default='diragenda'),
-        'USER': env_config('DB_USER', default='diragenda'),
-        'PASSWORD': env_config('DB_PASSWORD', default='diragenda'),
-        'HOST': env_config('DB_HOST', default='db'),
-        'PORT': env_config('DB_PORT', default='3306'),
+
+    "default": {
+
+        "ENGINE": "django.db.backends.mysql",
+
+        "NAME": env_config(
+            "DB_NAME",
+            default="diragenda"
+        ),
+
+        "USER": env_config(
+            "DB_USER",
+            default="diragenda"
+        ),
+
+        "PASSWORD": env_config(
+            "DB_PASSWORD",
+            default="diragenda"
+        ),
+
+        "HOST": env_config(
+            "DB_HOST",
+            default="db"
+        ),
+
+        "PORT": env_config(
+            "DB_PORT",
+            default="3306"
+        ),
+
+        "OPTIONS": {
+            "ssl": {
+                "ca": BASE_DIR / "ca.pem",
+            },
+        },
+        "CONN_MAX_AGE": 0,
     }
 }
 

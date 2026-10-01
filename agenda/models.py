@@ -124,6 +124,7 @@ class RendezVous(models.Model):
 # =========================================================
 
 class Reunion(models.Model):
+
     STATUT_CHOICES = [
         ("planifiee", "Planifiée"),
         ("en_cours", "En cours"),
@@ -132,10 +133,23 @@ class Reunion(models.Model):
     ]
 
     titre = models.CharField(max_length=255)
+
     date = models.DateField()
-    heure_debut = models.TimeField(null=True, blank=True)
-    heure_fin = models.TimeField(null=True, blank=True)
-    lieu = models.CharField(max_length=255, blank=True)
+
+    heure_debut = models.TimeField(
+        null=True,
+        blank=True
+    )
+
+    heure_fin = models.TimeField(
+        null=True,
+        blank=True
+    )
+
+    lieu = models.CharField(
+        max_length=255,
+        blank=True
+    )
 
     organisateur = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -148,15 +162,45 @@ class Reunion(models.Model):
         help_text="Indiquez les participants à la réunion."
     )
 
-    ordre_du_jour = models.TextField(blank=True)
+    ordre_du_jour = models.TextField(
+        blank=True
+    )
 
-    description = models.TextField(blank=True)
+    description = models.TextField(
+        blank=True
+    )
 
     statut = models.CharField(
         max_length=20,
         choices=STATUT_CHOICES,
         default="planifiee"
     )
+
+    # =====================================================
+    # RAPPEL DE LA RÉUNION
+    # =====================================================
+
+    RAPPEL_CHOICES = [
+        ("", "Aucun rappel"),
+        ("15", "15 minutes avant"),
+        ("30", "30 minutes avant"),
+        ("60", "1 heure avant"),
+        ("1440", "1 jour avant"),
+    ]
+
+    rappel_minutes_avant = models.CharField(
+        max_length=10,
+        choices=RAPPEL_CHOICES,
+        blank=True
+    )
+
+    rappel_envoye = models.BooleanField(
+        default=False
+    )
+
+    # =====================================================
+    # CRÉATION
+    # =====================================================
 
     cree_par = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -174,8 +218,6 @@ class Reunion(models.Model):
 
     def __str__(self):
         return f"{self.titre} - {self.date}"
-    
-    
     
 
 # =========================================================
