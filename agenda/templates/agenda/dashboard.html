@@ -12,363 +12,227 @@ Tableau de bord - DIRAGENDA
 
 <div class="section-header">
 
-    <div>
-        <h2 class="dashboard-title">
 
-            <span class="dashboard-title-icon">
+<div>
+    <h2 class="dashboard-title">
 
-                <svg viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                </svg>
+        <span class="dashboard-title-icon">
+            <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+            </svg>
+        </span>
 
-            </span>
+        Tableau de bord
 
-            Tableau de bord
+    </h2>
 
-        </h2>
+    <p style="color:#7b8794; margin-top:5px;">
+        Bienvenue sur votre espace de gestion de l'agenda.
+    </p>
+</div>
 
-        <p style="color:#7b8794; margin-top:5px;">
-            Bienvenue sur votre espace de gestion de l'agenda.
-        </p>
-    </div>
+<a href="{% url 'activites' %}" class="btn">
+    + Nouvelle activité
+</a>
 
-    <a href="{% url 'activites' %}" class="btn">
-        + Nouvelle activité
-    </a>
 
 </div>
 
-
 <!-- =========================
-     STATISTIQUES
+     STATISTIQUES PRINCIPALES
 ========================= -->
 
 <div class="stats">
 
 
-    <!-- ACTIVITÉS À VENIR -->
+<!-- ACTIVITÉS À VENIR -->
 
-    <div class="stat-card">
+<div class="stat-card">
 
-        <div class="stat-info">
+    <div class="stat-info">
+        <span>Activités à venir</span>
 
-            <span>
-                Activités à venir
-            </span>
-
-            <strong>
-                {{ activites_a_venir|length }}
-            </strong>
-
-        </div>
-
-
-        <div class="stat-icon stat-icon-activites">
-
-            <svg viewBox="0 0 24 24">
-
-                <rect
-                    x="3"
-                    y="4"
-                    width="18"
-                    height="17"
-                    rx="2"
-                ></rect>
-
-                <line
-                    x1="16"
-                    y1="2"
-                    x2="16"
-                    y2="6"
-                ></line>
-
-                <line
-                    x1="8"
-                    y1="2"
-                    x2="8"
-                    y2="6"
-                ></line>
-
-                <line
-                    x1="3"
-                    y1="10"
-                    x2="21"
-                    y2="10"
-                ></line>
-
-                <line
-                    x1="8"
-                    y1="14"
-                    x2="8"
-                    y2="14"
-                ></line>
-
-                <line
-                    x1="12"
-                    y1="14"
-                    x2="12"
-                    y2="14"
-                ></line>
-
-                <line
-                    x1="16"
-                    y1="14"
-                    x2="16"
-                    y2="14"
-                ></line>
-
-            </svg>
-
-        </div>
-
+        <strong>
+            {{ activites_a_venir|length }}
+        </strong>
     </div>
 
+    <div class="stat-icon stat-icon-activites">
 
-    <!-- ACTIVITÉS EFFECTUÉES -->
+        <svg viewBox="0 0 24 24">
 
-    <div class="stat-card">
+            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
 
-        <div class="stat-info">
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
 
-            <span>
-                Activités effectuées
-            </span>
+            <line x1="8" y1="14" x2="8" y2="14"></line>
+            <line x1="12" y1="14" x2="12" y2="14"></line>
+            <line x1="16" y1="14" x2="16" y2="14"></line>
 
-            <strong>
-                {{ activites_effectuees|length }}
-            </strong>
-
-        </div>
-
-
-        <div class="stat-icon stat-icon-effectuees">
-
-            <svg viewBox="0 0 24 24">
-
-                <circle
-                    cx="12"
-                    cy="12"
-                    r="9"
-                ></circle>
-
-                <polyline
-                    points="8 12 11 15 16 9"
-                ></polyline>
-
-            </svg>
-
-        </div>
+        </svg>
 
     </div>
-
-
-    <!-- RENDEZ-VOUS -->
-
-    <div class="stat-card">
-
-        <div class="stat-info">
-
-            <span>
-                Rendez-vous
-            </span>
-
-            <strong>
-                {{ nombre_rendez_vous }}
-            </strong>
-
-        </div>
-
-
-        <div class="stat-icon stat-icon-rendezvous">
-
-            <svg viewBox="0 0 24 24">
-
-                <circle
-                    cx="9"
-                    cy="8"
-                    r="4"
-                ></circle>
-
-                <path
-                    d="M3 21c0-4 2.7-7 6-7s6 3 6 7"
-                ></path>
-
-                <circle
-                    cx="17"
-                    cy="9"
-                    r="3"
-                ></circle>
-
-                <path
-                    d="M16 14c2.8.2 5 2.7 5 6"
-                ></path>
-
-            </svg>
-
-        </div>
-
-    </div>
-
-
-    <!-- MISSIONS -->
-
-    <div class="stat-card">
-
-        <div class="stat-info">
-
-            <span>
-                Missions
-            </span>
-
-            <strong>
-                {{ nombre_missions }}
-            </strong>
-
-        </div>
-
-
-        <div class="stat-icon stat-icon-missions">
-
-            <svg viewBox="0 0 24 24">
-
-                <rect
-                    x="3"
-                    y="6"
-                    width="18"
-                    height="13"
-                    rx="2"
-                ></rect>
-
-                <path
-                    d="M8 6V4h8v2"
-                ></path>
-
-                <line
-                    x1="3"
-                    y1="11"
-                    x2="21"
-                    y2="11"
-                ></line>
-
-                <line
-                    x1="10"
-                    y1="15"
-                    x2="14"
-                    y2="15"
-                ></line>
-
-            </svg>
-
-        </div>
-
-    </div>
-
-
-                  <!-- RÉUNIONS -->
-
-            <div class="stat-card">
-
-                    <div class="stat-info">
-
-                        <span>
-                             Réunions
-                        </span>
-
-                       <strong>
-                          {{ nombre_reunions }}
-                       </strong>
-
-                    </div>
-
-
-                    <div class="stat-icon stat-icon-reunions">
-
-                        <svg viewBox="0 0 24 24">
-
-                            <circle
-                             cx="9"
-                             cy="8"
-                             r="3"
-                            ></circle>
-
-                           <circle
-                              cx="17"
-                              cy="8"
-                              r="3"
-                           ></circle>
-
-                            <path
-                             d="M3 20c0-3.5 2.5-6 6-6s6 2.5 6 6"
-                            ></path>
-
-                            <path
-                              d="M14 14c3.5-.3 6 2.2 6 6"
-                            ></path>
-
-                        </svg>
-
-                    </div>
-
-            </div>
-
-
-            
-    <!-- COMPTES RENDUS -->
-
-    <div class="stat-card">
-
-        <div class="stat-info">
-
-            <span>
-                Comptes rendus
-            </span>
-
-            <strong>
-                {{ nombre_comptes_rendus }}
-            </strong>
-
-        </div>
-
-
-        <div class="stat-icon stat-icon-comptes-rendus">
-
-            <svg viewBox="0 0 24 24">
-
-                <path
-                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                ></path>
-
-                <polyline
-                    points="14 2 14 8 20 8"
-                ></polyline>
-
-                <line
-                    x1="8"
-                    y1="13"
-                    x2="16"
-                    y2="13"
-                ></line>
-
-                <line
-                    x1="8"
-                    y1="17"
-                    x2="14"
-                    y2="17"
-                ></line>
-
-            </svg>
-
-        </div>
-
-    </div>
-
-
 
 </div>
 
+
+<!-- ACTIVITÉS EFFECTUÉES -->
+
+<div class="stat-card">
+
+    <div class="stat-info">
+        <span>Activités effectuées</span>
+
+        <strong>
+            {{ activites_effectuees|length }}
+        </strong>
+    </div>
+
+    <div class="stat-icon stat-icon-effectuees">
+
+        <svg viewBox="0 0 24 24">
+
+            <circle cx="12" cy="12" r="9"></circle>
+
+            <polyline points="8 12 11 15 16 9"></polyline>
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+<!-- RENDEZ-VOUS -->
+
+<div class="stat-card">
+
+    <div class="stat-info">
+        <span>Rendez-vous</span>
+
+        <strong>
+            {{ nombre_rendez_vous }}
+        </strong>
+    </div>
+
+    <div class="stat-icon stat-icon-rendezvous">
+
+        <svg viewBox="0 0 24 24">
+
+            <circle cx="9" cy="8" r="4"></circle>
+
+            <path d="M3 21c0-4 2.7-7 6-7s6 3 6 7"></path>
+
+            <circle cx="17" cy="9" r="3"></circle>
+
+            <path d="M16 14c2.8.2 5 2.7 5 6"></path>
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+<!-- MISSIONS -->
+
+<div class="stat-card">
+
+    <div class="stat-info">
+        <span>Missions</span>
+
+        <strong>
+            {{ nombre_missions }}
+        </strong>
+    </div>
+
+    <div class="stat-icon stat-icon-missions">
+
+        <svg viewBox="0 0 24 24">
+
+            <rect x="3" y="6" width="18" height="13" rx="2"></rect>
+
+            <path d="M8 6V4h8v2"></path>
+
+            <line x1="3" y1="11" x2="21" y2="11"></line>
+
+            <line x1="10" y1="15" x2="14" y2="15"></line>
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+<!-- RÉUNIONS -->
+
+<div class="stat-card">
+
+    <div class="stat-info">
+        <span>Réunions</span>
+
+        <strong>
+            {{ nombre_reunions }}
+        </strong>
+    </div>
+
+    <div class="stat-icon stat-icon-reunions">
+
+        <svg viewBox="0 0 24 24">
+
+            <circle cx="9" cy="8" r="3"></circle>
+
+            <circle cx="17" cy="8" r="3"></circle>
+
+            <path d="M3 20c0-3.5 2.5-6 6-6s6 2.5 6 6"></path>
+
+            <path d="M14 14c3.5-.3 6 2.2 6 6"></path>
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+<!-- COMPTES RENDUS -->
+
+<div class="stat-card">
+
+    <div class="stat-info">
+        <span>Comptes rendus</span>
+
+        <strong>
+            {{ nombre_comptes_rendus }}
+        </strong>
+    </div>
+
+    <div class="stat-icon stat-icon-comptes-rendus">
+
+        <svg viewBox="0 0 24 24">
+
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+
+            <polyline points="14 2 14 8 20 8"></polyline>
+
+            <line x1="8" y1="13" x2="16" y2="13"></line>
+
+            <line x1="8" y1="17" x2="14" y2="17"></line>
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+</div>
 
 <!-- =========================
      ACTIVITÉS À VENIR
@@ -376,143 +240,104 @@ Tableau de bord - DIRAGENDA
 
 <div class="section">
 
-    <div class="section-header">
 
-        <h2 class="section-title-icon">
+<div class="section-header">
 
-            <span class="section-icon section-icon-calendar">
+    <h2 class="section-title-icon">
 
-                <svg viewBox="0 0 24 24">
+        <span class="section-icon section-icon-calendar">
 
-                    <rect
-                        x="3"
-                        y="4"
-                        width="18"
-                        height="17"
-                        rx="2"
-                    ></rect>
+            <svg viewBox="0 0 24 24">
 
-                    <line
-                        x1="16"
-                        y1="2"
-                        x2="16"
-                        y2="6"
-                    ></line>
+                <rect x="3" y="4" width="18" height="17" rx="2"></rect>
 
-                    <line
-                        x1="8"
-                        y1="2"
-                        x2="8"
-                        y2="6"
-                    ></line>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
 
-                    <line
-                        x1="3"
-                        y1="10"
-                        x2="21"
-                        y2="10"
-                    ></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
 
-                </svg>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
 
-            </span>
+            </svg>
 
-            Activités à venir
+        </span>
 
-        </h2>
+        Activités à venir
 
+    </h2>
 
-        <a
-            href="{% url 'activites' %}"
-            class="btn btn-light"
-        >
-            Voir toutes
-        </a>
-
-    </div>
-
-
-    {% if activites_a_venir %}
-
-    <table>
-
-        <thead>
-
-            <tr>
-
-                <th>Date</th>
-
-                <th>Heure</th>
-
-                <th>Activité</th>
-
-                <th>Lieu</th>
-
-                <th>Statut</th>
-
-            </tr>
-
-        </thead>
-
-
-        <tbody>
-
-        {% for activite in activites_a_venir %}
-
-            <tr>
-
-                <td>
-                    {{ activite.date|date:"d/m/Y" }}
-                </td>
-
-                <td>
-
-                    {% if activite.heure_debut %}
-
-                        {{ activite.heure_debut|time:"H:i" }}
-
-                    {% else %}
-
-                        —
-
-                    {% endif %}
-
-                </td>
-
-                <td>
-
-                    <strong>
-                        {{ activite.objet }}
-                    </strong>
-
-                </td>
-
-                <td>
-                    {{ activite.lieu|default:"—" }}
-                </td>
-
-                <td>
-                    {{ activite.get_statut_display }}
-                </td>
-
-            </tr>
-
-        {% endfor %}
-
-        </tbody>
-
-    </table>
-
-    {% else %}
-
-        <p style="color:#7b8794;">
-            Aucune activité à venir.
-        </p>
-
-    {% endif %}
+    <a href="{% url 'activites' %}" class="btn btn-light">
+        Voir toutes
+    </a>
 
 </div>
 
+
+{% if activites_a_venir %}
+
+<table>
+
+    <thead>
+
+        <tr>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Activité</th>
+            <th>Lieu</th>
+            <th>Statut</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for activite in activites_a_venir %}
+
+        <tr>
+
+            <td>
+                {{ activite.date|date:"d/m/Y" }}
+            </td>
+
+            <td>
+
+                {% if activite.heure_debut %}
+                    {{ activite.heure_debut|time:"H:i" }}
+                {% else %}
+                    —
+                {% endif %}
+
+            </td>
+
+            <td>
+                <strong>{{ activite.objet }}</strong>
+            </td>
+
+            <td>
+                {{ activite.lieu|default:"—" }}
+            </td>
+
+            <td>
+                {{ activite.get_statut_display }}
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% else %}
+
+    <p style="color:#7b8794;">
+        Aucune activité à venir.
+    </p>
+
+{% endif %}
+
+
+</div>
 
 <!-- =========================
      ACTIVITÉS EFFECTUÉES
@@ -520,112 +345,680 @@ Tableau de bord - DIRAGENDA
 
 <div class="section">
 
-    <div class="section-header">
+
+<div class="section-header">
+
+    <h2 class="section-title-icon">
+
+        <span class="section-icon section-icon-check">
+
+            <svg viewBox="0 0 24 24">
+
+                <circle cx="12" cy="12" r="9"></circle>
+
+                <polyline points="8 12 11 15 16 9"></polyline>
+
+            </svg>
+
+        </span>
+
+        Activités effectuées
+
+    </h2>
+
+    <a href="{% url 'activites' %}" class="btn btn-light">
+        Voir toutes
+    </a>
+
+</div>
+
+
+{% if activites_effectuees %}
+
+<table>
+
+    <thead>
+
+        <tr>
+            <th>Date</th>
+            <th>Activité</th>
+            <th>Lieu</th>
+            <th>Observation</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for activite in activites_effectuees %}
+
+        <tr>
+
+            <td>
+                {{ activite.date|date:"d/m/Y" }}
+            </td>
+
+            <td>
+                <strong>{{ activite.objet }}</strong>
+            </td>
+
+            <td>
+                {{ activite.lieu|default:"—" }}
+            </td>
+
+            <td>
+                {{ activite.observations|default:"—" }}
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% else %}
+
+    <p style="color:#7b8794;">
+        Aucune activité effectuée pour le moment.
+    </p>
+
+{% endif %}
+
+
+</div>
+
+<!-- =========================================================
+     STATISTIQUES DÉTAILLÉES
+========================================================= -->
+
+<div class="dashboard-statistiques">
+
+
+<div class="section-header dashboard-stats-header">
+
+    <div>
 
         <h2 class="section-title-icon">
 
-            <span class="section-icon section-icon-check">
+            <span class="section-icon section-icon-statistiques">
 
                 <svg viewBox="0 0 24 24">
 
-                    <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                    ></circle>
-
-                    <polyline
-                        points="8 12 11 15 16 9"
-                    ></polyline>
+                    <line x1="4" y1="19" x2="4" y2="10"></line>
+                    <line x1="10" y1="19" x2="10" y2="5"></line>
+                    <line x1="16" y1="19" x2="16" y2="8"></line>
+                    <line x1="22" y1="19" x2="22" y2="3"></line>
 
                 </svg>
 
             </span>
 
-            Activités effectuées
+            Statistiques détaillées
 
         </h2>
 
-
-        <a
-            href="{% url 'activites' %}"
-            class="btn btn-light"
-        >
-            Voir toutes
-        </a>
-
-    </div>
-
-
-    {% if activites_effectuees %}
-
-    <table>
-
-        <thead>
-
-            <tr>
-
-                <th>Date</th>
-
-                <th>Activité</th>
-
-                <th>Lieu</th>
-
-                <th>Observation</th>
-
-            </tr>
-
-        </thead>
-
-
-        <tbody>
-
-        {% for activite in activites_effectuees %}
-
-            <tr>
-
-                <td>
-                    {{ activite.date|date:"d/m/Y" }}
-                </td>
-
-                <td>
-
-                    <strong>
-                        {{ activite.objet }}
-                    </strong>
-
-                </td>
-
-                <td>
-                    {{ activite.lieu|default:"—" }}
-                </td>
-
-                <td>
-                    {{ activite.observations|default:"—" }}
-                </td>
-
-            </tr>
-
-        {% endfor %}
-
-        </tbody>
-
-    </table>
-
-    {% else %}
-
-        <p style="color:#7b8794;">
-            Aucune activité effectuée pour le moment.
+        <p class="statistiques-sous-titre">
+            Évolution des activités, missions et rendez-vous
+            en {{ annee_courante }}
         </p>
 
-    {% endif %}
+    </div>
 
 </div>
 
 
 <!-- =========================
-     STYLE DES ICÔNES DU DASHBOARD
+     ACTIVITÉS
 ========================= -->
+
+<div class="stats-detail-section">
+
+    <h3>Activités</h3>
+
+    <div class="stats-detail-grid">
+
+        <div class="stat-detail-card">
+
+            <span>Semaine</span>
+
+            <strong id="stat-activites-semaine">
+                {{ stats.activites.semaine }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat-detail-card">
+
+            <span>Mois</span>
+
+            <strong id="stat-activites-mois">
+                {{ stats.activites.mois }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat-detail-card">
+
+            <span>Année</span>
+
+            <strong id="stat-activites-annee">
+                {{ stats.activites.annee }}
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MISSIONS
+========================= -->
+
+<div class="stats-detail-section">
+
+    <h3>Missions</h3>
+
+    <div class="stats-detail-grid">
+
+        <div class="stat-detail-card">
+
+            <span>Semaine</span>
+
+            <strong id="stat-missions-semaine">
+                {{ stats.missions.semaine }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat-detail-card">
+
+            <span>Mois</span>
+
+            <strong id="stat-missions-mois">
+                {{ stats.missions.mois }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat-detail-card">
+
+            <span>Année</span>
+
+            <strong id="stat-missions-annee">
+                {{ stats.missions.annee }}
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     RENDEZ-VOUS
+========================= -->
+
+<div class="stats-detail-section">
+
+    <h3>Rendez-vous</h3>
+
+    <div class="stats-detail-grid">
+
+        <div class="stat-detail-card">
+
+            <span>Semaine</span>
+
+            <strong id="stat-rdv-semaine">
+                {{ stats.rendez_vous.semaine }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat-detail-card">
+
+            <span>Mois</span>
+
+            <strong id="stat-rdv-mois">
+                {{ stats.rendez_vous.mois }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat-detail-card">
+
+            <span>Année</span>
+
+            <strong id="stat-rdv-annee">
+                {{ stats.rendez_vous.annee }}
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     GRAPHIQUE ANNUEL
+========================= -->
+
+<div class="stats-chart-card">
+
+    <div class="stats-chart-header">
+
+        <div>
+
+            <h3>Évolution annuelle</h3>
+
+            <p>
+                Activités, missions et rendez-vous
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="chart-container">
+
+        <canvas id="graphiqueAnnuel"></canvas>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     RÉPARTITION DES STATUTS
+========================= -->
+
+<div class="stats-chart-card">
+
+    <div class="stats-chart-header">
+
+        <div>
+
+            <h3>Répartition des activités par statut</h3>
+
+            <p>
+                Situation actuelle des activités
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="statut-chart-container">
+
+        <canvas id="graphiqueStatuts"></canvas>
+
+    </div>
+
+    <div id="legendeStatuts" class="statut-legende"></div>
+
+</div>
+
+
+</div>
+
+<!-- =========================================================
+     DONNÉES DJANGO POUR JAVASCRIPT
+========================================================= -->
+
+{{ graphique_json|json_script:"graphique-data" }}
+
+{{ repartition_statut_json|json_script:"statut-data" }}
+
+<!-- =========================================================
+     CHART.JS
+========================================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* =====================================================
+       DONNÉES INITIALES
+    ===================================================== */
+
+    const graphiqueDataElement =
+        document.getElementById("graphique-data");
+
+    const statutDataElement =
+        document.getElementById("statut-data");
+
+
+    const graphiqueData =
+        JSON.parse(graphiqueDataElement.textContent);
+
+    const statutData =
+        JSON.parse(statutDataElement.textContent);
+
+
+    /* =====================================================
+       GRAPHIQUE ANNUEL
+    ===================================================== */
+
+    const graphiqueCanvas =
+        document.getElementById("graphiqueAnnuel");
+
+
+    let graphiqueAnnuel = new Chart(
+        graphiqueCanvas,
+        {
+            type: "bar",
+
+            data: {
+
+                labels: graphiqueData.labels,
+
+                datasets: [
+
+                    {
+                        label: "Activités",
+                        data: graphiqueData.activites,
+                        borderWidth: 1
+                    },
+
+                    {
+                        label: "Missions",
+                        data: graphiqueData.missions,
+                        borderWidth: 1
+                    },
+
+                    {
+                        label: "Rendez-vous",
+                        data: graphiqueData.rendez_vous,
+                        borderWidth: 1
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                scales: {
+
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       GRAPHIQUE DES STATUTS
+    ===================================================== */
+
+    const statutCanvas =
+        document.getElementById("graphiqueStatuts");
+
+
+    let graphiqueStatuts =
+        new Chart(
+            statutCanvas,
+            {
+                type: "doughnut",
+
+                data: {
+
+                    labels: statutData.labels,
+
+                    datasets: [
+
+                        {
+                            data: statutData.valeurs,
+                            borderWidth: 1
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       LÉGENDE DES STATUTS
+    ===================================================== */
+
+    function afficherLegendeStatuts(data) {
+
+        const legende =
+            document.getElementById("legendeStatuts");
+
+        legende.innerHTML = "";
+
+        data.labels.forEach(function (label, index) {
+
+            const element =
+                document.createElement("div");
+
+            element.className =
+                "statut-legende-item";
+
+            element.innerHTML = `
+                <span class="statut-legende-nom">
+                    ${label}
+                </span>
+
+                <strong>
+                    ${data.valeurs[index]}
+                </strong>
+            `;
+
+            legende.appendChild(element);
+
+        });
+
+    }
+
+
+    afficherLegendeStatuts(statutData);
+
+
+    /* =====================================================
+       ACTUALISATION AUTOMATIQUE
+    ===================================================== */
+
+    function actualiserStatistiques() {
+
+        fetch("{% url 'statistiques_data' %}")
+
+            .then(function (response) {
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Erreur lors de la récupération des statistiques."
+                    );
+                }
+
+                return response.json();
+
+            })
+
+            .then(function (data) {
+
+                /* ================================
+                   ACTIVITÉS
+                ================================= */
+
+                document.getElementById(
+                    "stat-activites-semaine"
+                ).textContent =
+                    data.stats.activites.semaine;
+
+
+                document.getElementById(
+                    "stat-activites-mois"
+                ).textContent =
+                    data.stats.activites.mois;
+
+
+                document.getElementById(
+                    "stat-activites-annee"
+                ).textContent =
+                    data.stats.activites.annee;
+
+
+                /* ================================
+                   MISSIONS
+                ================================= */
+
+                document.getElementById(
+                    "stat-missions-semaine"
+                ).textContent =
+                    data.stats.missions.semaine;
+
+
+                document.getElementById(
+                    "stat-missions-mois"
+                ).textContent =
+                    data.stats.missions.mois;
+
+
+                document.getElementById(
+                    "stat-missions-annee"
+                ).textContent =
+                    data.stats.missions.annee;
+
+
+                /* ================================
+                   RENDEZ-VOUS
+                ================================= */
+
+                document.getElementById(
+                    "stat-rdv-semaine"
+                ).textContent =
+                    data.stats.rendez_vous.semaine;
+
+
+                document.getElementById(
+                    "stat-rdv-mois"
+                ).textContent =
+                    data.stats.rendez_vous.mois;
+
+
+                document.getElementById(
+                    "stat-rdv-annee"
+                ).textContent =
+                    data.stats.rendez_vous.annee;
+
+
+                /* ================================
+                   GRAPHIQUE ANNUEL
+                ================================= */
+
+                if (data.graphique) {
+
+                    graphiqueAnnuel.data.labels =
+                        data.graphique.labels;
+
+                    graphiqueAnnuel.data.datasets[0].data =
+                        data.graphique.activites;
+
+                    graphiqueAnnuel.data.datasets[1].data =
+                        data.graphique.missions;
+
+                    graphiqueAnnuel.data.datasets[2].data =
+                        data.graphique.rendez_vous;
+
+                    graphiqueAnnuel.update();
+
+                }
+
+
+                /* ================================
+                   STATUTS
+                ================================= */
+
+                if (data.repartition_statut) {
+
+                    graphiqueStatuts.data.labels =
+                        data.repartition_statut.labels;
+
+                    graphiqueStatuts.data.datasets[0].data =
+                        data.repartition_statut.valeurs;
+
+                    graphiqueStatuts.update();
+
+                    afficherLegendeStatuts(
+                        data.repartition_statut
+                    );
+
+                }
+
+            })
+
+            .catch(function (error) {
+
+                console.error(
+                    "Erreur statistiques :",
+                    error
+                );
+
+            });
+
+    }
+
+
+    /* Actualisation toutes les 15 secondes */
+
+    setInterval(
+        actualiserStatistiques,
+        15000
+    );
+
+});
+
+</script>
+
+<!-- =========================================================
+     STYLE DES ICÔNES DU DASHBOARD
+========================================================= -->
 
 <style>
 
@@ -686,15 +1079,11 @@ Tableau de bord - DIRAGENDA
 }
 
 
-/* Activités à venir */
-
 .stat-icon-activites {
     color: #4FA3D1;
     background: #E8F4FA;
 }
 
-
-/* Activités effectuées */
 
 .stat-icon-effectuees {
     color: #5CB85C;
@@ -702,15 +1091,11 @@ Tableau de bord - DIRAGENDA
 }
 
 
-/* Rendez-vous */
-
 .stat-icon-rendezvous {
     color: #8E7CC3;
     background: #F0ECF8;
 }
 
-
-/* Missions */
 
 .stat-icon-missions {
     color: #E6A23C;
@@ -718,21 +1103,16 @@ Tableau de bord - DIRAGENDA
 }
 
 
-/* Réunions */
-
 .stat-icon-reunions {
     color: #38B2AC;
     background: #E6F6F5;
 }
 
 
-/* Comptes rendus */
-
 .stat-icon-comptes-rendus {
     color: #6C63A8;
     background: #EFEDF8;
 }
-
 
 
 /* =========================================================
@@ -773,6 +1153,189 @@ Tableau de bord - DIRAGENDA
 
 .section-icon-check {
     color: #5CB85C;
+}
+
+
+/* =========================================================
+   STATISTIQUES DÉTAILLÉES
+========================================================= */
+
+.dashboard-statistiques {
+    margin-top: 35px;
+    padding: 25px;
+    background: #f8fafc;
+    border-radius: 14px;
+}
+
+
+.dashboard-stats-header {
+    margin-bottom: 25px;
+}
+
+
+.section-icon-statistiques {
+    color: #6C63A8;
+}
+
+
+.statistiques-sous-titre {
+    margin: 7px 0 0 34px;
+    color: #7b8794;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SECTIONS DES STATISTIQUES
+========================================================= */
+
+.stats-detail-section {
+    margin-bottom: 25px;
+}
+
+
+.stats-detail-section h3 {
+    margin-bottom: 12px;
+    font-size: 17px;
+    color: #374151;
+}
+
+
+.stats-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+
+.stat-detail-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+.stat-detail-card span {
+    color: #7b8794;
+    font-size: 14px;
+}
+
+
+.stat-detail-card strong {
+    font-size: 28px;
+    color: #374151;
+}
+
+
+/* =========================================================
+   CARTES DES GRAPHIQUES
+========================================================= */
+
+.stats-chart-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 25px;
+}
+
+
+.stats-chart-header h3 {
+    margin: 0;
+    color: #374151;
+}
+
+
+.stats-chart-header p {
+    margin-top: 5px;
+    color: #7b8794;
+    font-size: 14px;
+}
+
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    margin-top: 20px;
+}
+
+
+.statut-chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 350px;
+    margin: 20px auto;
+}
+
+
+/* =========================================================
+   LÉGENDE DES STATUTS
+========================================================= */
+
+.statut-legende {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+
+.statut-legende-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+
+.statut-legende-nom {
+    color: #4b5563;
+}
+
+
+.statut-legende-item strong {
+    color: #374151;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .stats-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .statut-legende {
+        grid-template-columns: 1fr;
+    }
+
+
+    .dashboard-statistiques {
+        padding: 15px;
+    }
+
+
+    .chart-container {
+        height: 300px;
+    }
+
+
+    .statut-chart-container {
+        height: 280px;
+    }
+
 }
 
 </style>

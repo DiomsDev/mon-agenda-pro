@@ -75,3 +75,27 @@ class Rappel(models.Model):
 
     def __str__(self):
         return f"{self.titre} ({self.date_rappel:%d/%m/%Y %H:%M})"
+    
+    
+class PushSubscription(models.Model):
+    utilisateur = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="push_subscriptions",
+    )
+
+    endpoint = models.TextField()
+
+    endpoint_hash = models.CharField(
+        max_length=64,
+        unique=True,
+        db_index=True,
+    )
+
+    p256dh = models.TextField()
+    auth = models.TextField()
+
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Abonnement Push — {self.utilisateur}"

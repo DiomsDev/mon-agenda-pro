@@ -1274,6 +1274,216 @@
 
 </script>
 
+<!-- =============================================================
+     WEB PUSH — NOTIFICATIONS
+============================================================= -->
+
+<script>
+
+    function base64ToUint8Array(base64String) {
+
+        const padding = '='.repeat(
+            (4 - base64String.length % 4) % 4
+        );
+
+        const base64 = (
+            base64String + padding
+        )
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+
+        return Uint8Array.from(
+            [...rawData].map(
+                char => char.charCodeAt(0)
+            )
+        );
+    }
+
+
+    async function activerNotificationsPush() {
+
+        try {
+
+            // Vérifier que le navigateur supporte les notifications
+            if (!('Notification' in window)) {
+
+                console.log(
+                    'Les notifications ne sont pas supportées.'
+                );
+
+                return;
+            }
+
+
+            // Vérifier que Push est disponible
+            if (!('PushManager' in window)) {
+
+                console.log(
+                    'Les notifications Push ne sont pas supportées.'
+                );
+
+                return;
+            }
+
+
+            // Vérifier l'autorisation
+            let permission = Notification.permission;
+
+
+            if (permission === 'default') {
+
+                permission = await Notification.requestPermission();
+
+            }
+
+
+            if (permission !== 'granted') {
+
+                console.log(
+                    'Permission de notification refusée.'
+                );
+
+                return;
+            }
+
+
+            // Récupérer le Service Worker
+            const registration =
+                await navigator.serviceWorker.ready;
+
+
+            // Vérifier s'il existe déjà un abonnement
+            let subscription =
+                await registration.pushManager.getSubscription();
+
+
+            // Si aucun abonnement, en créer un
+            if (!subscription) {
+
+                // Récupérer la clé publique VAPID
+                const response =
+                    await fetch('/push/public-key/');
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        'Impossible de récupérer la clé publique VAPID.'
+                    );
+
+                }
+
+
+                const donnees =
+                    await response.json();
+
+
+                const publicKey =
+                    base64ToUint8Array(
+                        donnees.publicKey
+                    );
+
+
+                // Créer l'abonnement Push
+                subscription =
+                    await registration.pushManager.subscribe({
+
+                        userVisibleOnly: true,
+
+                        applicationServerKey: publicKey
+
+                    });
+
+            }
+
+
+            // Envoyer l'abonnement à Django
+            const response =
+                await fetch('/push/subscribe/', {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type':
+                            'application/json',
+
+                        'X-CSRFToken':
+                            getCookie('csrftoken')
+
+                    },
+
+                    body: JSON.stringify(
+                        subscription.toJSON()
+                    )
+
+                });
+
+
+            const resultat =
+                await response.json();
+
+
+            if (resultat.success) {
+
+                console.log(
+                    'Notifications Push activées.'
+                );
+                 return true;
+
+            } else {
+
+                console.error(
+                    'Erreur abonnement Push :',
+                    resultat.message
+                );
+                 return false;
+
+            }
+
+        } catch (erreur) {
+
+            console.error(
+                'Erreur notifications Push :',
+                erreur
+            );
+            return false;
+
+        }
+
+    }
+
+
+    function getCookie(name) {
+
+        const cookies =
+            document.cookie.split(';');
+
+        for (const cookie of cookies) {
+
+            const [
+                key,
+                value
+            ] = cookie.trim().split('=');
+
+
+            if (key === name) {
+
+                return decodeURIComponent(value);
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+
+    
+</script>
 
 </body>
 </html>

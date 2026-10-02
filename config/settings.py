@@ -189,3 +189,23 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+
+# =========================================================
+# WEB PUSH - VAPID
+# =========================================================
+
+VAPID_PRIVATE_KEY_PATH = BASE_DIR / env_config(
+    "VAPID_PRIVATE_KEY_PATH",
+    default="private_key.pem"
+)
+
+VAPID_PUBLIC_KEY_PATH = BASE_DIR / env_config(
+    "VAPID_PUBLIC_KEY_PATH",
+    default="public_key.pem"
+)
+
+VAPID_EMAIL = env_config(
+    "VAPID_EMAIL",
+    default="mailto:pacomemamadoudiomande@gmail.com"
+)

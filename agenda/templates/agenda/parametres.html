@@ -323,22 +323,37 @@ Paramètres - DIRAGENDA
         padding:18px;
         background:#F8FAF9;
         border-radius:10px;
-    ">
-
-        <label style="
-            display:flex;
-            align-items:center;
-            gap:10px;
-            cursor:pointer;
         ">
 
-            <input type="checkbox" checked>
+        <label style="
+                  display:flex;
+                  align-items:center;
+                   gap:10px;
+                   cursor:pointer;
+               ">
 
-            <span>
-                Activer les notifications
-            </span>
+                  <input
+                     type="checkbox"
+                     id="notifications-push"
+                   >
+
+                <span>
+                   Activer les notifications
+                </span>
 
         </label>
+
+       <p
+            id="notifications-status"
+            style="
+            margin-top:8px;
+            margin-left:25px;
+            color:#64748b;
+            font-size:13px;
+         "
+        >
+           Chargement du statut des notifications...
+       </p>
 
 
         <p style="
@@ -603,6 +618,55 @@ Paramètres - DIRAGENDA
     </div>
 
 </div>
+
+
+<script>
+
+    const notificationsPush =
+        document.getElementById('notifications-push');
+
+    const notificationsStatus =
+        document.getElementById('notifications-status');
+
+
+    notificationsPush.addEventListener(
+        'change',
+        async function () {
+
+            if (this.checked) {
+
+                notificationsStatus.textContent =
+                    "Activation des notifications...";
+
+                const succes =
+                    await activerNotificationsPush();
+
+                if (succes) {
+
+                    notificationsStatus.textContent =
+                        "✓ Notifications activées.";
+
+                } else {
+
+                    this.checked = false;
+
+                    notificationsStatus.textContent =
+                        "Les notifications n'ont pas été activées.";
+                }
+
+            } else {
+
+                notificationsStatus.textContent =
+                    "Les notifications sont désactivées.";
+
+            }
+
+        }
+    );
+
+</script>
+
+
 
 
 {% endblock %}

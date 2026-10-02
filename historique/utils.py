@@ -1,10 +1,100 @@
 from .models import HistoriqueAction
 from .models import Notification
+from .models import PushSubscription
 
+from django.conf import settings
 from django.utils import timezone
+
 from datetime import timedelta, datetime
 
+import json
+import logging
 
+from pywebpush import webpush, WebPushException
+
+
+logger = logging.getLogger(__name__)
+
+
+
+# =========================================================
+# ENVOYER UNE NOTIFICATION PUSH
+# =========================================================
+
+def envoyer_push(destinataire, message, lien=""):
+
+    abonnements = PushSubscription.objects.filter(
+        utilisateur=destinataire
+    )
+
+    if not abonnements.exists():
+        return
+
+    donnees = json.dumps({
+        "title": "DIRAGENDA",
+        "body": message,
+        "url": lien or "/",
+    })
+
+    for abonnement in abonnements:
+
+        subscription_info = {
+            "endpoint": abonnement.endpoint,
+            "keys": {
+                "p256dh": abonnement.p256dh,
+                "auth": abonnement.auth,
+            },
+        }
+
+        try:
+
+            webpush(
+                subscription_info=subscription_info,
+                data=donnees,
+                vapid_private_key=str(
+                    settings.VAPID_PRIVATE_KEY_PATH
+                ),
+                vapid_claims={
+                    "sub": settings.VAPID_EMAIL
+                },
+            )
+
+        except WebPushException as erreur:
+
+            response = getattr(
+                erreur,
+                "response",
+                None
+            )
+
+            status_code = getattr(
+                response,
+                "status_code",
+                None
+            )
+
+            # L'abonnement n'existe plus
+            if status_code in (404, 410):
+
+                abonnement.delete()
+
+            else:
+
+                logger.error(
+                    "Erreur Web Push pour %s : %s",
+                    destinataire,
+                    erreur
+                )
+
+        except Exception as erreur:
+
+            logger.error(
+                "Erreur inattendue Web Push pour %s : %s",
+                destinataire,
+                erreur
+            )
+            
+            
 # =========================================================
 # ENREGISTRER UNE ACTION
 # =========================================================
@@ -28,12 +118,22 @@ def creer_notification(
     lien="",
     entreprise=None
 ):
-    Notification.objects.create(
+
+    notification = Notification.objects.create(
         destinataire=destinataire,
         entreprise=entreprise or destinataire.entreprise,
         message=message,
         lien=lien,
     )
+
+    # Envoyer également la notification en Push
+    envoyer_push(
+        destinataire=destinataire,
+        message=message,
+        lien=lien,
+    )
+
+    return notification
 
 
 # =========================================================

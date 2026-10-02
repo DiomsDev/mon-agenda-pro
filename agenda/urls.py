@@ -200,4 +200,22 @@ urlpatterns = [
         name="nouvelle_tache"
     ),
     
+    
+    
+        # =========================================================
+    # WEB PUSH — NOTIFICATIONS
+    # =========================================================
+
+    path(
+        "push/public-key/",
+        views.push_public_key,
+        name="push_public_key"
+    ),
+
+    path(
+        "push/subscribe/",
+        views.push_subscribe,
+        name="push_subscribe"
+    ),
+    
 ]
