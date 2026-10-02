@@ -195,14 +195,24 @@ STORAGES = {
 # WEB PUSH - VAPID
 # =========================================================
 
-VAPID_PRIVATE_KEY_PATH = BASE_DIR / env_config(
-    "VAPID_PRIVATE_KEY_PATH",
-    default="private_key.pem"
+import os
+
+VAPID_PRIVATE_KEY_PATH = (
+    "/etc/secrets/private_key.pem"
+    if os.path.exists("/etc/secrets/private_key.pem")
+    else BASE_DIR / env_config(
+        "VAPID_PRIVATE_KEY_PATH",
+        default="private_key.pem"
+    )
 )
 
-VAPID_PUBLIC_KEY_PATH = BASE_DIR / env_config(
-    "VAPID_PUBLIC_KEY_PATH",
-    default="public_key.pem"
+VAPID_PUBLIC_KEY_PATH = (
+    "/etc/secrets/public_key.pem"
+    if os.path.exists("/etc/secrets/public_key.pem")
+    else BASE_DIR / env_config(
+        "VAPID_PUBLIC_KEY_PATH",
+        default="public_key.pem"
+    )
 )
 
 VAPID_EMAIL = env_config(
