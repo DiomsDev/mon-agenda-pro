@@ -629,6 +629,98 @@ Paramètres - DIRAGENDA
         document.getElementById('notifications-status');
 
 
+    // =========================================================
+    // VÉRIFIER L'ÉTAT ACTUEL DES NOTIFICATIONS
+    // =========================================================
+
+    async function verifierStatutNotifications() {
+
+        try {
+
+            // Vérifier que le navigateur supporte les notifications
+            if (!('Notification' in window)) {
+
+                notificationsPush.checked = false;
+
+                notificationsStatus.textContent =
+                    "Les notifications ne sont pas prises en charge par ce navigateur.";
+
+                return;
+            }
+
+
+            // Vérifier le Service Worker
+            if (!('serviceWorker' in navigator)) {
+
+                notificationsPush.checked = false;
+
+                notificationsStatus.textContent =
+                    "Le Service Worker n'est pas disponible.";
+
+                return;
+            }
+
+
+            const registration =
+                await navigator.serviceWorker.ready;
+
+
+            // Récupérer l'abonnement Push existant
+            const subscription =
+                await registration.pushManager.getSubscription();
+
+
+            // =================================================
+            // ABONNEMENT EXISTANT
+            // =================================================
+
+            if (subscription) {
+
+                notificationsPush.checked = true;
+
+                notificationsStatus.textContent =
+                    "✓ Notifications activées.";
+
+                return;
+            }
+
+
+            // =================================================
+            // PAS D'ABONNEMENT
+            // =================================================
+
+            notificationsPush.checked = false;
+
+            if (Notification.permission === 'denied') {
+
+                notificationsStatus.textContent =
+                    "Les notifications sont bloquées dans le navigateur.";
+
+            } else {
+
+                notificationsStatus.textContent =
+                    "Les notifications sont désactivées.";
+            }
+
+        } catch (erreur) {
+
+            console.error(
+                "Erreur lors de la vérification des notifications :",
+                erreur
+            );
+
+            notificationsPush.checked = false;
+
+            notificationsStatus.textContent =
+                "Impossible de vérifier le statut des notifications.";
+        }
+    }
+
+
+    // =========================================================
+    // ACTIVATION / DÉSACTIVATION
+    // =========================================================
+
     notificationsPush.addEventListener(
         'change',
         async function () {
@@ -638,13 +730,17 @@ Paramètres - DIRAGENDA
                 notificationsStatus.textContent =
                     "Activation des notifications...";
 
+
                 const succes =
                     await activerNotificationsPush();
+
 
                 if (succes) {
 
                     notificationsStatus.textContent =
                         "✓ Notifications activées.";
+
+                    this.checked = true;
 
                 } else {
 
@@ -654,18 +750,39 @@ Paramètres - DIRAGENDA
                         "Les notifications n'ont pas été activées.";
                 }
 
+
             } else {
+
+                /*
+                 * Pour l'instant, on ne supprime pas
+                 * l'abonnement Push du navigateur.
+                 *
+                 * Cette partie pourra être améliorée ensuite
+                 * pour permettre une vraie désactivation.
+                 */
 
                 notificationsStatus.textContent =
                     "Les notifications sont désactivées.";
-
             }
 
         }
     );
 
-</script>
 
+    // =========================================================
+    // VÉRIFICATION AU CHARGEMENT DE LA PAGE
+    // =========================================================
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+
+            verifierStatutNotifications();
+
+        }
+    );
+
+</script>
 
 
 

@@ -1169,6 +1169,98 @@
 
 
 <!-- =============================================================
+     DEMANDE D'AUTORISATION DES NOTIFICATIONS
+============================================================= -->
+
+<div
+    id="notification-permission-modal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.45);
+        z-index:9999;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+
+    <div
+        style="
+            background:white;
+            width:100%;
+            max-width:420px;
+            border-radius:14px;
+            padding:28px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.2);
+            text-align:center;
+        "
+    >
+
+        <div
+            style="
+                font-size:42px;
+                margin-bottom:15px;
+            "
+        >
+            🔔
+        </div>
+
+        <h2
+            style="
+                color:#16283D;
+                margin-bottom:10px;
+            "
+        >
+            Activer les notifications
+        </h2>
+
+        <p
+            style="
+                color:#5B6B78;
+                font-size:14px;
+                line-height:1.6;
+                margin-bottom:22px;
+            "
+        >
+            DIRAGENDA peut vous envoyer des rappels
+            concernant vos rendez-vous, activités et réunions.
+        </p>
+
+        <div
+            style="
+                display:flex;
+                gap:10px;
+                justify-content:center;
+            "
+        >
+
+            <button
+                type="button"
+                id="notification-allow-btn"
+                class="btn"
+            >
+                Autoriser les notifications
+            </button>
+
+            <button
+                type="button"
+                id="notification-later-btn"
+                class="btn btn-light"
+            >
+                Plus tard
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =============================================================
      MENU MOBILE
 ============================================================= -->
 
@@ -1483,6 +1575,130 @@
 
 
     
+</script>
+
+
+<script>
+    // =========================================================
+    // DEMANDE D'AUTORISATION DES NOTIFICATIONS
+    // =========================================================
+
+    document.addEventListener('DOMContentLoaded', async function () {
+
+        const modal =
+            document.getElementById('notification-permission-modal');
+
+        const allowButton =
+            document.getElementById('notification-allow-btn');
+
+        const laterButton =
+            document.getElementById('notification-later-btn');
+
+
+        // Vérifier que la fenêtre existe
+        if (!modal || !allowButton || !laterButton) {
+            return;
+        }
+
+
+        // Vérifier que les notifications sont disponibles
+        if (!('Notification' in window)) {
+            return;
+        }
+
+
+        // Si l'utilisateur a déjà refusé
+        if (Notification.permission === 'denied') {
+            return;
+        }
+
+
+        // Attendre que le Service Worker soit prêt
+        if (!('serviceWorker' in navigator)) {
+            return;
+        }
+
+
+        const registration =
+            await navigator.serviceWorker.ready;
+
+
+        // Vérifier si l'utilisateur possède déjà un abonnement
+        const subscription =
+            await registration.pushManager.getSubscription();
+
+
+        // Si les notifications sont déjà activées,
+        // ne pas afficher la fenêtre.
+        if (subscription) {
+            return;
+        }
+
+
+        // Vérifier si la demande a déjà été affichée
+        const utilisateur =
+            "{{ request.user.username|escapejs }}";
+
+        const cle =
+            "diragenda_notification_demande_" + utilisateur;
+
+
+        if (localStorage.getItem(cle) === "oui") {
+            return;
+        }
+
+
+        // Afficher la fenêtre
+        modal.style.display = "flex";
+
+
+        // =====================================================
+        // BOUTON AUTORISER
+        // =====================================================
+
+        allowButton.addEventListener('click', async function () {
+
+            allowButton.disabled = true;
+
+            allowButton.textContent =
+                "Activation...";
+
+
+            const succes =
+                await activerNotificationsPush();
+
+
+            if (succes) {
+
+                localStorage.setItem(cle, "oui");
+
+                modal.style.display = "none";
+
+            } else {
+
+                allowButton.disabled = false;
+
+                allowButton.textContent =
+                    "Autoriser les notifications";
+
+            }
+
+        });
+
+
+        // =====================================================
+        // BOUTON PLUS TARD
+        // =====================================================
+
+        laterButton.addEventListener('click', function () {
+
+            localStorage.setItem(cle, "oui");
+
+            modal.style.display = "none";
+
+        });
+
+    });
 </script>
 
 </body>
