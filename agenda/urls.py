@@ -20,6 +20,7 @@ urlpatterns = [
     path("historique/", views.historique, name="historique"),
     path("assistants/", views.assistants, name="assistants"),
     path("parametres/", views.parametres, name="parametres"),
+    path("verifier-rappels-automatique/", views.verifier_rappels_automatique, name="verifier_rappels_automatique"),
 
     # =========================================================
     # ACTIVITÉS — CRUD

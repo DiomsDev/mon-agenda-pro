@@ -219,3 +219,8 @@ VAPID_EMAIL = env_config(
     "VAPID_EMAIL",
     default="mailto:pacomemamadoudiomande@gmail.com"
 )
+
+RAPPELS_SECRET = env_config(
+    "RAPPELS_SECRET",
+    default=""
+)

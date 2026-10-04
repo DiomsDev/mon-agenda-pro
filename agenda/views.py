@@ -36,7 +36,10 @@ from historique.models import (
 from historique.utils import (
     enregistrer_action,
     creer_notification,
+    verifier_rappels,
 )
+
+from entreprises.models import Entreprise
 
 from comptes.models import Utilisateur
 
@@ -815,6 +818,37 @@ def notifications(request):
         }
     )
 
+# =========================================================
+# VÉRIFICATION AUTOMATIQUE DES RAPPELS
+# =========================================================
+
+def verifier_rappels_automatique(request):
+
+    secret = request.headers.get("X-Rappels-Secret")
+
+    if secret != settings.RAPPELS_SECRET:
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Accès non autorisé."
+            },
+            status=403
+        )
+
+    entreprises = Entreprise.objects.all()
+
+    nombre = 0
+
+    for entreprise in entreprises:
+        verifier_rappels(entreprise)
+        nombre += 1
+
+    return JsonResponse(
+        {
+            "success": True,
+            "message": f"{nombre} entreprise(s) vérifiée(s)."
+        }
+    )
 
 # =========================================================
 # RÉUNIONS
