@@ -83,6 +83,99 @@ Paramètres - DIRAGENDA
 </div>
 
 
+{% if request.user.role == 'directeur' %}
+
+<!-- =========================================================
+     ASSISTANT
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-header">
+
+        <div>
+
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+            ">
+
+                <!-- Icône assistant -->
+
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#4F8FC0"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <circle cx="9" cy="8" r="4"></circle>
+
+                    <path d="M3 21c0-4 2.5-7 6-7s6 3 6 7"></path>
+
+                    <circle cx="17" cy="8" r="3"></circle>
+
+                    <path d="M15 14c3 0 5 2.5 5 6"></path>
+
+                </svg>
+
+                <h2>Assistant</h2>
+
+            </div>
+
+            <p style="margin-top:5px; color:#64748b;">
+                Gérez les assistants de votre entreprise
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:20px;
+        padding:18px;
+        background:#F8FAF9;
+        border-radius:10px;
+    ">
+
+        <div>
+
+            <strong>Gestion des assistants</strong>
+
+            <p style="
+                margin-top:5px;
+                color:#64748b;
+                font-size:13px;
+            ">
+                Ajoutez, modifiez ou gérez les accès de vos assistants.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'gestion_acces' %}"
+            class="btn"
+        >
+            Gérer les assistants
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
 <!-- =========================================================
      PROFIL
 ========================================================= -->

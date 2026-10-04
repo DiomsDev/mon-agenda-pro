@@ -279,13 +279,46 @@
         ========================================================= */
 
         .logout-btn {
-            background: none;
-            border: none;
-            color: #B15E2B;
-            cursor: pointer;
-            font-size: 13px;
-            font-family: inherit;
-        }
+    background: transparent;
+    border: 1px solid #D7DCE1;
+    color: #16283D;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    padding: 9px 15px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: #F2F4F6;
+}
+
+
+        /* =========================================================
+   THÈME
+========================================================= */
+
+.theme-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    color: #16283D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.theme-btn:hover {
+    background: #EEF1F3;
+}
 
 
         /* =========================================================
@@ -599,6 +632,93 @@
             }
 
         }
+
+
+
+        /* =========================================================
+   MODE SOMBRE
+========================================================= */
+
+body.dark-mode {
+    background: #111827;
+    color: #E5E7EB;
+}
+
+body.dark-mode .topbar {
+    background: #1F2937;
+    border-bottom-color: #374151;
+}
+
+body.dark-mode .page-title h1 {
+    color: #F9FAFB;
+}
+
+body.dark-mode .page-title p {
+    color: #9CA3AF;
+}
+
+body.dark-mode .theme-btn {
+    color: #F9FAFB;
+}
+
+body.dark-mode .theme-btn:hover {
+    background: #374151;
+}
+
+body.dark-mode .profile-info strong {
+    color: #F9FAFB;
+}
+
+body.dark-mode .profile-info small {
+    color: #9CA3AF;
+}
+
+body.dark-mode .logout-btn {
+    color: #F9FAFB;
+    border-color: #4B5563;
+}
+
+body.dark-mode .logout-btn:hover {
+    background: #374151;
+}
+
+body.dark-mode .section,
+body.dark-mode .stat-card {
+    background: #1F2937;
+    border-color: #374151;
+}
+
+body.dark-mode .section-header h2 {
+    color: #F9FAFB;
+}
+
+body.dark-mode .stat-info span {
+    color: #9CA3AF;
+}
+
+body.dark-mode .stat-info strong {
+    color: #F9FAFB;
+}
+
+body.dark-mode th {
+    background: #374151;
+    color: #D1D5DB;
+}
+
+body.dark-mode td {
+    border-bottom-color: #374151;
+    color: #E5E7EB;
+}
+
+body.dark-mode .form-control {
+    background: #1F2937;
+    color: #F9FAFB;
+    border-color: #4B5563;
+}
+
+body.dark-mode label {
+    color: #D1D5DB;
+}
 
     </style>
 </head>
@@ -1066,91 +1186,141 @@
 
             <!-- ACTIONS -->
 
-            <div class="top-actions">
+<div class="top-actions">
+
+    <!-- PROFIL -->
+
+    <div class="profile">
+
+        <div class="avatar">
+            {{ request.user.username|first|upper }}
+        </div>
+
+        <div class="profile-info">
+
+            <strong>
+                {{ request.user.get_full_name|default:request.user.username }}
+            </strong>
+
+        </div>
+
+    </div>
 
 
-                <!-- NOTIFICATIONS -->
+    <!-- NOTIFICATIONS -->
 
-                <a
-                    href="{% url 'notifications' %}"
-                    class="notification"
-                    style="text-decoration:none; color:inherit;"
-                    aria-label="Notifications"
-                >
+    <a
+        href="{% url 'notifications' %}"
+        class="notification"
+        style="text-decoration:none; color:inherit;"
+        aria-label="Notifications"
+        title="Notifications"
+    >
 
-                    <svg
-                        viewBox="0 0 24 24"
-                        width="21"
-                        height="21"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
+        <svg
+            viewBox="0 0 24 24"
+            width="21"
+            height="21"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
 
-                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
 
-                        <path d="M10 21h4"></path>
+            <path d="M10 21h4"></path>
 
-                    </svg>
-
-
-                    {% if notifications_non_lues > 0 %}
-
-                        <span class="notification-badge">
-                            {{ notifications_non_lues }}
-                        </span>
-
-                    {% endif %}
-
-                </a>
+        </svg>
 
 
-                <!-- PROFIL -->
+        {% if notifications_non_lues > 0 %}
 
-                <div class="profile">
+            <span class="notification-badge">
+                {{ notifications_non_lues }}
+            </span>
 
-                    <div class="avatar">
-                        {{ request.user.username|first|upper }}
-                    </div>
+        {% endif %}
 
-
-                    <div class="profile-info">
-
-                        <strong>
-                            {{ request.user.get_full_name|default:request.user.username }}
-                        </strong>
-
-                        <small>
-                            {{ request.user.get_role_display }}
-                        </small>
-
-                    </div>
-
-                </div>
+    </a>
 
 
-                <!-- DÉCONNEXION -->
+    <!-- THÈME -->
 
-                <form
-                    method="post"
-                    action="{% url 'logout' %}"
-                >
+    <button
+        type="button"
+        class="theme-btn"
+        id="theme-toggle"
+        aria-label="Changer le thème"
+        title="Changer le thème"
+    >
 
-                    {% csrf_token %}
+        <svg
+            id="theme-icon"
+            viewBox="0 0 24 24"
+            width="21"
+            height="21"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+
+            <path d="M21 12.79A9 9 0 1 1 11.21 3
+                     7 7 0 0 0 21 12.79Z"></path>
+
+        </svg>
+
+    </button>
+
+
+    <!-- DÉCONNEXION -->
+
+    <form
+        method="post"
+        action="{% url 'logout' %}"
+    >
+
+        {% csrf_token %}
 
                     <button
-                        type="submit"
-                        class="logout-btn"
+                         type="submit"
+                         class="logout-btn"
+                         title="Déconnexion"
                     >
-                        Déconnexion
+
+                          <svg
+                               viewBox="0 0 24 24"
+                               width="19"
+                               height="19"
+                               fill="none"
+                               stroke="currentColor"
+                               stroke-width="1.8"
+                               stroke-linecap="round"
+                               stroke-linejoin="round"
+                           >
+
+                               <path d="M9 21H5a2 2 0 0 1-2-2V5
+                                  a2 2 0 0 1 2-2h4"></path>
+
+                                 <polyline points="16 17 21 12 16 7"></polyline>
+
+                                 <line x1="21" y1="12" x2="9" y2="12"></line>
+
+                           </svg>
+
+                              <span>Déconnexion</span>
+
                     </button>
 
-                </form>
+    </form>
 
-            </div>
+</div>
 
+
+           
         </header>
 
 
@@ -1698,6 +1868,80 @@
 
     });
 </script>
+
+<script>
+    // =========================================================
+    // GESTION DU THÈME CLAIR / SOMBRE
+    // =========================================================
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Appliquer le thème sauvegardé
+    const themeSauvegarde = localStorage.getItem('diragenda_theme');
+
+    if (themeSauvegarde === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerHTML = `
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+        `;
+    }
+
+    // Changer le thème
+    if (themeToggle) {
+
+        themeToggle.addEventListener('click', function () {
+
+            document.body.classList.toggle('dark-mode');
+
+            const modeSombre =
+                document.body.classList.contains('dark-mode');
+
+            if (modeSombre) {
+
+                localStorage.setItem(
+                    'diragenda_theme',
+                    'dark'
+                );
+
+                themeIcon.innerHTML = `
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2"></path>
+                    <path d="M12 20v2"></path>
+                    <path d="m4.93 4.93 1.41 1.41"></path>
+                    <path d="m17.66 17.66 1.41 1.41"></path>
+                    <path d="M2 12h2"></path>
+                    <path d="M20 12h2"></path>
+                    <path d="m6.34 17.66-1.41 1.41"></path>
+                    <path d="m19.07 4.93-1.41 1.41"></path>
+                `;
+
+            } else {
+
+                localStorage.setItem(
+                    'diragenda_theme',
+                    'light'
+                );
+
+                themeIcon.innerHTML = `
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3
+                             7 7 0 0 0 21 12.79Z"></path>
+                `;
+            }
+
+        });
+
+    }
+</script>
+
 
 </body>
 </html>
