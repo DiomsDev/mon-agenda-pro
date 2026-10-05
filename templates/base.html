@@ -1430,6 +1430,91 @@ body.dark-mode label {
 
 
 
+<!-- =========================================================
+     POPUP NOTIFICATION
+========================================================= -->
+
+<div id="notification-toast"
+     style="
+        display:none;
+        position:fixed;
+        top:90px;
+        right:25px;
+        width:340px;
+        background:white;
+        border:1px solid #E5E9EC;
+        border-radius:12px;
+        padding:16px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.15);
+        z-index:10000;
+     ">
+
+    <div style="
+        display:flex;
+        align-items:flex-start;
+        gap:12px;
+    ">
+
+        <div style="
+            font-size:25px;
+        ">
+            🔔
+        </div>
+
+        <div style="flex:1;">
+
+            <strong style="
+                display:block;
+                color:#16283D;
+                margin-bottom:5px;
+            ">
+                Nouvelle notification
+            </strong>
+
+            <div id="notification-toast-message"
+     style="
+        color:#5B6B78;
+        font-size:13px;
+        line-height:1.5;
+     ">
+</div>
+
+           <a
+                id="notification-toast-link"
+                href="#"
+                style="
+                   display:none;
+                    margin-top:10px;
+                    font-size:13px;
+                    font-weight:600;
+                    color:#16283D;
+                    text-decoration:none;
+                  "
+               >
+                  Voir →
+          </a>
+        </div>
+
+        <button
+            type="button"
+            id="notification-toast-close"
+            style="
+                border:none;
+                background:none;
+                cursor:pointer;
+                font-size:18px;
+                color:#6B7280;
+            "
+        >
+            ×
+        </button>
+
+    </div>
+
+</div>
+
+
+
 <!-- =============================================================
      MENU MOBILE
 ============================================================= -->
@@ -1942,6 +2027,217 @@ body.dark-mode label {
     }
 </script>
 
+<script>
+    // =========================================================
+    // MISE À JOUR AUTOMATIQUE DU BADGE DES NOTIFICATIONS
+    // =========================================================
+
+    async function mettreAJourBadgeNotifications() {
+
+        try {
+
+            const response = await fetch(
+                "{% url 'notifications_non_lues_api' %}"
+            );
+
+            if (!response.ok) {
+                return;
+            }
+
+            const donnees = await response.json();
+
+            const notification = document.querySelector(
+                ".notification"
+            );
+
+            if (!notification) {
+                return;
+            }
+
+            let badge = notification.querySelector(
+                ".notification-badge"
+            );
+
+            if (donnees.nombre > 0) {
+
+                if (!badge) {
+
+                    badge = document.createElement("span");
+
+                    badge.className =
+                        "notification-badge";
+
+                    notification.appendChild(badge);
+                }
+
+                badge.textContent = donnees.nombre;
+
+            } else {
+
+                if (badge) {
+                    badge.remove();
+                }
+            }
+
+        } catch (erreur) {
+
+            console.error(
+                "Erreur mise à jour notifications :",
+                erreur
+            );
+        }
+    }
+
+
+    // Première vérification
+    mettreAJourBadgeNotifications();
+
+
+    // Vérification automatique toutes les 10 secondes
+    setInterval(
+        mettreAJourBadgeNotifications,
+        10000
+    );
+
+</script>
+
+<script>
+    // =========================================================
+    // POPUP DES NOUVELLES NOTIFICATIONS
+    // =========================================================
+
+    let dernierNombreNotifications = null;
+
+    async function verifierNouvellesNotifications() {
+
+        try {
+
+            const response = await fetch(
+                "{% url 'notifications_non_lues_api' %}"
+            );
+
+            if (!response.ok) {
+                return;
+            }
+
+            const donnees = await response.json();
+
+            const nombreActuel = donnees.nombre;
+
+            // Première vérification :
+            // on mémorise simplement le nombre actuel.
+            if (dernierNombreNotifications === null) {
+                dernierNombreNotifications = nombreActuel;
+                return;
+            }
+
+            // Une nouvelle notification est arrivée
+            if (nombreActuel > dernierNombreNotifications) {
+
+                  window.notificationLien = donnees.lien || "";
+
+            afficherNotificationToast(
+                    donnees.message ||
+                    "Vous avez reçu une nouvelle notification."
+               );
+            }
+
+            dernierNombreNotifications = nombreActuel;
+
+        } catch (erreur) {
+
+            console.error(
+                "Erreur vérification notification :",
+                erreur
+            );
+        }
+    }
+
+
+    function afficherNotificationToast(message) {
+
+        const toast =
+            document.getElementById("notification-toast");
+
+        const messageElement =
+            document.getElementById(
+                "notification-toast-message"
+            );
+        const lienElement =
+            document.getElementById(
+               "notification-toast-link"
+           );
+
+        if (!toast || !messageElement) {
+            return;
+        }
+
+        messageElement.textContent = message;
+
+        if (lienElement) {
+
+        const lien = window.notificationLien || "";
+
+        if (lien) {
+
+             lienElement.href = lien;
+             lienElement.style.display = "inline-block";
+
+         } else {
+
+             lienElement.style.display = "none";
+
+          }
+        }
+
+        toast.style.display = "block";
+
+        // Masquer automatiquement après 6 secondes
+        setTimeout(function () {
+
+            toast.style.display = "none";
+
+        }, 6000);
+    }
+
+
+    // Fermer manuellement le popup
+    const boutonFermer =
+        document.getElementById(
+            "notification-toast-close"
+        );
+
+    if (boutonFermer) {
+
+        boutonFermer.addEventListener(
+            "click",
+            function () {
+
+                const toast =
+                    document.getElementById(
+                        "notification-toast"
+                    );
+
+                if (toast) {
+                    toast.style.display = "none";
+                }
+
+            }
+        );
+    }
+
+
+    // Première vérification
+    verifierNouvellesNotifications();
+
+
+    // Vérifier toutes les 10 secondes
+    setInterval(
+        verifierNouvellesNotifications,
+        10000
+    );
+
+</script>
 
 </body>
 </html>

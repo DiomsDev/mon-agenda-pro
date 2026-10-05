@@ -818,6 +818,25 @@ def notifications(request):
         }
     )
 
+
+@login_required
+def notifications_non_lues_api(request):
+
+    notifications = Notification.objects.filter(
+        destinataire=request.user,
+        lue=False
+    ).order_by("-date_creation")
+
+    nombre = notifications.count()
+
+    derniere = notifications.first()
+
+    return JsonResponse({
+        "nombre": nombre,
+        "message": derniere.message if derniere else "",
+        "lien": derniere.lien if derniere else ""
+    })
+
 # =========================================================
 # VÉRIFICATION AUTOMATIQUE DES RAPPELS
 # =========================================================

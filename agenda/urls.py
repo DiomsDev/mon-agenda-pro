@@ -21,6 +21,7 @@ urlpatterns = [
     path("assistants/", views.assistants, name="assistants"),
     path("parametres/", views.parametres, name="parametres"),
     path("verifier-rappels-automatique/", views.verifier_rappels_automatique, name="verifier_rappels_automatique"),
+    path("notifications/non-lues/",views.notifications_non_lues_api,name="notifications_non_lues_api"),
 
     # =========================================================
     # ACTIVITÉS — CRUD
