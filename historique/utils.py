@@ -17,6 +17,20 @@ logger = logging.getLogger(__name__)
 
 
 
+def obtenir_destinataire(utilisateur):
+    """
+    Détermine qui doit recevoir la notification.
+
+    - Si c'est un assistant lié à un directeur :
+      la notification est envoyée au directeur.
+    - Sinon :
+      la notification est envoyée à l'utilisateur lui-même.
+    """
+    if utilisateur.role == "assistant" and utilisateur.directeur:
+        return utilisateur.directeur
+
+    return utilisateur
+
 # =========================================================
 # ENVOYER UNE NOTIFICATION PUSH
 # =========================================================
@@ -181,9 +195,11 @@ def verifier_rappels(entreprise):
         )
 
         if maintenant >= moment_rappel:
+            
+         destinataire = obtenir_destinataire(activite.cree_par)
 
-            creer_notification(
-                activite.cree_par,
+        creer_notification(
+                destinataire,
                 (
                     f"⏰ Rappel : Activité "
                     f"« {activite.objet} » "
@@ -192,9 +208,9 @@ def verifier_rappels(entreprise):
                 lien="/activites/",
             )
 
-            activite.rappel_envoye = True
+        activite.rappel_envoye = True
 
-            activite.save(
+        activite.save(
                 update_fields=["rappel_envoye"]
             )
 
