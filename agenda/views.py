@@ -825,7 +825,7 @@ def notifications_non_lues_api(request):
     notifications = Notification.objects.filter(
         destinataire=request.user,
         lue=False
-    ).order_by("-date_creation")
+    ).order_by("-date")
 
     nombre = notifications.count()
 

@@ -4,6 +4,330 @@
 Tableau de bord - DIRAGENDA
 {% endblock %}
 
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   TITRE TABLEAU DE BORD
+========================================================= */
+
+.dashboard-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+
+.dashboard-title-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #5B9BD5;
+}
+
+
+.dashboard-title-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* =========================================================
+   ICÔNES DES CARTES
+========================================================= */
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.stat-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+.stat-icon-activites {
+    color: #4FA3D1;
+    background: #E8F4FA;
+}
+
+
+.stat-icon-effectuees {
+    color: #5CB85C;
+    background: #EAF6EA;
+}
+
+
+.stat-icon-rendezvous {
+    color: #8E7CC3;
+    background: #F0ECF8;
+}
+
+
+.stat-icon-missions {
+    color: #E6A23C;
+    background: #FBF2E3;
+}
+
+
+.stat-icon-reunions {
+    color: #38B2AC;
+    background: #E6F6F5;
+}
+
+
+.stat-icon-comptes-rendus {
+    color: #6C63A8;
+    background: #EFEDF8;
+}
+
+
+/* =========================================================
+   ICÔNES DES SECTIONS
+========================================================= */
+
+.section-title-icon {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+
+.section-icon {
+    width: 25px;
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.section-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+.section-icon-calendar {
+    color: #5B9BD5;
+}
+
+
+.section-icon-check {
+    color: #5CB85C;
+}
+
+
+/* =========================================================
+   STATISTIQUES DÉTAILLÉES
+========================================================= */
+
+.dashboard-statistiques {
+    margin-top: 35px;
+    padding: 25px;
+    background: #f8fafc;
+    border-radius: 14px;
+}
+
+
+.dashboard-stats-header {
+    margin-bottom: 25px;
+}
+
+
+.section-icon-statistiques {
+    color: #6C63A8;
+}
+
+
+.statistiques-sous-titre {
+    margin: 7px 0 0 34px;
+    color: #7b8794;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SECTIONS DES STATISTIQUES
+========================================================= */
+
+.stats-detail-section {
+    margin-bottom: 25px;
+}
+
+
+.stats-detail-section h3 {
+    margin-bottom: 12px;
+    font-size: 17px;
+    color: #374151;
+}
+
+
+.stats-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+
+.stat-detail-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+.stat-detail-card span {
+    color: #7b8794;
+    font-size: 14px;
+}
+
+
+.stat-detail-card strong {
+    font-size: 28px;
+    color: #374151;
+}
+
+
+/* =========================================================
+   CARTES DES GRAPHIQUES
+========================================================= */
+
+.stats-chart-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 25px;
+}
+
+
+.stats-chart-header h3 {
+    margin: 0;
+    color: #374151;
+}
+
+
+.stats-chart-header p {
+    margin-top: 5px;
+    color: #7b8794;
+    font-size: 14px;
+}
+
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    margin-top: 20px;
+}
+
+
+.statut-chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 350px;
+    margin: 20px auto;
+}
+
+
+/* =========================================================
+   LÉGENDE DES STATUTS
+========================================================= */
+
+.statut-legende {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+
+.statut-legende-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+
+.statut-legende-nom {
+    color: #4b5563;
+}
+
+
+.statut-legende-item strong {
+    color: #374151;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .stats-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .statut-legende {
+        grid-template-columns: 1fr;
+    }
+
+
+    .dashboard-statistiques {
+        padding: 15px;
+    }
+
+
+    .chart-container {
+        height: 300px;
+    }
+
+
+    .statut-chart-container {
+        height: 280px;
+    }
+
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- =========================
@@ -1020,324 +1344,7 @@ document.addEventListener("DOMContentLoaded", function () {
      STYLE DES ICÔNES DU DASHBOARD
 ========================================================= -->
 
-<style>
 
-/* =========================================================
-   TITRE TABLEAU DE BORD
-========================================================= */
 
-.dashboard-title {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
-
-
-.dashboard-title-icon {
-    width: 28px;
-    height: 28px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #5B9BD5;
-}
-
-
-.dashboard-title-icon svg {
-    width: 22px;
-    height: 22px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-
-/* =========================================================
-   ICÔNES DES CARTES
-========================================================= */
-
-.stat-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.stat-icon svg {
-    width: 24px;
-    height: 24px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-
-.stat-icon-activites {
-    color: #4FA3D1;
-    background: #E8F4FA;
-}
-
-
-.stat-icon-effectuees {
-    color: #5CB85C;
-    background: #EAF6EA;
-}
-
-
-.stat-icon-rendezvous {
-    color: #8E7CC3;
-    background: #F0ECF8;
-}
-
-
-.stat-icon-missions {
-    color: #E6A23C;
-    background: #FBF2E3;
-}
-
-
-.stat-icon-reunions {
-    color: #38B2AC;
-    background: #E6F6F5;
-}
-
-
-.stat-icon-comptes-rendus {
-    color: #6C63A8;
-    background: #EFEDF8;
-}
-
-
-/* =========================================================
-   ICÔNES DES SECTIONS
-========================================================= */
-
-.section-title-icon {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
-
-
-.section-icon {
-    width: 25px;
-    height: 25px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.section-icon svg {
-    width: 20px;
-    height: 20px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-
-.section-icon-calendar {
-    color: #5B9BD5;
-}
-
-
-.section-icon-check {
-    color: #5CB85C;
-}
-
-
-/* =========================================================
-   STATISTIQUES DÉTAILLÉES
-========================================================= */
-
-.dashboard-statistiques {
-    margin-top: 35px;
-    padding: 25px;
-    background: #f8fafc;
-    border-radius: 14px;
-}
-
-
-.dashboard-stats-header {
-    margin-bottom: 25px;
-}
-
-
-.section-icon-statistiques {
-    color: #6C63A8;
-}
-
-
-.statistiques-sous-titre {
-    margin: 7px 0 0 34px;
-    color: #7b8794;
-    font-size: 14px;
-}
-
-
-/* =========================================================
-   SECTIONS DES STATISTIQUES
-========================================================= */
-
-.stats-detail-section {
-    margin-bottom: 25px;
-}
-
-
-.stats-detail-section h3 {
-    margin-bottom: 12px;
-    font-size: 17px;
-    color: #374151;
-}
-
-
-.stats-detail-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-
-.stat-detail-card {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-
-.stat-detail-card span {
-    color: #7b8794;
-    font-size: 14px;
-}
-
-
-.stat-detail-card strong {
-    font-size: 28px;
-    color: #374151;
-}
-
-
-/* =========================================================
-   CARTES DES GRAPHIQUES
-========================================================= */
-
-.stats-chart-card {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 20px;
-    margin-top: 25px;
-}
-
-
-.stats-chart-header h3 {
-    margin: 0;
-    color: #374151;
-}
-
-
-.stats-chart-header p {
-    margin-top: 5px;
-    color: #7b8794;
-    font-size: 14px;
-}
-
-
-.chart-container {
-    position: relative;
-    width: 100%;
-    height: 380px;
-    margin-top: 20px;
-}
-
-
-.statut-chart-container {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    height: 350px;
-    margin: 20px auto;
-}
-
-
-/* =========================================================
-   LÉGENDE DES STATUTS
-========================================================= */
-
-.statut-legende {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 15px;
-}
-
-
-.statut-legende-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 12px;
-    background: #f8fafc;
-    border-radius: 8px;
-}
-
-
-.statut-legende-nom {
-    color: #4b5563;
-}
-
-
-.statut-legende-item strong {
-    color: #374151;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 768px) {
-
-    .stats-detail-grid {
-        grid-template-columns: 1fr;
-    }
-
-
-    .statut-legende {
-        grid-template-columns: 1fr;
-    }
-
-
-    .dashboard-statistiques {
-        padding: 15px;
-    }
-
-
-    .chart-container {
-        height: 300px;
-    }
-
-
-    .statut-chart-container {
-        height: 280px;
-    }
-
-}
-
-</style>
 
 {% endblock %}
