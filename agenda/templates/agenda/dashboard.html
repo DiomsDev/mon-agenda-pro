@@ -292,7 +292,6 @@ Tableau de bord - DIRAGENDA
     color: #374151;
 }
 
-
 /* =========================================================
    RESPONSIVE
 ========================================================= */
@@ -323,7 +322,78 @@ Tableau de bord - DIRAGENDA
         height: 280px;
     }
 
+
+    /* =====================================================
+       ACTIVITÉS EFFECTUÉES - MOBILE
+    ===================================================== */
+
+    .table-activites-effectuees {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+
+    .table-activites-effectuees thead {
+        display: none;
+    }
+
+
+    .table-activites-effectuees tbody {
+        display: block;
+        width: 100%;
+    }
+
+
+    .table-activites-effectuees tr {
+        display: block;
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-sizing: border-box;
+    }
+
+
+    .table-activites-effectuees td {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+        width: 100%;
+        padding: 10px 0;
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+        box-sizing: border-box;
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
+
+    .table-activites-effectuees td:last-child {
+        border-bottom: none;
+    }
+
+
+    .table-activites-effectuees td::before {
+        content: attr(data-label);
+        flex: 0 0 95px;
+        font-weight: 600;
+        color: #6b7280;
+        text-align: left;
+    }
+
+
+    .table-activites-effectuees td strong {
+        display: block;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
 }
+
 
 </style>
 {% endblock %}
@@ -669,90 +739,88 @@ Tableau de bord - DIRAGENDA
 
 <div class="section">
 
+    <div class="section-header">
 
-<div class="section-header">
+        <h2 class="section-title-icon">
 
-    <h2 class="section-title-icon">
+            <span class="section-icon section-icon-check">
 
-        <span class="section-icon section-icon-check">
+                <svg viewBox="0 0 24 24">
 
-            <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9"></circle>
 
-                <circle cx="12" cy="12" r="9"></circle>
+                    <polyline points="8 12 11 15 16 9"></polyline>
 
-                <polyline points="8 12 11 15 16 9"></polyline>
+                </svg>
 
-            </svg>
+            </span>
 
-        </span>
+            Activités effectuées
 
-        Activités effectuées
+        </h2>
 
-    </h2>
+        <a href="{% url 'activites' %}" class="btn btn-light">
+            Voir toutes
+        </a>
 
-    <a href="{% url 'activites' %}" class="btn btn-light">
-        Voir toutes
-    </a>
+    </div>
+
+
+    {% if activites_effectuees %}
+
+    <table class="table-activites-effectuees">
+
+        <thead>
+
+            <tr>
+                <th>Date</th>
+                <th>Activité</th>
+                <th>Lieu</th>
+                <th>Observation</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+        {% for activite in activites_effectuees %}
+
+            <tr>
+
+                <td data-label="Date">
+                    {{ activite.date|date:"d/m/Y" }}
+                </td>
+
+                <td data-label="Activité">
+                    <strong>{{ activite.objet }}</strong>
+                </td>
+
+                <td data-label="Lieu">
+                    {{ activite.lieu|default:"—" }}
+                </td>
+
+                <td data-label="Observation">
+                    {{ activite.observations|default:"—" }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <p style="color:#7b8794;">
+            Aucune activité effectuée pour le moment.
+        </p>
+
+    {% endif %}
 
 </div>
-
-
-{% if activites_effectuees %}
-
-<table>
-
-    <thead>
-
-        <tr>
-            <th>Date</th>
-            <th>Activité</th>
-            <th>Lieu</th>
-            <th>Observation</th>
-        </tr>
-
-    </thead>
-
-    <tbody>
-
-    {% for activite in activites_effectuees %}
-
-        <tr>
-
-            <td>
-                {{ activite.date|date:"d/m/Y" }}
-            </td>
-
-            <td>
-                <strong>{{ activite.objet }}</strong>
-            </td>
-
-            <td>
-                {{ activite.lieu|default:"—" }}
-            </td>
-
-            <td>
-                {{ activite.observations|default:"—" }}
-            </td>
-
-        </tr>
-
-    {% endfor %}
-
-    </tbody>
-
-</table>
-
-{% else %}
-
-    <p style="color:#7b8794;">
-        Aucune activité effectuée pour le moment.
-    </p>
-
-{% endif %}
-
-
-</div>
-
 <!-- =========================================================
      STATISTIQUES DÉTAILLÉES
 ========================================================= -->
