@@ -4,82 +4,207 @@
 Réunions - DIRAGENDA
 {% endblock %}
 
+
+{% block extra_css %}
+<style>
+
+@media (max-width: 768px) {
+
+    /* =====================================================
+       TABLEAU DES RÉUNIONS SUR MOBILE
+       ===================================================== */
+
+    .table-reunions {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    /* Masquer les titres du tableau sur mobile */
+    .table-reunions thead {
+        display: none;
+    }
+
+    .table-reunions tbody {
+        display: block;
+        width: 100%;
+    }
+
+    /* Chaque réunion devient une carte */
+    .table-reunions tr {
+        display: block;
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-sizing: border-box;
+    }
+
+    /* Chaque information devient une ligne */
+    .table-reunions td {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+        width: 100%;
+        padding: 10px 0;
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+        box-sizing: border-box;
+        text-align: right;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .table-reunions td:last-child {
+        border-bottom: none;
+    }
+
+    /* Nom du champ : Titre, Date, Lieu, etc. */
+    .table-reunions td::before {
+        content: attr(data-label);
+        flex: 0 0 95px;
+        font-weight: 600;
+        color: #6b7280;
+        text-align: left;
+    }
+
+    .table-reunions td strong {
+        display: block;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    /* =====================================================
+       ACTIONS
+       ===================================================== */
+
+    .table-reunions .reunion-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .table-reunions .reunion-actions::before {
+        margin-bottom: 5px;
+    }
+
+    .table-reunions .reunion-actions a {
+        width: 100%;
+        box-sizing: border-box;
+        justify-content: center;
+    }
+
+}
+
+
+/* =========================================================
+   PETITS ÉCRANS
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .table-reunions tr {
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .table-reunions td {
+        gap: 10px;
+        padding: 9px 0;
+        font-size: 14px;
+    }
+
+    .table-reunions td::before {
+        flex: 0 0 85px;
+        font-size: 13px;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
 {% block content %}
 
 <div class="page-header">
 
-<div>
+    <div>
 
-    <h1 style="
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    ">
+        <h1 style="
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        ">
 
-        <!-- Icône réunion -->
+            <!-- Icône réunion -->
+            <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#38B2AC"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+                <circle cx="9" cy="15" r="1.5"></circle>
+                <circle cx="15" cy="15" r="1.5"></circle>
+            </svg>
+
+            Réunions
+
+        </h1>
+
+        <p>
+            Gérez les réunions de votre entreprise.
+        </p>
+
+    </div>
+
+
+    <!-- Nouvelle réunion -->
+    <a
+        href="{% url 'nouvelle_reunion' %}"
+        class="btn btn-primary"
+        style="
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        "
+    >
+
         <svg
-            width="28"
-            height="28"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#38B2AC"
+            stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
             aria-hidden="true"
         >
-            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-            <circle cx="9" cy="15" r="1.5"></circle>
-            <circle cx="15" cy="15" r="1.5"></circle>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
 
-        Réunions
+        Nouvelle réunion
 
-    </h1>
-
-    <p>
-        Gérez les réunions de votre entreprise.
-    </p>
+    </a>
 
 </div>
 
-
-<!-- Nouvelle réunion -->
-
-<a
-    href="{% url 'nouvelle_reunion' %}"
-    class="btn btn-primary"
-    style="
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-    "
->
-
-    <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-    >
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-    </svg>
-
-    Nouvelle réunion
-
-</a>
-
-
-</div>
 
 <div class="content-card">
 
@@ -88,7 +213,7 @@ Réunions - DIRAGENDA
 
     <div class="table-responsive">
 
-        <table class="table">
+        <table class="table table-reunions">
 
             <thead>
 
@@ -111,17 +236,22 @@ Réunions - DIRAGENDA
 
                 <tr>
 
-                    <td>
-                        <strong>{{ reunion.titre }}</strong>
+                    <!-- Titre -->
+                    <td data-label="Titre">
+                        <strong>
+                            {{ reunion.titre }}
+                        </strong>
                     </td>
 
 
-                    <td>
+                    <!-- Date -->
+                    <td data-label="Date">
                         {{ reunion.date|date:"d/m/Y" }}
                     </td>
 
 
-                    <td>
+                    <!-- Horaire -->
+                    <td data-label="Horaire">
 
                         {% if reunion.heure_debut %}
                             {{ reunion.heure_debut|time:"H:i" }}
@@ -134,27 +264,31 @@ Réunions - DIRAGENDA
                     </td>
 
 
-                    <td>
+                    <!-- Lieu -->
+                    <td data-label="Lieu">
                         {{ reunion.lieu|default:"—" }}
                     </td>
 
 
-                    <td>
+                    <!-- Organisateur -->
+                    <td data-label="Organisateur">
                         {{ reunion.organisateur }}
                     </td>
 
 
-                    <td>
+                    <!-- Statut -->
+                    <td data-label="Statut">
                         {{ reunion.get_statut_display }}
                     </td>
 
 
                     <!-- Actions -->
-
-                    <td style="white-space: nowrap;">
+                    <td
+                        class="reunion-actions"
+                        data-label="Actions"
+                    >
 
                         <!-- Compte rendu -->
-
                         <a
                             href="{% url 'nouveau_compte_rendu' reunion.pk %}"
                             class="btn btn-sm btn-primary"
@@ -192,7 +326,6 @@ Réunions - DIRAGENDA
 
 
                         <!-- Modifier -->
-
                         <a
                             href="{% url 'modifier_reunion' reunion.pk %}"
                             class="btn btn-sm btn-secondary"
@@ -228,7 +361,6 @@ Réunions - DIRAGENDA
 
 
                         <!-- Supprimer -->
-
                         <a
                             href="{% url 'supprimer_reunion' reunion.pk %}"
                             class="btn btn-sm btn-danger"
