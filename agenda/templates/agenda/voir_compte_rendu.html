@@ -1,171 +1,712 @@
-
 {% extends "base.html" %}
 
-{% block title %}Compte rendu{% endblock %}
+{% block title %}
+Détails du compte rendu - DIRAGENDA
+{% endblock %}
 
 {% block content %}
 
-<div class="page-header">
-    <div>
-        <h1>Compte rendu</h1>
-        <p>Consultation du compte rendu de la réunion</p>
-    </div>
-</div>
+<style>
 
-<div class="content-card">
+.compte-rendu-detail {
+    max-width: 1100px;
+    margin: 0 auto;
+}
 
-    <!-- INFORMATIONS DE LA RÉUNION -->
-    <div class="section-header">
-        <h2>Informations de la réunion</h2>
-    </div>
+/* =========================
+   EN-TÊTE
+   ========================= */
 
-    <div class="info-grid">
+.compte-rendu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
 
-        <div class="info-item">
-            <span class="info-label">Réunion</span>
-            <strong>{{ reunion.titre }}</strong>
+.compte-rendu-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 28px;
+}
+
+.compte-rendu-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* =========================
+   HERO
+   ========================= */
+
+.compte-rendu-hero {
+    background: linear-gradient(
+        135deg,
+        rgba(56, 178, 172, 0.12),
+        rgba(91, 155, 213, 0.08)
+    );
+    border: 1px solid rgba(56, 178, 172, 0.18);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 22px;
+}
+
+.compte-rendu-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #38B2AC;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.compte-rendu-title {
+    margin: 0 0 12px 0;
+    font-size: 28px;
+    line-height: 1.3;
+}
+
+.compte-rendu-date {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* =========================
+   INFORMATIONS RÉUNION
+   ========================= */
+
+.compte-rendu-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.compte-rendu-info-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+}
+
+.compte-rendu-info-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.compte-rendu-info-value {
+    color: #172b4d;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* =========================
+   SECTIONS
+   ========================= */
+
+.compte-rendu-section {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 18px;
+}
+
+.compte-rendu-section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #172b4d;
+}
+
+.compte-rendu-section-title svg {
+    color: #38B2AC;
+    flex-shrink: 0;
+}
+
+.compte-rendu-content {
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #eef0f2;
+    color: #374151;
+    line-height: 1.75;
+    white-space: normal;
+}
+
+.compte-rendu-content p {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.compte-rendu-content p:last-child {
+    margin-bottom: 0;
+}
+
+.compte-rendu-empty {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* =========================
+   INFORMATIONS DE RÉDACTION
+   ========================= */
+
+.compte-rendu-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.compte-rendu-meta-item {
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.compte-rendu-meta-label {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.compte-rendu-meta-value {
+    color: #172b4d;
+    font-weight: 500;
+}
+
+/* =========================
+   BAS DE PAGE
+   ========================= */
+
+.compte-rendu-footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 768px) {
+
+    .compte-rendu-header-title {
+        font-size: 23px;
+    }
+
+    .compte-rendu-actions {
+        width: 100%;
+    }
+
+    .compte-rendu-actions a {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .compte-rendu-hero {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .compte-rendu-title {
+        font-size: 23px;
+    }
+
+    .compte-rendu-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .compte-rendu-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .compte-rendu-section {
+        padding: 18px;
+    }
+
+    .compte-rendu-footer-actions {
+        flex-direction: column;
+    }
+
+    .compte-rendu-footer-actions a {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+</style>
+
+
+<div class="compte-rendu-detail">
+
+    <!-- =========================
+         EN-TÊTE
+         ========================= -->
+
+    <div class="compte-rendu-header">
+
+        <h1 class="compte-rendu-header-title">
+
+            <svg
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#38B2AC"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="8" y1="13" x2="16" y2="13"></line>
+                <line x1="8" y1="17" x2="14" y2="17"></line>
+            </svg>
+
+            Détails du compte rendu
+
+        </h1>
+
+
+        <div class="compte-rendu-actions">
+
+            <a
+                href="{% url 'comptes_rendus' %}"
+                class="btn btn-light"
+            >
+                ← Retour
+            </a>
+
+            <a
+                href="{% url 'modifier_compte_rendu' compte_rendu.pk %}"
+                class="btn"
+            >
+                Modifier
+            </a>
+
         </div>
 
-        <div class="info-item">
-            <span class="info-label">Date</span>
-            <strong>{{ reunion.date|date:"d/m/Y" }}</strong>
+    </div>
+
+
+    <!-- =========================
+         RÉUNION
+         ========================= -->
+
+    <div class="compte-rendu-hero">
+
+        <div class="compte-rendu-label">
+            Réunion concernée
         </div>
 
-        <div class="info-item">
-            <span class="info-label">Heure</span>
-            <strong>
+        <h2 class="compte-rendu-title">
+            {{ reunion.titre }}
+        </h2>
+
+        <div class="compte-rendu-date">
+            Compte rendu rédigé le
+            {{ compte_rendu.date_redaction|date:"d/m/Y" }}
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         INFORMATIONS RÉUNION
+         ========================= -->
+
+    <div class="compte-rendu-info-grid">
+
+        <div class="compte-rendu-info-card">
+
+            <div class="compte-rendu-info-label">
+                Réunion
+            </div>
+
+            <div class="compte-rendu-info-value">
+                {{ reunion.titre }}
+            </div>
+
+        </div>
+
+
+        <div class="compte-rendu-info-card">
+
+            <div class="compte-rendu-info-label">
+                Date
+            </div>
+
+            <div class="compte-rendu-info-value">
+                {{ reunion.date|date:"d/m/Y" }}
+            </div>
+
+        </div>
+
+
+        <div class="compte-rendu-info-card">
+
+            <div class="compte-rendu-info-label">
+                Heure
+            </div>
+
+            <div class="compte-rendu-info-value">
+
                 {% if reunion.heure_debut %}
                     {{ reunion.heure_debut|time:"H:i" }}
                 {% else %}
                     Non précisée
                 {% endif %}
-            </strong>
+
+                {% if reunion.heure_fin %}
+                    → {{ reunion.heure_fin|time:"H:i" }}
+                {% endif %}
+
+            </div>
+
         </div>
 
-        <div class="info-item">
-            <span class="info-label">Lieu</span>
-            <strong>
-                {% if reunion.lieu %}
-                    {{ reunion.lieu }}
-                {% else %}
-                    Non précisé
-                {% endif %}
-            </strong>
+
+        <div class="compte-rendu-info-card">
+
+            <div class="compte-rendu-info-label">
+                Lieu
+            </div>
+
+            <div class="compte-rendu-info-value">
+                {{ reunion.lieu|default:"Non précisé" }}
+            </div>
+
         </div>
 
     </div>
 
 
-    <!-- PARTICIPANTS -->
-    <div class="report-section">
-        <h2>Participants</h2>
+    <!-- =========================
+         PARTICIPANTS
+         ========================= -->
 
-        <div class="report-content">
+    <div class="compte-rendu-section">
+
+        <h3 class="compte-rendu-section-title">
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+
+            Participants
+
+        </h3>
+
+        <div class="compte-rendu-content">
+
             {% if compte_rendu.participants %}
                 {{ compte_rendu.participants|linebreaks }}
             {% else %}
-                <span class="empty-value">Aucun participant renseigné.</span>
+                <span class="compte-rendu-empty">
+                    Aucun participant renseigné.
+                </span>
             {% endif %}
+
         </div>
+
     </div>
 
 
-    <!-- RÉSUMÉ -->
-    <div class="report-section">
-        <h2>Résumé</h2>
+    <!-- =========================
+         RÉSUMÉ
+         ========================= -->
 
-        <div class="report-content">
+    <div class="compte-rendu-section">
+
+        <h3 class="compte-rendu-section-title">
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <path d="M4 5h16"></path>
+                <path d="M4 10h16"></path>
+                <path d="M4 15h10"></path>
+                <path d="M4 20h7"></path>
+            </svg>
+
+            Résumé
+
+        </h3>
+
+        <div class="compte-rendu-content">
+
             {% if compte_rendu.resume %}
                 {{ compte_rendu.resume|linebreaks }}
             {% else %}
-                <span class="empty-value">Aucun résumé renseigné.</span>
+                <span class="compte-rendu-empty">
+                    Aucun résumé renseigné.
+                </span>
             {% endif %}
+
         </div>
+
     </div>
 
 
-    <!-- POINTS DISCUTÉS -->
-    <div class="report-section">
-        <h2>Points discutés</h2>
+    <!-- =========================
+         POINTS DISCUTÉS
+         ========================= -->
 
-        <div class="report-content">
+    <div class="compte-rendu-section">
+
+        <h3 class="compte-rendu-section-title">
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+
+            Points discutés
+
+        </h3>
+
+        <div class="compte-rendu-content">
+
             {% if compte_rendu.points_discutes %}
                 {{ compte_rendu.points_discutes|linebreaks }}
             {% else %}
-                <span class="empty-value">Aucun point renseigné.</span>
+                <span class="compte-rendu-empty">
+                    Aucun point renseigné.
+                </span>
             {% endif %}
+
         </div>
+
     </div>
 
 
-    <!-- DÉCISIONS -->
-    <div class="report-section">
-        <h2>Décisions prises</h2>
+    <!-- =========================
+         DÉCISIONS
+         ========================= -->
 
-        <div class="report-content">
+    <div class="compte-rendu-section">
+
+        <h3 class="compte-rendu-section-title">
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+
+            Décisions prises
+
+        </h3>
+
+        <div class="compte-rendu-content">
+
             {% if compte_rendu.decisions %}
                 {{ compte_rendu.decisions|linebreaks }}
             {% else %}
-                <span class="empty-value">Aucune décision renseignée.</span>
+                <span class="compte-rendu-empty">
+                    Aucune décision renseignée.
+                </span>
             {% endif %}
+
         </div>
+
     </div>
 
 
-    <!-- ACTIONS -->
-    <div class="report-section">
-        <h2>Actions à réaliser</h2>
+    <!-- =========================
+         ACTIONS À RÉALISER
+         ========================= -->
 
-        <div class="report-content">
+    <div class="compte-rendu-section">
+
+        <h3 class="compte-rendu-section-title">
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <polyline points="20 6 9 17 4 12"></polyline>
+                <line x1="4" y1="4" x2="4" y2="4"></line>
+            </svg>
+
+            Actions à réaliser
+
+        </h3>
+
+        <div class="compte-rendu-content">
+
             {% if compte_rendu.actions_a_realiser %}
                 {{ compte_rendu.actions_a_realiser|linebreaks }}
             {% else %}
-                <span class="empty-value">Aucune action renseignée.</span>
+                <span class="compte-rendu-empty">
+                    Aucune action renseignée.
+                </span>
             {% endif %}
+
         </div>
+
     </div>
 
 
-    <!-- OBSERVATIONS -->
-    <div class="report-section">
-        <h2>Observations</h2>
+    <!-- =========================
+         OBSERVATIONS
+         ========================= -->
 
-        <div class="report-content">
+    <div class="compte-rendu-section">
+
+        <h3 class="compte-rendu-section-title">
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <circle cx="12" cy="12" r="9"></circle>
+                <line x1="12" y1="11" x2="12" y2="16"></line>
+                <line x1="12" y1="7" x2="12.01" y2="7"></line>
+            </svg>
+
+            Observations
+
+        </h3>
+
+        <div class="compte-rendu-content">
+
             {% if compte_rendu.observations %}
                 {{ compte_rendu.observations|linebreaks }}
             {% else %}
-                <span class="empty-value">Aucune observation renseignée.</span>
+                <span class="compte-rendu-empty">
+                    Aucune observation renseignée.
+                </span>
             {% endif %}
-        </div>
-    </div>
 
-
-    <!-- INFORMATIONS DE CRÉATION -->
-    <div class="report-meta">
-
-        <div>
-            <span>Rédigé par</span>
-            <strong>{{ compte_rendu.cree_par }}</strong>
-        </div>
-
-        <div>
-            <span>Date de rédaction</span>
-            <strong>
-                {{ compte_rendu.date_redaction|date:"d/m/Y" }}
-            </strong>
         </div>
 
     </div>
 
 
-    <!-- ACTIONS -->
-    <div class="form-actions">
+    <!-- =========================
+         INFORMATIONS DE RÉDACTION
+         ========================= -->
+
+    <div class="compte-rendu-section">
+
+        <h3 class="compte-rendu-section-title">
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 7v5l3 2"></path>
+            </svg>
+
+            Informations de rédaction
+
+        </h3>
+
+
+        <div class="compte-rendu-meta">
+
+            <div class="compte-rendu-meta-item">
+
+                <span class="compte-rendu-meta-label">
+                    Rédigé par
+                </span>
+
+                <span class="compte-rendu-meta-value">
+                    {{ compte_rendu.cree_par }}
+                </span>
+
+            </div>
+
+
+            <div class="compte-rendu-meta-item">
+
+                <span class="compte-rendu-meta-label">
+                    Date de rédaction
+                </span>
+
+                <span class="compte-rendu-meta-value">
+                    {{ compte_rendu.date_redaction|date:"d/m/Y" }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         ACTIONS
+         ========================= -->
+
+    <div class="compte-rendu-footer-actions">
 
         <a
             href="{% url 'comptes_rendus' %}"
-            class="btn btn-secondary"
+            class="btn btn-light"
         >
-            Retour
+            ← Retour
         </a>
 
         <a
@@ -179,169 +720,4 @@
 
 </div>
 
-
-<style>
-
-.page-header {
-    margin-bottom: 25px;
-}
-
-.page-header h1 {
-    margin-bottom: 5px;
-}
-
-.page-header p {
-    margin: 0;
-    color: #6b7280;
-}
-
-.content-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.section-header {
-    margin-bottom: 20px;
-}
-
-.section-header h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.info-label {
-    font-size: 13px;
-    color: #6b7280;
-}
-
-.info-item strong {
-    font-size: 15px;
-    color: #111827;
-}
-
-.report-section {
-    margin-top: 28px;
-}
-
-.report-section h2 {
-    margin-bottom: 10px;
-    font-size: 17px;
-    color: #111827;
-}
-
-.report-content {
-    padding: 15px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    line-height: 1.7;
-    color: #374151;
-}
-
-.report-content p {
-    margin-top: 0;
-    margin-bottom: 8px;
-}
-
-.empty-value {
-    color: #9ca3af;
-    font-style: italic;
-}
-
-.report-meta {
-    display: flex;
-    gap: 50px;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #e5e7eb;
-}
-
-.report-meta div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.report-meta span {
-    font-size: 13px;
-    color: #6b7280;
-}
-
-.report-meta strong {
-    color: #111827;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 30px;
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 18px;
-    border-radius: 7px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    border: none;
-}
-
-.btn-primary {
-    background: #2563eb;
-    color: #ffffff;
-}
-
-.btn-secondary {
-    background: #e5e7eb;
-    color: #374151;
-}
-
-.btn:hover {
-    opacity: 0.9;
-}
-
-@media (max-width: 768px) {
-
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .report-meta {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .form-actions {
-        flex-direction: column;
-    }
-
-    .form-actions .btn {
-        width: 100%;
-    }
-
-}
-
-</style>
-
 {% endblock %}
-

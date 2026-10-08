@@ -678,6 +678,7 @@ Tableau de bord - DIRAGENDA
             <th>Activité</th>
             <th>Lieu</th>
             <th>Statut</th>
+            <th>Actions</th>
         </tr>
 
     </thead>
@@ -712,6 +713,11 @@ Tableau de bord - DIRAGENDA
 
             <td>
                 {{ activite.get_statut_display }}
+            </td>
+            <td>
+                <a href="{% url 'voir_activite' activite.pk %}" class="btn btn-light">
+                            Voir
+                </a>
             </td>
 
         </tr>
@@ -777,6 +783,7 @@ Tableau de bord - DIRAGENDA
                 <th>Activité</th>
                 <th>Lieu</th>
                 <th>Observation</th>
+                <th>Actions</th>
             </tr>
 
         </thead>
@@ -802,6 +809,11 @@ Tableau de bord - DIRAGENDA
 
                 <td data-label="Observation">
                     {{ activite.observations|default:"—" }}
+                </td>
+                <td>
+                        <a href="{% url 'voir_activite' activite.pk %}" class="btn btn-light">
+                         Voir
+                        </a>
                 </td>
 
             </tr>

@@ -518,6 +518,23 @@ def activites(request):
         }
     )
 
+@login_required
+def voir_activite(request, pk):
+    activite = get_object_or_404(
+        Activite,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    return render(
+        request,
+        "agenda/voir_activite.html",
+        {
+            "activite": activite,
+        }
+    )
+    
+
 
 @login_required
 def missions(request):
@@ -538,6 +555,19 @@ def missions(request):
         }
     )
 
+@login_required
+def voir_mission(request, pk):
+    mission = get_object_or_404(
+        Mission,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    return render(
+        request,
+        "agenda/voir_mission.html",
+        {"mission": mission}
+    )
 
 @login_required
 def rendez_vous(request):
@@ -559,6 +589,22 @@ def rendez_vous(request):
         }
     )
 
+@login_required
+def voir_rendez_vous(request, pk):
+
+    rdv = get_object_or_404(
+        RendezVous,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    return render(
+        request,
+        "agenda/voir_rendez_vous.html",
+        {
+            "rendez_vous": rdv,
+        }
+    )
 
 @login_required
 def visiteurs(request):
@@ -893,6 +939,21 @@ def reunions(request):
         }
     )
 
+@login_required
+def voir_reunion(request, pk):
+    reunion = get_object_or_404(
+        Reunion,
+        pk=pk,
+        entreprise=request.user.entreprise
+    )
+
+    return render(
+        request,
+        "agenda/voir_reunion.html",
+        {
+            "reunion": reunion
+        }
+    )
 
 # =========================================================
 # STATISTIQUES

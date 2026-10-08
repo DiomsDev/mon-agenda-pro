@@ -32,6 +32,12 @@ urlpatterns = [
         views.nouvelle_activite,
         name="nouvelle_activite"
     ),
+    
+    path(
+         "activites/<int:pk>/",
+         views.voir_activite,
+         name="voir_activite"
+   ),
 
     path(
         "activites/<int:pk>/modifier/",
@@ -53,6 +59,12 @@ urlpatterns = [
         "missions/nouvelle/",
         views.nouvelle_mission,
         name="nouvelle_mission"
+    ),
+    
+    path(
+       "missions/<int:pk>/",
+        views.voir_mission,
+        name="voir_mission"
     ),
 
     path(
@@ -76,6 +88,11 @@ urlpatterns = [
         views.nouveau_rendez_vous,
         name="nouveau_rendez_vous"
     ),
+    path(
+        "rendez-vous/<int:pk>/",
+         views.voir_rendez_vous,
+         name="voir_rendez_vous"
+   ),
 
     path(
         "rendez-vous/<int:pk>/modifier/",
@@ -97,6 +114,12 @@ urlpatterns = [
         "reunions/nouvelle/",
         views.nouvelle_reunion,
         name="nouvelle_reunion"
+    ),
+    
+    path(
+        "reunions/<int:pk>/",
+        views.voir_reunion,
+        name="voir_reunion"
     ),
 
     path(

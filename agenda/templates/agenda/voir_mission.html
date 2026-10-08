@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block title %}Détail de la mission - DIRAGENDA{% endblock %}
+
+{% block content %}
+
+<style>
+    .mission-detail-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    .mission-detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+    .mission-detail-header h1 {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    .mission-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .mission-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .mission-btn-retour {
+        background: #f1f5f9;
+        color: #334155;
+    }
+
+    .mission-btn-modifier {
+        background: #2563eb;
+        color: white;
+    }
+
+    .mission-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .mission-title {
+        padding-bottom: 20px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .mission-title h2 {
+        margin: 0 0 12px;
+        font-size: 25px;
+        color: #1e293b;
+    }
+
+    .mission-status {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #fff7ed;
+        color: #c2410c;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .mission-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .mission-item {
+        padding: 18px;
+        background: #f8fafc;
+        border-radius: 10px;
+    }
+
+    .mission-item-full {
+        grid-column: 1 / -1;
+    }
+
+    .mission-label {
+        display: block;
+        margin-bottom: 7px;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .mission-value {
+        color: #1e293b;
+        font-size: 16px;
+        word-break: break-word;
+    }
+
+    .mission-footer {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+
+        .mission-detail-container {
+            margin: 15px auto;
+            padding: 0 12px;
+        }
+
+        .mission-detail-header h1 {
+            font-size: 23px;
+        }
+
+        .mission-card {
+            padding: 20px;
+        }
+
+        .mission-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .mission-item-full {
+            grid-column: auto;
+        }
+
+        .mission-actions {
+            width: 100%;
+        }
+
+        .mission-btn {
+            flex: 1;
+        }
+    }
+</style>
+
+
+<div class="mission-detail-container">
+
+    <div class="mission-detail-header">
+
+        <h1>Détail de la mission</h1>
+
+        <div class="mission-actions">
+
+            <a href="{% url 'missions' %}"
+               class="mission-btn mission-btn-retour">
+                ← Retour
+            </a>
+
+            <a href="{% url 'modifier_mission' mission.pk %}"
+               class="mission-btn mission-btn-modifier">
+                ✏️ Modifier
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="mission-card">
+
+        <div class="mission-title">
+
+            <h2>
+                {{ mission.motif }}
+            </h2>
+
+            <span class="mission-status">
+                {{ mission.get_statut_display }}
+            </span>
+
+        </div>
+
+
+        <div class="mission-grid">
+
+            <div class="mission-item">
+
+                <span class="mission-label">
+                    📅 Date de départ
+                </span>
+
+                <div class="mission-value">
+                    {{ mission.date_depart|date:"d/m/Y" }}
+                </div>
+
+            </div>
+
+
+            <div class="mission-item">
+
+                <span class="mission-label">
+                    📅 Date de retour
+                </span>
+
+                <div class="mission-value">
+
+                    {% if mission.date_retour %}
+                        {{ mission.date_retour|date:"d/m/Y" }}
+                    {% else %}
+                        —
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="mission-item mission-item-full">
+
+                <span class="mission-label">
+                    📍 Lieu
+                </span>
+
+                <div class="mission-value">
+                    {{ mission.lieu|default:"Non renseigné" }}
+                </div>
+
+            </div>
+
+
+            <div class="mission-item mission-item-full">
+
+                <span class="mission-label">
+                    📝 Motif de la mission
+                </span>
+
+                <div class="mission-value">
+                    {{ mission.motif|default:"Aucun motif renseigné" }}
+                </div>
+
+            </div>
+
+
+            <div class="mission-item">
+
+                <span class="mission-label">
+                    📌 Statut
+                </span>
+
+                <div class="mission-value">
+                    {{ mission.get_statut_display }}
+                </div>
+
+            </div>
+
+
+            <div class="mission-item">
+
+                <span class="mission-label">
+                    👤 Créé par
+                </span>
+
+                <div class="mission-value">
+                    {{ mission.cree_par }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="mission-footer">
+
+            Mission enregistrée dans l'entreprise :
+            <strong>{{ mission.entreprise }}</strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
