@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
@@ -238,6 +237,47 @@
                 padding: 30px 24px;
             }
         }
+    
+
+        /* Animation du bouton pendant la connexion */
+        .login-button:disabled {
+            cursor: wait;
+            opacity: 0.88;
+        }
+
+        .login-button-content {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .login-spinner {
+            display: none;
+            width: 17px;
+            height: 17px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #FFFFFF;
+            border-radius: 50%;
+            animation: login-spin 0.7s linear infinite;
+        }
+
+        .login-button.is-loading .login-spinner {
+            display: inline-block;
+        }
+
+        @keyframes login-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .login-spinner {
+                animation-duration: 1.8s;
+            }
+        }
+
     </style>
 </head>
 
@@ -404,8 +444,12 @@
             <button
                 type="submit"
                 class="login-button"
+                id="login-submit-button"
             >
-                Se connecter
+                <span class="login-button-content">
+                    <span class="login-spinner" aria-hidden="true"></span>
+                    <span id="login-button-label">Se connecter</span>
+                </span>
             </button>
 
             
@@ -436,6 +480,19 @@
     ====================================================== -->
 
     <script>
+
+        // Animation du bouton lors de l'envoi du formulaire de connexion.
+        const loginForm = document.querySelector(".card form");
+        const loginButton = document.getElementById("login-submit-button");
+        const loginButtonLabel = document.getElementById("login-button-label");
+
+        if (loginForm && loginButton && loginButtonLabel) {
+            loginForm.addEventListener("submit", function () {
+                loginButton.disabled = true;
+                loginButton.classList.add("is-loading");
+                loginButtonLabel.textContent = "Connexion en cours…";
+            });
+        }
 
         function togglePassword(id, button) {
 
