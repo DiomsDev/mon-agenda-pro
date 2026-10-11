@@ -503,18 +503,54 @@ def activites(request):
 
     entreprise = request.user.entreprise
 
+    # Récupérer toutes les activités de l'entreprise
     activites = Activite.objects.filter(
         entreprise=entreprise
-    ).order_by(
+    )
+
+    # ==========================================
+    # RECHERCHE PAR TEXTE
+    # ==========================================
+
+    recherche = request.GET.get("q", "").strip()
+
+    if recherche:
+        activites = activites.filter(
+            Q(objet__icontains=recherche)
+            | Q(lieu__icontains=recherche)
+            | Q(contact__icontains=recherche)
+        )
+
+    # ==========================================
+    # FILTRE PAR DATE
+    # ==========================================
+
+    date_recherche = request.GET.get("date", "").strip()
+
+    if date_recherche:
+      activites = activites.filter(
+        date=date_recherche
+    )
+    # ==========================================
+    # TRI DES ACTIVITÉS
+    # ==========================================
+
+    activites = activites.order_by(
         "-date",
         "-heure_debut"
     )
 
+    # ==========================================
+    # AFFICHAGE
+    # ==========================================
+    
     return render(
         request,
         "agenda/activites.html",
         {
-            "activites": activites
+            "activites": activites,
+            "recherche": recherche,
+            "date_recherche": date_recherche,
         }
     )
 
