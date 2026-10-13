@@ -171,6 +171,106 @@ Activités - DIRAGENDA
             height: 32px;
         }
     }
+
+    /* =========================================================
+   BARRE DE RECHERCHE DES ACTIVITÉS
+========================================================= */
+
+.filtres-activites {
+    background: #FFFFFF;
+    border: 1px solid #E5E9EC;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-recherche-activites {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.champ-recherche,
+.champ-date {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.champ-recherche {
+    flex: 1;
+    min-width: 220px;
+}
+
+.champ-date {
+    min-width: 180px;
+}
+
+.champ-recherche label,
+.champ-date label {
+    color: #16283D;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.champ-recherche input,
+.champ-date input {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #D9E0E6;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #16283D;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.champ-recherche input:focus,
+.champ-date input:focus {
+    outline: none;
+    border-color: #4FA3D1;
+    box-shadow: 0 0 0 3px rgba(79, 163, 209, 0.12);
+}
+
+.btn-reinitialiser {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    background: #F1F4F7;
+    color: #44546A;
+    text-decoration: none;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.btn-reinitialiser:hover {
+    background: #E3E8ED;
+}
+
+@media (max-width: 700px) {
+    .form-recherche-activites {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .champ-recherche,
+    .champ-date {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-recherche-activites button,
+    .form-recherche-activites a {
+        width: 100%;
+        text-align: center;
+    }
+}
+
 </style>
 {% endblock extra_css %}
 
@@ -233,6 +333,68 @@ Activités - DIRAGENDA
 ========================================================= -->
 
 <div class="card">
+
+    <!-- =========================================================
+     BARRE DE RECHERCHE ET FILTRE PAR DATE
+========================================================= -->
+
+<div class="filtres-activites">
+    <form method="GET" action="{% url 'activites' %}" class="form-recherche-activites">
+
+        <div class="champ-recherche">
+            <label for="q">Rechercher une activité</label>
+
+            <input
+                type="search"
+                id="q"
+                name="q"
+                placeholder="Objet, lieu ou contact..."
+                value="{{ recherche }}"
+            >
+        </div>
+
+        <div class="champ-date">
+            <label for="date">Filtrer par date</label>
+
+            <input
+                type="date"
+                id="date"
+                name="date"
+                value="{{ date_recherche }}"
+            >
+        </div>
+
+        <button type="submit" class="btn">
+            Rechercher
+        </button>
+
+        <a href="{% url 'activites' %}"
+                           class="btn btn-reinitialiser"
+                           title="Réinitialiser les filtres"
+                           aria-label="Réinitialiser les filtres">
+
+            <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true">
+
+                 <path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"></path>
+                 <path d="M3 3v5h5"></path>
+
+            </svg>
+
+           <span>Réinitialiser</span>
+        </a>
+
+    </form>
+</div>
 
     {% if activites %}
 
