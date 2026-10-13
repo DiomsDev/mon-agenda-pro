@@ -503,7 +503,7 @@ def activites(request):
 
     entreprise = request.user.entreprise
 
-    # Récupérer toutes les activités de l'entreprise
+    # Récupérer les activités de l'entreprise
     activites = Activite.objects.filter(
         entreprise=entreprise
     )
@@ -528,9 +528,10 @@ def activites(request):
     date_recherche = request.GET.get("date", "").strip()
 
     if date_recherche:
-      activites = activites.filter(
-        date=date_recherche
-    )
+        activites = activites.filter(
+            date=date_recherche
+        )
+
     # ==========================================
     # TRI DES ACTIVITÉS
     # ==========================================
@@ -543,7 +544,7 @@ def activites(request):
     # ==========================================
     # AFFICHAGE
     # ==========================================
-    
+
     return render(
         request,
         "agenda/activites.html",
@@ -553,7 +554,7 @@ def activites(request):
             "date_recherche": date_recherche,
         }
     )
-
+    
 @login_required
 def voir_activite(request, pk):
     activite = get_object_or_404(

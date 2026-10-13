@@ -1,4 +1,4 @@
-const CACHE_NAME = "diragenda-v1";
+const CACHE_NAME = "diragenda-v2";
 
 // =========================================================
 // INSTALLATION
@@ -25,11 +25,42 @@ self.addEventListener("activate", (event) => {
 // =========================================================
 
 self.addEventListener("fetch", (event) => {
+
+    // Ne traiter que les requêtes HTTP et HTTPS
+    if (
+        event.request.method !== "GET" ||
+        !["http:", "https:"].includes(
+            new URL(event.request.url).protocol
+        )
+    ) {
+        return;
+    }
+
     event.respondWith(
-        fetch(event.request).catch(() => {
-            return caches.match(event.request);
+        fetch(event.request).catch(async () => {
+
+            const reponseEnCache = await caches.match(
+                event.request
+            );
+
+            if (reponseEnCache) {
+                return reponseEnCache;
+            }
+
+            // Aucune réponse disponible hors ligne
+            return new Response(
+                "Cette ressource est indisponible hors ligne.",
+                {
+                    status: 503,
+                    statusText: "Service Unavailable",
+                    headers: {
+                        "Content-Type": "text/plain; charset=utf-8"
+                    }
+                }
+            );
         })
     );
+
 });
 
 
