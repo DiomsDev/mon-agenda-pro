@@ -4,6 +4,177 @@
 Activités - DIRAGENDA
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    /* EN-TÊTE */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .page-title-activites {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #16283D;
+        font-size: 22px;
+    }
+
+    .page-title-icon {
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #4FA3D1;
+    }
+
+    .page-title-icon svg {
+        width: 23px;
+        height: 23px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    /* CARTE */
+    .card {
+        background: white;
+        border: 1px solid #E5E9EC;
+        border-radius: 12px;
+        padding: 22px;
+    }
+
+    /* ICÔNES DES ACTIONS */
+    .action-icon {
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 7px;
+        margin-left: 4px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .action-icon svg {
+        width: 17px;
+        height: 17px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .action-edit {
+        color: #4F8FC0;
+        background: #EDF5FA;
+    }
+
+    .action-edit:hover {
+        background: #DCECF7;
+        transform: translateY(-1px);
+    }
+
+    .action-delete {
+        color: #DC6262;
+        background: #FBEDED;
+    }
+
+    .action-delete:hover {
+        background: #F8DADA;
+        transform: translateY(-1px);
+    }
+
+    .action-pdf {
+        color: #C95A5A;
+        background: #FBEDED;
+    }
+
+    .action-pdf:hover {
+        background: #F7DADA;
+        transform: translateY(-1px);
+    }
+
+    .action-word {
+        color: #3976B8;
+        background: #EAF2FA;
+    }
+
+    .action-word:hover {
+        background: #D8E8F7;
+        transform: translateY(-1px);
+    }
+
+    /* AUCUNE ACTIVITÉ */
+    .empty-state {
+        text-align: center;
+        padding: 45px 20px;
+    }
+
+    .empty-state-icon {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 15px;
+        border-radius: 12px;
+        background: #E8F4FA;
+        color: #4FA3D1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-state-icon svg {
+        width: 26px;
+        height: 26px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .empty-state h3 {
+        color: #16283D;
+        margin-bottom: 8px;
+    }
+
+    .empty-state p {
+        color: #7B8794;
+        margin-bottom: 18px;
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
+        .page-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .page-title-activites {
+            font-size: 20px;
+        }
+
+        .card {
+            padding: 15px;
+        }
+
+        .action-icon {
+            width: 32px;
+            height: 32px;
+        }
+    }
+</style>
+{% endblock extra_css %}
+
+
 {% block content %}
 
 <!-- =========================================================
@@ -400,233 +571,6 @@ Activités - DIRAGENDA
 </div>
 
 
-<!-- =========================================================
-     STYLE DE LA PAGE
-========================================================= -->
 
-<style>
-
-/* =========================================================
-   EN-TÊTE
-========================================================= */
-
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-
-.page-title-activites {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #16283D;
-    font-size: 22px;
-}
-
-
-.page-title-activites p {
-    color: #7B8794;
-    font-size: 13px;
-    margin-top: 5px;
-}
-
-
-.page-title-icon {
-    width: 30px;
-    height: 30px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #4FA3D1;
-}
-
-
-.page-title-icon svg {
-    width: 23px;
-    height: 23px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-
-/* =========================================================
-   CARTE
-========================================================= */
-
-.card {
-    background: white;
-    border: 1px solid #E5E9EC;
-    border-radius: 12px;
-    padding: 22px;
-}
-
-
-/* =========================================================
-   ICÔNES DES ACTIONS
-========================================================= */
-
-.action-icon {
-    width: 34px;
-    height: 34px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 7px;
-    margin-left: 4px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-
-.action-icon svg {
-    width: 17px;
-    height: 17px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-
-/* Modifier */
-
-.action-edit {
-    color: #4F8FC0;
-    background: #EDF5FA;
-}
-
-
-.action-edit:hover {
-    background: #DCECF7;
-    transform: translateY(-1px);
-}
-
-
-/* Supprimer */
-
-.action-delete {
-    color: #DC6262;
-    background: #FBEDED;
-}
-
-
-.action-delete:hover {
-    background: #F8DADA;
-    transform: translateY(-1px);
-}
-
-
-/* PDF */
-
-.action-pdf {
-    color: #C95A5A;
-    background: #FBEDED;
-}
-
-
-.action-pdf:hover {
-    background: #F7DADA;
-    transform: translateY(-1px);
-}
-
-
-/* Word */
-
-.action-word {
-    color: #3976B8;
-    background: #EAF2FA;
-}
-
-
-.action-word:hover {
-    background: #D8E8F7;
-    transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   AUCUNE ACTIVITÉ
-========================================================= */
-
-.empty-state {
-    text-align: center;
-    padding: 45px 20px;
-}
-
-
-.empty-state-icon {
-    width: 52px;
-    height: 52px;
-    margin: 0 auto 15px;
-    border-radius: 12px;
-    background: #E8F4FA;
-    color: #4FA3D1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.empty-state-icon svg {
-    width: 26px;
-    height: 26px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-
-.empty-state h3 {
-    color: #16283D;
-    margin-bottom: 8px;
-}
-
-
-.empty-state p {
-    color: #7B8794;
-    margin-bottom: 18px;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-    .page-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-
-    .page-title-activites {
-        font-size: 20px;
-    }
-
-
-    .card {
-        padding: 15px;
-    }
-
-
-    .action-icon {
-        width: 32px;
-        height: 32px;
-    }
-
-}
-
-</style>
 
 {% endblock %}
