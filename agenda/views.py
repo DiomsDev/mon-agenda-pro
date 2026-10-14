@@ -575,20 +575,40 @@ def voir_activite(request, pk):
 
 @login_required
 def missions(request):
-
     entreprise = request.user.entreprise
 
+    # Récupérer les missions de l'entreprise
     missions = Mission.objects.filter(
         entreprise=entreprise
-    ).order_by(
-        "-date_depart"
     )
+
+    # Recherche par motif ou lieu
+    recherche = request.GET.get("q", "").strip()
+
+    if recherche:
+        missions = missions.filter(
+            Q(motif__icontains=recherche)
+            | Q(lieu__icontains=recherche)
+        )
+
+    # Filtre par date de départ
+    date_recherche = request.GET.get("date", "").strip()
+
+    if date_recherche:
+        missions = missions.filter(
+            date_depart=date_recherche
+        )
+
+    # Trier les missions par date de départ
+    missions = missions.order_by("-date_depart")
 
     return render(
         request,
         "agenda/missions.html",
         {
-            "missions": missions
+            "missions": missions,
+            "recherche": recherche,
+            "date_recherche": date_recherche,
         }
     )
 
@@ -611,21 +631,63 @@ def rendez_vous(request):
 
     entreprise = request.user.entreprise
 
+    # ==========================================
+    # RÉCUPÉRER LES RENDEZ-VOUS DE L'ENTREPRISE
+    # ==========================================
+
     rendez_vous = RendezVous.objects.filter(
         entreprise=entreprise
-    ).order_by(
+    )
+
+    # ==========================================
+    # RECHERCHE PAR TEXTE
+    # ==========================================
+
+    recherche = request.GET.get("q", "").strip()
+
+    if recherche:
+        rendez_vous = rendez_vous.filter(
+            Q(objet__icontains=recherche)
+            | Q(lieu__icontains=recherche)
+            | Q(personne__icontains=recherche)
+            | Q(telephone__icontains=recherche)
+        )
+
+    # ==========================================
+    # FILTRE PAR DATE
+    # ==========================================
+
+    date_recherche = request.GET.get("date", "").strip()
+
+    if date_recherche:
+        rendez_vous = rendez_vous.filter(
+            date=date_recherche
+        )
+
+    # ==========================================
+    # TRI DES RENDEZ-VOUS
+    # ==========================================
+
+    rendez_vous = rendez_vous.order_by(
         "-date",
         "-heure"
     )
+
+    # ==========================================
+    # AFFICHAGE
+    # ==========================================
 
     return render(
         request,
         "agenda/rendez_vous.html",
         {
-            "rendez_vous": rendez_vous
+            "rendez_vous": rendez_vous,
+            "recherche": recherche,
+            "date_recherche": date_recherche,
         }
     )
-
+    
+    
 @login_required
 def voir_rendez_vous(request, pk):
 
@@ -803,19 +865,38 @@ def nouvelle_tache(request):
 
 @login_required
 def comptes_rendus(request):
+    entreprise = request.user.entreprise
 
-    comptes_rendus = (
-        CompteRendu.objects
-        .filter(
-            entreprise=request.user.entreprise
+    # Récupérer les comptes rendus de l'entreprise
+    comptes_rendus = CompteRendu.objects.filter(
+        entreprise=entreprise
+    ).select_related(
+        "reunion",
+        "cree_par"
+    )
+
+    # Recherche par titre de réunion ou créateur
+    recherche = request.GET.get("q", "").strip()
+
+    if recherche:
+        comptes_rendus = comptes_rendus.filter(
+            Q(reunion__titre__icontains=recherche)
+            | Q(cree_par__username__icontains=recherche)
+            | Q(cree_par__first_name__icontains=recherche)
+            | Q(cree_par__last_name__icontains=recherche)
         )
-        .select_related(
-            "reunion",
-            "cree_par"
+
+    # Filtre par date de rédaction
+    date_recherche = request.GET.get("date", "").strip()
+
+    if date_recherche:
+        comptes_rendus = comptes_rendus.filter(
+            date_redaction__date=date_recherche
         )
-        .order_by(
-            "-date_redaction"
-        )
+
+    # Trier du plus récent au plus ancien
+    comptes_rendus = comptes_rendus.order_by(
+        "-date_redaction"
     )
 
     return render(
@@ -823,6 +904,8 @@ def comptes_rendus(request):
         "agenda/comptes_rendus.html",
         {
             "comptes_rendus": comptes_rendus,
+            "recherche": recherche,
+            "date_recherche": date_recherche,
         }
     )
 
@@ -958,12 +1041,35 @@ def verifier_rappels_automatique(request):
 
 @login_required
 def reunions(request):
-
     entreprise = request.user.entreprise
 
+    # Récupérer les réunions de l'entreprise
     reunions = Reunion.objects.filter(
         entreprise=entreprise
-    ).order_by(
+    )
+
+    # Recherche par titre, lieu ou organisateur
+    recherche = request.GET.get("q", "").strip()
+
+    if recherche:
+        reunions = reunions.filter(
+            Q(titre__icontains=recherche)
+            | Q(lieu__icontains=recherche)
+            | Q(organisateur__username__icontains=recherche)
+            | Q(organisateur__first_name__icontains=recherche)
+            | Q(organisateur__last_name__icontains=recherche)
+        )
+
+    # Filtre par date
+    date_recherche = request.GET.get("date", "").strip()
+
+    if date_recherche:
+        reunions = reunions.filter(
+            date=date_recherche
+        )
+
+    # Trier par date et heure de début
+    reunions = reunions.order_by(
         "-date",
         "-heure_debut"
     )
@@ -972,10 +1078,11 @@ def reunions(request):
         request,
         "agenda/reunions.html",
         {
-            "reunions": reunions
+            "reunions": reunions,
+            "recherche": recherche,
+            "date_recherche": date_recherche,
         }
     )
-
 @login_required
 def voir_reunion(request, pk):
     reunion = get_object_or_404(

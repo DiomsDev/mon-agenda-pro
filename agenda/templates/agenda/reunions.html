@@ -1,19 +1,389 @@
 {% extends "base.html" %}
 
-{% block title %}
-Réunions - DIRAGENDA
-{% endblock %}
+{% block title %}Réunions | DIRAGENDA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-reunions {
+        padding: 20px;
+    }
+
+    .entete-reunions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+    }
+
+    .titre-reunions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        color: var(--text-color, #172a40);
+        font-size: 28px;
+    }
+
+    .titre-reunions svg {
+        width: 27px;
+        height: 27px;
+        fill: none;
+        stroke: #4296d0;
+        stroke-width: 1.9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+    }
+
+    .entete-reunions p {
+        margin: 8px 0 0;
+        color: var(--text-muted, #64748b);
+    }
+
+    .btn-nouvelle-reunion {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 18px;
+        border: none;
+        border-radius: 9px;
+        background: #172a40;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background .2s ease;
+    }
+
+    .btn-nouvelle-reunion:hover {
+        background: #263f59;
+        color: #fff;
+    }
+
+    .filtres-reunions {
+        display: flex;
+        align-items: end;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 24px;
+        margin-bottom: 22px;
+        background: var(--card-bg, #fff);
+        border: 1px solid var(--border-color, #e0e6ed);
+        border-radius: 15px;
+    }
+
+    .champ-filtre-reunion {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        min-width: 190px;
+    }
+
+    .champ-filtre-reunion label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-color, #172a40);
+    }
+
+    .champ-filtre-reunion input {
+        width: 100%;
+        min-height: 46px;
+        box-sizing: border-box;
+        padding: 11px 13px;
+        border: 1px solid #d5dee8;
+        border-radius: 9px;
+        background: var(--input-bg, #fff);
+        color: var(--text-color, #172a40);
+        font-size: 14px;
+    }
+
+    .champ-filtre-reunion input:focus {
+        outline: none;
+        border-color: #4296d0;
+        box-shadow: 0 0 0 3px rgba(66, 150, 208, .12);
+    }
+
+    .btn-rechercher-reunion,
+    .btn-reset-reunion {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 43px;
+        box-sizing: border-box;
+        padding: 10px 17px;
+        border: none;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .btn-rechercher-reunion {
+        background: #172a40;
+        color: #fff;
+    }
+
+    .btn-rechercher-reunion:hover {
+        background: #263f59;
+        color: #fff;
+    }
+
+    .btn-reset-reunion {
+        background: #f0f3f7;
+        color: #40566d;
+    }
+
+    .btn-reset-reunion:hover {
+        background: #e4eaf1;
+        color: #172a40;
+    }
+
+    .resume-reunions {
+        margin: 15px 0;
+        color: var(--text-muted, #64748b);
+        font-size: 13px;
+    }
+
+    .tableau-conteneur-reunions {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid var(--border-color, #e0e6ed);
+        border-radius: 14px;
+        background: var(--card-bg, #fff);
+    }
+
+    .table-reunions {
+        width: 100%;
+        min-width: 900px;
+        border-collapse: collapse;
+    }
+
+    .table-reunions thead {
+        background: #f7f9fa;
+    }
+
+    .table-reunions th {
+        padding: 15px;
+        border-bottom: 1px solid #e5eaf0;
+        color: #40566d;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .table-reunions td {
+        padding: 16px 15px;
+        border-bottom: 1px solid #e5eaf0;
+        color: var(--text-color, #172a40);
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .table-reunions tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .table-reunions tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .titre-cellule-reunion {
+        font-weight: 600;
+    }
+
+    .texte-secondaire-reunion {
+        display: block;
+        margin-top: 4px;
+        color: var(--text-muted, #64748b);
+        font-size: 12px;
+    }
+
+    .badge-statut-reunion {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 20px;
+        background: #e8f3fc;
+        color: #286c9f;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .statut-annulee {
+        background: #ffeded;
+        color: #c43d44;
+    }
+
+    .statut-terminee {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .actions-reunion {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    .action-reunion {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        flex-shrink: 0;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        box-sizing: border-box;
+        border: none;
+        border-radius: 9px;
+        background: #e8f3fc;
+        color: #4296d0;
+        text-decoration: none;
+        transition: background .2s ease;
+    }
+
+    .action-reunion svg {
+        display: block;
+        width: 19px;
+        height: 19px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .action-reunion:hover {
+        background: #d5eafa;
+        color: #287db9;
+    }
+
+    .action-reunion.action-voir {
+        width: auto;
+        min-width: 86px;
+        padding: 0 13px;
+        background: #172a40;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .action-reunion.action-voir:hover {
+        background: #263f59;
+        color: #fff;
+    }
+
+    .action-reunion.action-compte-rendu {
+        background: #e8f3fc;
+        color: #347fd0;
+    }
+
+    .action-reunion.action-modifier {
+        background: #e8f3fc;
+        color: #4296d0;
+    }
+
+    .action-reunion.action-supprimer {
+        background: #ffeded;
+        color: #f15b60;
+    }
+
+    .action-reunion.action-supprimer:hover {
+        background: #ffdddd;
+        color: #d83f45;
+    }
+
+    .empty-reunions {
+        padding: 48px 20px;
+        text-align: center;
+        border: 1px solid var(--border-color, #e0e6ed);
+        border-radius: 14px;
+        background: var(--card-bg, #fff);
+    }
+
+    .empty-reunions .icone-vide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 76px;
+        height: 76px;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        background: #e8f3fc;
+    }
+
+    .empty-reunions .icone-vide svg {
+        width: 40px;
+        height: 40px;
+        fill: none;
+        stroke: #4296d0;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .empty-reunions h3 {
+        margin: 0 0 10px;
+        color: var(--text-color, #172a40);
+        font-size: 20px;
+    }
+
+    .empty-reunions p {
+        max-width: 500px;
+        margin: 0 auto 20px;
+        color: var(--text-muted, #64748b);
+        line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+        .page-reunions {
+            padding: 12px;
+        }
+
+        .entete-reunions {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .btn-nouvelle-reunion {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .filtres-reunions {
+            padding: 16px;
+        }
+
+        .champ-filtre-reunion {
+            min-width: 100%;
+        }
+
+        .btn-rechercher-reunion,
+        .btn-reset-reunion {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock extra_css %}
 
 {% block content %}
+<div class="page-reunions">
 
-<!-- =========================================================
-     EN-TÊTE DE LA PAGE
-========================================================= -->
-
-<div class="page-header">
-    <div>
-        <h1 class="page-title-reunions">
-            <span class="page-title-icon">
+    <!-- EN-TÊTE -->
+    <div class="entete-reunions">
+        <div>
+            <h1 class="titre-reunions">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <rect x="3" y="4" width="18" height="17" rx="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -22,405 +392,194 @@ Réunions - DIRAGENDA
                     <circle cx="9" cy="15" r="1.5"></circle>
                     <circle cx="15" cy="15" r="1.5"></circle>
                 </svg>
-            </span>
-            Réunions
-        </h1>
-        <p>Gérez les réunions de votre entreprise.</p>
-    </div>
-
-    <a href="{% url 'nouvelle_reunion' %}" class="btn">
-        + Nouvelle réunion
-    </a>
-</div>
-
-<!-- =========================================================
-     LISTE DES RÉUNIONS
-========================================================= -->
-
-<div class="card">
-    {% if reunions %}
-    <div class="table-wrapper">
-        <table class="table-reunions">
-            <thead>
-                <tr>
-                    <th>Titre</th>
-                    <th>Date</th>
-                    <th>Horaire</th>
-                    <th>Lieu</th>
-                    <th>Organisateur</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for reunion in reunions %}
-                <tr>
-                    <td data-label="Titre">
-                        <strong>{{ reunion.titre }}</strong>
-                    </td>
-
-                    <td data-label="Date">
-                        {{ reunion.date|date:"d/m/Y" }}
-                    </td>
-
-                    <td data-label="Horaire">
-                        {% if reunion.heure_debut %}
-                            {{ reunion.heure_debut|time:"H:i" }}
-                        {% else %}
-                            —
-                        {% endif %}
-
-                        {% if reunion.heure_fin %}
-                            - {{ reunion.heure_fin|time:"H:i" }}
-                        {% endif %}
-                    </td>
-
-                    <td data-label="Lieu">
-                        {% if reunion.lieu %}
-                            {{ reunion.lieu }}
-                        {% else %}
-                            —
-                        {% endif %}
-                    </td>
-
-                    <td data-label="Organisateur">
-                        {% if reunion.organisateur %}
-                            {{ reunion.organisateur }}
-                        {% else %}
-                            —
-                        {% endif %}
-                    </td>
-
-                    <td data-label="Statut">
-                        {{ reunion.get_statut_display }}
-                    </td>
-
-                    <td class="reunion-actions" data-label="Actions">
-                        <!-- Voir -->
-                        <a
-                            href="{% url 'voir_reunion' reunion.pk %}"
-                            class="btn btn-sm btn-secondary action-view"
-                            title="Voir la réunion"
-                            aria-label="Voir la réunion"
-                        >
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
-                                <circle cx="12" cy="12" r="2.5"></circle>
-                            </svg>
-                            <span>Voir</span>
-                        </a>
-
-                        <!-- Compte rendu -->
-                        <a
-                            href="{% url 'nouveau_compte_rendu' reunion.pk %}"
-                            class="btn btn-sm btn-primary action-report"
-                            title="Créer le compte rendu"
-                            aria-label="Créer le compte rendu"
-                        >
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="8" y1="13" x2="16" y2="13"></line>
-                                <line x1="8" y1="17" x2="14" y2="17"></line>
-                            </svg>
-                            <span>Compte rendu</span>
-                        </a>
-
-                        <!-- Modifier -->
-                        <a
-                            href="{% url 'modifier_reunion' reunion.pk %}"
-                            class="action-icon action-edit"
-                            title="Modifier"
-                            aria-label="Modifier la réunion"
-                        >
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M12 20h9"></path>
-                                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
-                            </svg>
-                        </a>
-
-                        <!-- Supprimer -->
-                        <a
-                            href="{% url 'supprimer_reunion' reunion.pk %}"
-                            class="action-icon action-delete"
-                            title="Supprimer"
-                            aria-label="Supprimer la réunion"
-                        >
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M8 6V4h8v2"></path>
-                                <path d="M19 6l-1 15H6L5 6"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    {% else %}
-    <!-- =====================================================
-         AUCUNE RÉUNION
-    ====================================================== -->
-
-    <div class="empty-state">
-        <div class="empty-state-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="3" y="4" width="18" height="17" rx="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-                <circle cx="9" cy="15" r="1.5"></circle>
-                <circle cx="15" cy="15" r="1.5"></circle>
-            </svg>
+                Réunions
+            </h1>
+            <p>Gérez et suivez les réunions de votre entreprise.</p>
         </div>
 
-        <h3>Aucune réunion</h3>
-        <p>Vous n'avez encore aucune réunion enregistrée.</p>
-
-        <a href="{% url 'nouvelle_reunion' %}" class="btn">
-            + Nouvelle réunion
+        <a href="{% url 'nouvelle_reunion' %}" class="btn-nouvelle-reunion">
+            <span aria-hidden="true">＋</span>
+            Nouvelle réunion
         </a>
     </div>
+
+    <!-- RECHERCHE ET FILTRES : restent visibles sans résultat -->
+    <form method="get" action="{% url 'reunions' %}" class="filtres-reunions">
+        <div class="champ-filtre-reunion">
+            <label for="recherche-reunion">Rechercher une réunion</label>
+            <input
+                type="search"
+                id="recherche-reunion"
+                name="q"
+                value="{{ recherche }}"
+                placeholder="Titre, lieu ou organisateur..."
+            >
+        </div>
+
+        <div class="champ-filtre-reunion">
+            <label for="date-reunion">Filtrer par date</label>
+            <input
+                type="date"
+                id="date-reunion"
+                name="date"
+                value="{{ date_recherche }}"
+            >
+        </div>
+
+        <button type="submit" class="btn-rechercher-reunion">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="16" y1="16" x2="21" y2="21"></line>
+            </svg>
+            Rechercher
+        </button>
+
+        {% if recherche or date_recherche %}
+            <a href="{% url 'reunions' %}" class="btn-reset-reunion">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                </svg>
+                Réinitialiser
+            </a>
+        {% endif %}
+    </form>
+
+    <!-- LISTE -->
+    {% if reunions %}
+        <p class="resume-reunions">
+            Réunions trouvées : <strong>{{ reunions|length }}</strong>
+        </p>
+
+        <div class="tableau-conteneur-reunions">
+            <table class="table-reunions">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Date</th>
+                        <th>Horaire</th>
+                        <th>Lieu</th>
+                        <th>Organisateur</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reunion in reunions %}
+                        <tr>
+                            <td>
+                                <div class="titre-cellule-reunion">{{ reunion.titre }}</div>
+                            </td>
+
+                            <td>{{ reunion.date|date:"d/m/Y" }}</td>
+
+                            <td>
+                                {% if reunion.heure_debut %}
+                                    {{ reunion.heure_debut|time:"H:i" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                                {% if reunion.heure_fin %}
+                                    – {{ reunion.heure_fin|time:"H:i" }}
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if reunion.lieu %}
+                                    {{ reunion.lieu }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if reunion.organisateur %}
+                                    {{ reunion.organisateur }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if reunion.statut == "annulee" or reunion.statut == "annule" %}
+                                    <span class="badge-statut-reunion statut-annulee">{{ reunion.get_statut_display }}</span>
+                                {% elif reunion.statut == "terminee" or reunion.statut == "termine" %}
+                                    <span class="badge-statut-reunion statut-terminee">{{ reunion.get_statut_display }}</span>
+                                {% else %}
+                                    <span class="badge-statut-reunion">{{ reunion.get_statut_display }}</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <div class="actions-reunion">
+                                    <!-- VOIR -->
+                                    <a href="{% url 'voir_reunion' reunion.pk %}" class="action-reunion action-voir" title="Voir la réunion" aria-label="Voir la réunion">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+                                            <circle cx="12" cy="12" r="2.5"></circle>
+                                        </svg>
+                                        <span>Voir</span>
+                                    </a>
+
+                                    <!-- COMPTE RENDU -->
+                                    <a href="{% url 'nouveau_compte_rendu' reunion.pk %}" class="action-reunion action-compte-rendu" title="Créer ou modifier le compte rendu" aria-label="Compte rendu de la réunion">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <path d="M14 2v6h6"></path>
+                                            <path d="M8 13h8M8 17h8"></path>
+                                        </svg>
+                                    </a>
+
+                                    <!-- MODIFIER -->
+                                    <a href="{% url 'modifier_reunion' reunion.pk %}" class="action-reunion action-modifier" title="Modifier la réunion" aria-label="Modifier la réunion">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M12 20h9"></path>
+                                            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+                                        </svg>
+                                    </a>
+
+                                    <!-- SUPPRIMER -->
+                                    <a href="{% url 'supprimer_reunion' reunion.pk %}" class="action-reunion action-supprimer" title="Supprimer la réunion" aria-label="Supprimer la réunion">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M3 6h18"></path>
+                                            <path d="M8 6V4h8v2"></path>
+                                            <path d="m19 6-1 14H6L5 6"></path>
+                                            <path d="M10 11v5M14 11v5"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        <div class="empty-reunions">
+            <div class="icone-vide">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                    <circle cx="9" cy="15" r="1.5"></circle>
+                    <circle cx="15" cy="15" r="1.5"></circle>
+                </svg>
+            </div>
+            <h3>Aucune réunion trouvée</h3>
+            <p>
+                {% if recherche or date_recherche %}
+                    Aucune réunion ne correspond à votre recherche. Essayez un autre mot-clé ou une autre date.
+                {% else %}
+                    Vous n'avez encore aucune réunion enregistrée. Cliquez sur « Nouvelle réunion » pour commencer.
+                {% endif %}
+            </p>
+            {% if not recherche and not date_recherche %}
+                <a href="{% url 'nouvelle_reunion' %}" class="btn-nouvelle-reunion">＋ Nouvelle réunion</a>
+            {% endif %}
+        </div>
     {% endif %}
+
 </div>
-
-<!-- =========================================================
-     STYLE DE LA PAGE — HARMONISÉ AVEC ACTIVITÉS
-========================================================= -->
-
-<style>
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.page-title-reunions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #16283D;
-    font-size: 22px;
-    margin: 0;
-}
-
-.page-header p {
-    color: #7B8794;
-    font-size: 13px;
-    margin-top: 5px;
-    margin-bottom: 0;
-}
-
-.page-title-icon {
-    width: 30px;
-    height: 30px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #4FA3D1;
-    flex-shrink: 0;
-}
-
-.page-title-icon svg {
-    width: 23px;
-    height: 23px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.card {
-    background: #ffffff;
-    border: 1px solid #E5E9EC;
-    border-radius: 12px;
-    padding: 22px;
-}
-
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-}
-
-.table-reunions {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 900px;
-}
-
-.table-reunions th {
-    padding: 15px 14px;
-    background: #F7F9F9;
-    color: #526579;
-    font-weight: 600;
-    text-align: left;
-    white-space: nowrap;
-}
-
-.table-reunions td {
-    padding: 16px 14px;
-    border-bottom: 1px solid #E9EEF2;
-    color: #16283D;
-    vertical-align: middle;
-}
-
-.table-reunions tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.table-reunions tbody tr:hover {
-    background: #FCFDFD;
-}
-
-.table-reunions td strong {
-    font-weight: 600;
-}
-
-/* Bouton Voir */
-.table-reunions .action-view {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    white-space: nowrap;
-    text-decoration: none;
-}
-
-.table-reunions .action-view svg,
-.table-reunions .action-report svg {
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    flex-shrink: 0;
-}
-
-.table-reunions .action-view svg {
-    stroke: #5B9BD5;
-}
-
-/* Bouton Compte rendu */
-.table-reunions .action-report {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    white-space: nowrap;
-    text-decoration: none;
-}
-
-/* Icônes Modifier et Supprimer : mêmes styles que Activités */
-.action-icon {
-    width: 34px;
-    height: 34px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 7px;
-    margin-left: 4px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    vertical-align: middle;
-}
-
-.action-icon svg {
-    width: 17px;
-    height: 17px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.action-edit {
-    color: #4F8FC0;
-    background: #EDF5FA;
-}
-
-.action-edit:hover {
-    background: #DCECF7;
-    transform: translateY(-1px);
-}
-
-.action-delete {
-    color: #DC6262;
-    background: #FBEDED;
-}
-
-.action-delete:hover {
-    background: #F8DADA;
-    transform: translateY(-1px);
-}
-
-/* État vide : même présentation que Activités */
-.empty-state {
-    text-align: center;
-    padding: 45px 20px;
-}
-
-.empty-state-icon {
-    width: 52px;
-    height: 52px;
-    margin: 0 auto 15px;
-    border-radius: 12px;
-    background: #E8F4FA;
-    color: #4FA3D1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.empty-state-icon svg {
-    width: 26px;
-    height: 26px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.empty-state h3 {
-    color: #16283D;
-    margin-bottom: 8px;
-}
-
-.empty-state p {
-    color: #7B8794;
-    margin-bottom: 18px;
-}
-
-/* Adaptation aux petits écrans */
-@media (max-width: 700px) {
-    .page-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .page-title-reunions {
-        font-size: 20px;
-    }
-
-    .card {
-        padding: 15px;
-    }
-
-    .table-reunions {
-        min-width: 900px;
-    }
-}
-</style>
-
-{% endblock %}
+{% endblock content %}
