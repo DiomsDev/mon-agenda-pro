@@ -271,6 +271,81 @@ Activités - DIRAGENDA
     }
 }
 
+
+
+    /* PAGINATION DES ACTIVITÉS */
+    .pagination-activites {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid #E5E9EC;
+    }
+
+    .pagination-info {
+        color: #667587;
+        font-size: 13px;
+    }
+
+    .pagination-liens {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .pagination-lien {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        min-height: 36px;
+        padding: 7px 11px;
+        box-sizing: border-box;
+        border: 1px solid #D9E0E6;
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: #35465A;
+        text-decoration: none;
+        font-size: 13px;
+        transition: all 0.2s ease;
+    }
+
+    .pagination-lien:hover {
+        border-color: #4FA3D1;
+        background: #EDF7FC;
+        color: #246C95;
+    }
+
+    .pagination-lien.active {
+        border-color: #4FA3D1;
+        background: #4FA3D1;
+        color: #FFFFFF;
+        font-weight: 600;
+    }
+
+    .pagination-lien.disabled {
+        color: #A3ADB8;
+        background: #F5F7F9;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    @media (max-width: 700px) {
+        .pagination-activites {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .pagination-liens {
+            justify-content: center;
+        }
+    }
+
 </style>
 {% endblock extra_css %}
 
@@ -681,6 +756,50 @@ Activités - DIRAGENDA
 
     </div>
 
+    {% if page_obj and page_obj.paginator.num_pages > 1 %}
+    <nav class="pagination-activites" aria-label="Pagination des activités">
+        <div class="pagination-info">
+            Affichage de {{ page_obj.start_index }} à {{ page_obj.end_index }}
+            sur {{ page_obj.paginator.count }} activité{{ page_obj.paginator.count|pluralize }}
+        </div>
+
+        <div class="pagination-liens">
+            {% if page_obj.has_previous %}
+                <a class="pagination-lien"
+                   href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page=1"
+                   aria-label="Première page">«</a>
+                <a class="pagination-lien"
+                   href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page={{ page_obj.previous_page_number }}"
+                   aria-label="Page précédente">Précédent</a>
+            {% else %}
+                <span class="pagination-lien disabled" aria-disabled="true">«</span>
+                <span class="pagination-lien disabled" aria-disabled="true">Précédent</span>
+            {% endif %}
+
+            {% for numero in page_obj.paginator.page_range %}
+                {% if numero == page_obj.number %}
+                    <span class="pagination-lien active" aria-current="page">{{ numero }}</span>
+                {% else %}
+                    <a class="pagination-lien"
+                       href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page={{ numero }}"
+                       aria-label="Aller à la page {{ numero }}">{{ numero }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="pagination-lien"
+                   href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page={{ page_obj.next_page_number }}"
+                   aria-label="Page suivante">Suivant</a>
+                <a class="pagination-lien"
+                   href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page={{ page_obj.paginator.num_pages }}"
+                   aria-label="Dernière page">»</a>
+            {% else %}
+                <span class="pagination-lien disabled" aria-disabled="true">Suivant</span>
+                <span class="pagination-lien disabled" aria-disabled="true">»</span>
+            {% endif %}
+        </div>
+    </nav>
+    {% endif %}
 
     {% else %}
 

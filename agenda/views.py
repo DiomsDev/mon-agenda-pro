@@ -4,6 +4,7 @@ from django.db.models.functions import TruncMonth
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse
+from django.core.paginator import Paginator
 
 import json
 from django.conf import settings
@@ -503,7 +504,10 @@ def activites(request):
 
     entreprise = request.user.entreprise
 
-    # Récupérer les activités de l'entreprise
+    # ==========================================
+    # RÉCUPÉRER LES ACTIVITÉS DE L'ENTREPRISE
+    # ==========================================
+
     activites = Activite.objects.filter(
         entreprise=entreprise
     )
@@ -542,6 +546,16 @@ def activites(request):
     )
 
     # ==========================================
+    # PAGINATION : 50 ACTIVITÉS PAR PAGE
+    # ==========================================
+
+    paginator = Paginator(activites, 50)
+
+    numero_page = request.GET.get("page")
+
+    activites_page = paginator.get_page(numero_page)
+
+    # ==========================================
     # AFFICHAGE
     # ==========================================
 
@@ -549,12 +563,13 @@ def activites(request):
         request,
         "agenda/activites.html",
         {
-            "activites": activites,
+            "activites": activites_page,
+            "page_obj": activites_page,
+            "paginator": paginator,
             "recherche": recherche,
             "date_recherche": date_recherche,
         }
     )
-    
 @login_required
 def voir_activite(request, pk):
     activite = get_object_or_404(
