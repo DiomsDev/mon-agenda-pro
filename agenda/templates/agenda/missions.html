@@ -333,6 +333,74 @@
         line-height: 1.7;
     }
 
+
+
+    /* PAGINATION DES MISSIONS */
+    .pagination-missions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color, #e0e6ed);
+    }
+
+    .pagination-missions .pagination-info {
+        width: 100%;
+        margin: 0 0 6px;
+        color: var(--text-muted, #64748b);
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .pagination-missions a,
+    .pagination-missions span.page-courante {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        min-height: 40px;
+        padding: 8px 12px;
+        box-sizing: border-box;
+        border: 1px solid var(--border-color, #dbe3eb);
+        border-radius: 8px;
+        background: var(--card-bg, #fff);
+        color: var(--text-color, #172a40);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background-color .2s ease, border-color .2s ease;
+    }
+
+    .pagination-missions a:hover {
+        background: #edf6fc;
+        border-color: #55a9df;
+        color: #172a40;
+    }
+
+    .pagination-missions span.page-courante {
+        background: #172a40;
+        border-color: #172a40;
+        color: #fff;
+        cursor: default;
+    }
+
+    @media (max-width: 480px) {
+        .pagination-missions {
+            gap: 6px;
+        }
+
+        .pagination-missions a,
+        .pagination-missions span.page-courante {
+            min-width: 36px;
+            min-height: 36px;
+            padding: 7px 9px;
+            font-size: 13px;
+        }
+    }
+
     @media (max-width: 768px) {
         .page-missions {
             padding: 0 0 15px;
@@ -457,7 +525,7 @@
 
         {% if missions %}
             <p class="resume-missions">
-                Missions trouvées : <strong>{{ missions|length }}</strong>
+                Missions trouvées : <strong>{{ paginator.count }}</strong>
             </p>
 
             <div class="tableau-missions-wrapper">
@@ -568,6 +636,39 @@
                     </tbody>
                 </table>
             </div>
+
+            {% if paginator.num_pages > 1 %}
+                <nav class="pagination-missions" aria-label="Pagination des missions">
+                    <p class="pagination-info">
+                        Page {{ page_obj.number }} sur {{ paginator.num_pages }}
+                        — {{ page_obj.start_index }} à {{ page_obj.end_index }} sur {{ paginator.count }} missions
+                    </p>
+
+                    {% if page_obj.has_previous %}
+                        <a href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page=1"
+                           aria-label="Première page" title="Première page">«</a>
+                        <a href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page={{ page_obj.previous_page_number }}"
+                           aria-label="Page précédente">Précédent</a>
+                    {% endif %}
+
+                    {% for numero in paginator.page_range %}
+                        {% if numero == page_obj.number %}
+                            <span class="page-courante" aria-current="page">{{ numero }}</span>
+                        {% else %}
+                            <a href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page={{ numero }}"
+                               aria-label="Page {{ numero }}">{{ numero }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page={{ page_obj.next_page_number }}"
+                           aria-label="Page suivante">Suivant</a>
+                        <a href="?q={{ recherche|urlencode }}&amp;date={{ date_recherche|urlencode }}&amp;page={{ paginator.num_pages }}"
+                           aria-label="Dernière page" title="Dernière page">»</a>
+                    {% endif %}
+                </nav>
+            {% endif %}
+
 
         {% else %}
             <div class="empty-missions">

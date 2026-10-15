@@ -587,17 +587,23 @@ def voir_activite(request, pk):
     )
     
 
-
 @login_required
 def missions(request):
+
     entreprise = request.user.entreprise
 
-    # Récupérer les missions de l'entreprise
+    # ==========================================
+    # RÉCUPÉRER LES MISSIONS DE L'ENTREPRISE
+    # ==========================================
+
     missions = Mission.objects.filter(
         entreprise=entreprise
     )
 
-    # Recherche par motif ou lieu
+    # ==========================================
+    # RECHERCHE PAR MOTIF OU LIEU
+    # ==========================================
+
     recherche = request.GET.get("q", "").strip()
 
     if recherche:
@@ -606,7 +612,10 @@ def missions(request):
             | Q(lieu__icontains=recherche)
         )
 
-    # Filtre par date de départ
+    # ==========================================
+    # FILTRE PAR DATE DE DÉPART
+    # ==========================================
+
     date_recherche = request.GET.get("date", "").strip()
 
     if date_recherche:
@@ -614,18 +623,38 @@ def missions(request):
             date_depart=date_recherche
         )
 
-    # Trier les missions par date de départ
+    # ==========================================
+    # TRI DES MISSIONS
+    # ==========================================
+
     missions = missions.order_by("-date_depart")
+
+    # ==========================================
+    # PAGINATION : 50 MISSIONS PAR PAGE
+    # ==========================================
+
+    paginator = Paginator(missions, 50)
+
+    numero_page = request.GET.get("page")
+
+    missions_page = paginator.get_page(numero_page)
+
+    # ==========================================
+    # AFFICHAGE
+    # ==========================================
 
     return render(
         request,
         "agenda/missions.html",
         {
-            "missions": missions,
+            "missions": missions_page,
+            "page_obj": missions_page,
+            "paginator": paginator,
             "recherche": recherche,
             "date_recherche": date_recherche,
         }
     )
+
 
 @login_required
 def voir_mission(request, pk):
@@ -689,6 +718,16 @@ def rendez_vous(request):
     )
 
     # ==========================================
+    # PAGINATION : 50 RENDEZ-VOUS PAR PAGE
+    # ==========================================
+
+    paginator = Paginator(rendez_vous, 50)
+
+    numero_page = request.GET.get("page")
+
+    rendez_vous_page = paginator.get_page(numero_page)
+
+    # ==========================================
     # AFFICHAGE
     # ==========================================
 
@@ -696,12 +735,13 @@ def rendez_vous(request):
         request,
         "agenda/rendez_vous.html",
         {
-            "rendez_vous": rendez_vous,
+            "rendez_vous": rendez_vous_page,
+            "page_obj": rendez_vous_page,
+            "paginator": paginator,
             "recherche": recherche,
             "date_recherche": date_recherche,
         }
     )
-    
     
 @login_required
 def voir_rendez_vous(request, pk):
@@ -880,9 +920,13 @@ def nouvelle_tache(request):
 
 @login_required
 def comptes_rendus(request):
+
     entreprise = request.user.entreprise
 
-    # Récupérer les comptes rendus de l'entreprise
+    # ==========================================
+    # RÉCUPÉRER LES COMPTES RENDUS DE L'ENTREPRISE
+    # ==========================================
+
     comptes_rendus = CompteRendu.objects.filter(
         entreprise=entreprise
     ).select_related(
@@ -890,7 +934,10 @@ def comptes_rendus(request):
         "cree_par"
     )
 
-    # Recherche par titre de réunion ou créateur
+    # ==========================================
+    # RECHERCHE PAR TITRE DE RÉUNION OU CRÉATEUR
+    # ==========================================
+
     recherche = request.GET.get("q", "").strip()
 
     if recherche:
@@ -901,7 +948,10 @@ def comptes_rendus(request):
             | Q(cree_par__last_name__icontains=recherche)
         )
 
-    # Filtre par date de rédaction
+    # ==========================================
+    # FILTRE PAR DATE DE RÉDACTION
+    # ==========================================
+
     date_recherche = request.GET.get("date", "").strip()
 
     if date_recherche:
@@ -909,20 +959,40 @@ def comptes_rendus(request):
             date_redaction__date=date_recherche
         )
 
-    # Trier du plus récent au plus ancien
+    # ==========================================
+    # TRI DU PLUS RÉCENT AU PLUS ANCIEN
+    # ==========================================
+
     comptes_rendus = comptes_rendus.order_by(
         "-date_redaction"
     )
+
+    # ==========================================
+    # PAGINATION : 50 COMPTES RENDUS PAR PAGE
+    # ==========================================
+
+    paginator = Paginator(comptes_rendus, 50)
+
+    numero_page = request.GET.get("page")
+
+    comptes_rendus_page = paginator.get_page(numero_page)
+
+    # ==========================================
+    # AFFICHAGE
+    # ==========================================
 
     return render(
         request,
         "agenda/comptes_rendus.html",
         {
-            "comptes_rendus": comptes_rendus,
+            "comptes_rendus": comptes_rendus_page,
+            "page_obj": comptes_rendus_page,
+            "paginator": paginator,
             "recherche": recherche,
             "date_recherche": date_recherche,
         }
     )
+    
 
 
 @login_required
@@ -1056,14 +1126,21 @@ def verifier_rappels_automatique(request):
 
 @login_required
 def reunions(request):
+
     entreprise = request.user.entreprise
 
-    # Récupérer les réunions de l'entreprise
+    # ==========================================
+    # RÉCUPÉRER LES RÉUNIONS DE L'ENTREPRISE
+    # ==========================================
+
     reunions = Reunion.objects.filter(
         entreprise=entreprise
     )
 
-    # Recherche par titre, lieu ou organisateur
+    # ==========================================
+    # RECHERCHE PAR TITRE, LIEU OU ORGANISATEUR
+    # ==========================================
+
     recherche = request.GET.get("q", "").strip()
 
     if recherche:
@@ -1075,7 +1152,10 @@ def reunions(request):
             | Q(organisateur__last_name__icontains=recherche)
         )
 
-    # Filtre par date
+    # ==========================================
+    # FILTRE PAR DATE
+    # ==========================================
+
     date_recherche = request.GET.get("date", "").strip()
 
     if date_recherche:
@@ -1083,21 +1163,43 @@ def reunions(request):
             date=date_recherche
         )
 
-    # Trier par date et heure de début
+    # ==========================================
+    # TRI PAR DATE ET HEURE DE DÉBUT
+    # ==========================================
+
     reunions = reunions.order_by(
         "-date",
         "-heure_debut"
     )
 
+    # ==========================================
+    # PAGINATION : 50 RÉUNIONS PAR PAGE
+    # ==========================================
+
+    paginator = Paginator(reunions, 50)
+
+    numero_page = request.GET.get("page")
+
+    reunions_page = paginator.get_page(numero_page)
+
+    # ==========================================
+    # AFFICHAGE
+    # ==========================================
+
     return render(
         request,
         "agenda/reunions.html",
         {
-            "reunions": reunions,
+            "reunions": reunions_page,
+            "page_obj": reunions_page,
+            "paginator": paginator,
+            "nombre_reunions": paginator.count,
             "recherche": recherche,
             "date_recherche": date_recherche,
         }
     )
+ 
+ 
 @login_required
 def voir_reunion(request, pk):
     reunion = get_object_or_404(

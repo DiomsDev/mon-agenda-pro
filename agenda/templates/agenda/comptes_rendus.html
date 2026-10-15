@@ -139,6 +139,86 @@
         font-size: 13px;
     }
 
+    /* PAGINATION */
+    .pagination-cr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 20px;
+        padding: 15px 17px;
+        border: 1px solid var(--border-color, #e0e6ed);
+        border-radius: 12px;
+        background: var(--card-bg, #ffffff);
+    }
+
+    .pagination-info-cr {
+        margin: 0;
+        color: var(--text-muted, #6b7280);
+        font-size: 13px;
+    }
+
+    .pagination-liens-cr {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .pagination-liens-cr a,
+    .pagination-liens-cr .page-actuelle-cr {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 38px;
+        min-height: 38px;
+        box-sizing: border-box;
+        padding: 0 11px;
+        border: 1px solid #dbe3eb;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #40566d;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .pagination-liens-cr a:hover {
+        border-color: #347fd0;
+        background: #e8f2fd;
+        color: #2468b4;
+    }
+
+    .pagination-liens-cr .page-actuelle-cr {
+        border-color: #172a40;
+        background: #172a40;
+        color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+        .pagination-cr {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .pagination-info-cr {
+            text-align: center;
+        }
+
+        .pagination-liens-cr {
+            gap: 5px;
+        }
+
+        .pagination-liens-cr a,
+        .pagination-liens-cr .page-actuelle-cr {
+            min-width: 35px;
+            min-height: 35px;
+            padding: 0 9px;
+        }
+    }
+
     .table-conteneur-cr {
         width: 100%;
         overflow-x: auto;
@@ -391,7 +471,7 @@
     <!-- LISTE -->
     {% if comptes_rendus %}
         <p class="resume-cr">
-            Comptes rendus trouvés : <strong>{{ comptes_rendus|length }}</strong>
+            Comptes rendus trouvés : <strong>{{ paginator.count }}</strong>
         </p>
 
         <div class="table-conteneur-cr">
@@ -472,6 +552,37 @@
                 </tbody>
             </table>
         </div>
+
+        {% if page_obj.has_other_pages %}
+            <nav class="pagination-cr" aria-label="Pagination des comptes rendus">
+                <p class="pagination-info-cr">
+                    Affichage de <strong>{{ page_obj.start_index }}</strong>
+                    à <strong>{{ page_obj.end_index }}</strong>
+                    sur <strong>{{ paginator.count }}</strong> compte(s) rendu(s).
+                    Page <strong>{{ page_obj.number }}</strong> sur <strong>{{ paginator.num_pages }}</strong>.
+                </p>
+
+                <div class="pagination-liens-cr">
+                    {% if page_obj.has_previous %}
+                        <a href="?{% if recherche %}q={{ recherche|urlencode }}&amp;{% endif %}{% if date_recherche %}date={{ date_recherche|urlencode }}&amp;{% endif %}page=1" aria-label="Première page" title="Première page">«</a>
+                        <a href="?{% if recherche %}q={{ recherche|urlencode }}&amp;{% endif %}{% if date_recherche %}date={{ date_recherche|urlencode }}&amp;{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Page précédente">Précédent</a>
+                    {% endif %}
+
+                    {% for numero in paginator.page_range %}
+                        {% if numero == page_obj.number %}
+                            <span class="page-actuelle-cr" aria-current="page">{{ numero }}</span>
+                        {% else %}
+                            <a href="?{% if recherche %}q={{ recherche|urlencode }}&amp;{% endif %}{% if date_recherche %}date={{ date_recherche|urlencode }}&amp;{% endif %}page={{ numero }}" aria-label="Page {{ numero }}">{{ numero }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?{% if recherche %}q={{ recherche|urlencode }}&amp;{% endif %}{% if date_recherche %}date={{ date_recherche|urlencode }}&amp;{% endif %}page={{ page_obj.next_page_number }}" aria-label="Page suivante">Suivant</a>
+                        <a href="?{% if recherche %}q={{ recherche|urlencode }}&amp;{% endif %}{% if date_recherche %}date={{ date_recherche|urlencode }}&amp;{% endif %}page={{ paginator.num_pages }}" aria-label="Dernière page" title="Dernière page">»</a>
+                    {% endif %}
+                </div>
+            </nav>
+        {% endif %}
 
     {% else %}
         <!-- AUCUN RÉSULTAT -->

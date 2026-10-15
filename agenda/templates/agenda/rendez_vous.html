@@ -55,6 +55,66 @@
     .word-rdv { background:#e8f2fd; color:#347fd0; }
     .word-rdv:hover { background:#d7e8fb; color:#2468b4; }
 
+    /* PAGINATION DES RENDEZ-VOUS */
+    .pagination-rdv {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 22px 0 5px;
+        padding: 14px 16px;
+        background: #fff;
+        border: 1px solid #e0e6ed;
+        border-radius: 12px;
+    }
+    .pagination-info-rdv {
+        color: var(--text-muted, #6b7280);
+        font-size: 13px;
+    }
+    .pagination-liens-rdv {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .pagination-rdv a,
+    .pagination-rdv .page-actuelle-rdv,
+    .pagination-rdv .page-desactivee-rdv {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 38px;
+        min-height: 38px;
+        padding: 0 12px;
+        box-sizing: border-box;
+        border: 1px solid #dbe3eb;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .pagination-rdv a {
+        background: #fff;
+        color: #172a40;
+        transition: background .2s ease, color .2s ease;
+    }
+    .pagination-rdv a:hover {
+        background: #edf5fb;
+        border-color: #a8cce6;
+    }
+    .pagination-rdv .page-actuelle-rdv {
+        background: #172a40;
+        border-color: #172a40;
+        color: #fff;
+    }
+    .pagination-rdv .page-desactivee-rdv {
+        background: #f4f6f8;
+        color: #a0aab5;
+        cursor: not-allowed;
+    }
+
     .empty-state-rdv { padding:55px 20px; text-align:center; background:#fff; border:1px solid #e0e6ed; border-radius:14px; }
     .empty-state-rdv-icon { display:flex; justify-content:center; align-items:center; margin:0 auto 20px; width:85px; height:85px; background:rgba(23,42,64,.08); border-radius:50%; }
     .empty-state-rdv h3 { margin:0 0 10px; color:#172a40; font-size:20px; }
@@ -69,6 +129,12 @@
         .champ-filtre-rdv { width:100%; min-width:0; }
         .btn-rechercher-rdv, .btn-reinitialiser-rdv { width:100%; box-sizing:border-box; }
         .actions-rdv { flex-wrap:wrap; }
+        .pagination-rdv { align-items: stretch; flex-direction: column; padding: 13px; }
+        .pagination-info-rdv { text-align: center; }
+        .pagination-liens-rdv { gap: 5px; }
+        .pagination-rdv a,
+        .pagination-rdv .page-actuelle-rdv,
+        .pagination-rdv .page-desactivee-rdv { min-width: 35px; min-height: 35px; padding: 0 9px; }
     }
 </style>
 {% endblock extra_css %}
@@ -184,7 +250,7 @@
 
         <p class="nombre-rdv">
             Rendez-vous trouvés :
-            <strong>{{ rendez_vous|length }}</strong>
+            <strong>{{ paginator.count }}</strong>
         </p>
 
 
@@ -388,6 +454,41 @@
             </table>
 
         </div>
+
+        {% if page_obj.has_other_pages %}
+            <nav class="pagination-rdv" aria-label="Pagination des rendez-vous">
+                <div class="pagination-info-rdv">
+                    Affichage de <strong>{{ page_obj.start_index }}</strong>
+                    à <strong>{{ page_obj.end_index }}</strong>
+                    sur <strong>{{ paginator.count }}</strong> rendez-vous
+                </div>
+
+                <div class="pagination-liens-rdv">
+                    {% if page_obj.has_previous %}
+                        <a href="?{% if recherche %}q={{ recherche|urlencode }}&amp;{% endif %}{% if date_recherche %}date={{ date_recherche|urlencode }}&amp;{% endif %}page={{ page_obj.previous_page_number }}"
+                           aria-label="Page précédente">Précédent</a>
+                    {% else %}
+                        <span class="page-desactivee-rdv" aria-disabled="true">Précédent</span>
+                    {% endif %}
+
+                    {% for numero in paginator.page_range %}
+                        {% if numero == page_obj.number %}
+                            <span class="page-actuelle-rdv" aria-current="page">{{ numero }}</span>
+                        {% else %}
+                            <a href="?{% if recherche %}q={{ recherche|urlencode }}&amp;{% endif %}{% if date_recherche %}date={{ date_recherche|urlencode }}&amp;{% endif %}page={{ numero }}"
+                               aria-label="Page {{ numero }}">{{ numero }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?{% if recherche %}q={{ recherche|urlencode }}&amp;{% endif %}{% if date_recherche %}date={{ date_recherche|urlencode }}&amp;{% endif %}page={{ page_obj.next_page_number }}"
+                           aria-label="Page suivante">Suivant</a>
+                    {% else %}
+                        <span class="page-desactivee-rdv" aria-disabled="true">Suivant</span>
+                    {% endif %}
+                </div>
+            </nav>
+        {% endif %}
 
 
     {% else %}
