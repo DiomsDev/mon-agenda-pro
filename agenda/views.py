@@ -549,7 +549,7 @@ def activites(request):
     # PAGINATION : 50 ACTIVITÉS PAR PAGE
     # ==========================================
 
-    paginator = Paginator(activites, 10)
+    paginator = Paginator(activites, 20)
 
     numero_page = request.GET.get("page")
 
@@ -633,7 +633,7 @@ def missions(request):
     # PAGINATION : 50 MISSIONS PAR PAGE
     # ==========================================
 
-    paginator = Paginator(missions, 50)
+    paginator = Paginator(missions, 20)
 
     numero_page = request.GET.get("page")
 
@@ -721,7 +721,7 @@ def rendez_vous(request):
     # PAGINATION : 50 RENDEZ-VOUS PAR PAGE
     # ==========================================
 
-    paginator = Paginator(rendez_vous, 50)
+    paginator = Paginator(rendez_vous, 20)  
 
     numero_page = request.GET.get("page")
 
@@ -971,7 +971,7 @@ def comptes_rendus(request):
     # PAGINATION : 50 COMPTES RENDUS PAR PAGE
     # ==========================================
 
-    paginator = Paginator(comptes_rendus, 10)
+    paginator = Paginator(comptes_rendus, 20)
 
     numero_page = request.GET.get("page")
 
@@ -1176,7 +1176,7 @@ def reunions(request):
     # PAGINATION : 50 RÉUNIONS PAR PAGE
     # ==========================================
 
-    paginator = Paginator(reunions, 10)
+    paginator = Paginator(reunions, 20)
 
     numero_page = request.GET.get("page")
 
